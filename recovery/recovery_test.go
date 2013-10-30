@@ -8,11 +8,16 @@ import (
 )
 
 func Test_Recovery(t *testing.T) {
+	recorder := httptest.NewRecorder()
+
 	m := martini.New()
 	m.Use(New())
 	m.Use(func(res http.ResponseWriter, req *http.Request) {
 		panic("here is a panic!")
 	})
-	m.ServeHTTP(httptest.NewRecorder(), (*http.Request)(nil))
-	// TODO verify that a 500 is written and a log is also written to
+	m.ServeHTTP(recorder, (*http.Request)(nil))
+	// TODO verify that a log is written to
+	if recorder.Code != 500 {
+		t.Error("Response did not return 500")
+	}
 }

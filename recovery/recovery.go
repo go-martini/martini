@@ -1,18 +1,19 @@
 package recovery
 
 import (
-  "github.com/codegangsta/martini"
+	"github.com/codegangsta/martini"
+	"net/http"
 )
 
 func New() martini.Handler {
-  return func(c martini.Context) {
-    defer handlePanic()
-    c.Next()
-  }
+	return func(res http.ResponseWriter, c martini.Context) {
+		defer handlePanic(res)
+		c.Next()
+	}
 }
 
-func handlePanic() {
-  if err := recover(); err != nil {
-    println(err)
-  }
+func handlePanic(res http.ResponseWriter) {
+	if err := recover(); err != nil {
+		res.WriteHeader(500)
+	}
 }
