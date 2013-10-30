@@ -54,6 +54,10 @@ func (c *context) Invoke(f interface{}) error {
 	return c.injector.Invoke(f)
 }
 
+func (c *context) Apply(val interface{}) error {
+	return c.injector.Apply(val)
+}
+
 func (c *context) Map(val interface{}) {
 	c.injector.Map(val)
 }
