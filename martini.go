@@ -8,10 +8,20 @@ import (
 
 type Martini struct {
 	handlers []interface{}
+	injector inject.Injector
 }
 
 func New() *Martini {
-	return &Martini{}
+	m := &Martini{injector: inject.New()}
+	return m
+}
+
+func (m *Martini) Map(val interface{}) {
+	m.injector.Map(val)
+}
+
+func (m *Martini) MapTo(val interface{}, ifacePtr interface{}) {
+	m.injector.MapTo(val, ifacePtr)
 }
 
 func (m *Martini) Use(handler interface{}) {
@@ -20,6 +30,7 @@ func (m *Martini) Use(handler interface{}) {
 
 func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	ctx := &context{inject.New(), m.handlers, 0}
+	ctx.SetParent(m.injector)
 	ctx.MapTo(ctx, (*Context)(nil))
 	ctx.MapTo(res, (*http.ResponseWriter)(nil))
 	ctx.Map(req)
