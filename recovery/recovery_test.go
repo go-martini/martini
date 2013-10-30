@@ -14,4 +14,5 @@ func Test_Recovery(t *testing.T) {
 		panic("here is a panic!")
 	})
 	m.ServeHTTP(httptest.NewRecorder(), (*http.Request)(nil))
+	// TODO verify that a 500 is written and a log is also written to
 }
