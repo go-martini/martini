@@ -14,7 +14,7 @@ type context struct {
 	index    int
 }
 
-func NewContext() Context {
+func newContext() *context {
 	return &context{inject.New(), 0}
 }
 
