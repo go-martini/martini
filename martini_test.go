@@ -2,6 +2,7 @@ package martini
 
 import (
 	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"testing"
 )
@@ -48,10 +49,10 @@ func Test_Martini_ServeHTTP(t *testing.T) {
 		c.Next()
 		result += "baz"
 	})
-	m.Use(func() {
+	m.Use(func(res http.ResponseWriter, req *http.Request) {
 		result += "bat"
 	})
-	m.ServeHTTP(nil, (*http.Request)(nil))
+	m.ServeHTTP(httptest.NewRecorder(), (*http.Request)(nil))
 
 	expect(t, result, "foobarbatbazban")
 }
