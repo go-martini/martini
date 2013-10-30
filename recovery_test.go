@@ -1,20 +1,26 @@
 package martini
 
 import (
+	"bytes"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
 func Test_RecoveryHandler(t *testing.T) {
+	buff := bytes.NewBufferString("")
 	recorder := httptest.NewRecorder()
 
 	m := New()
+	// replace log for testing
+	m.Map(log.New(buff, "[martini] ", 0))
 	m.Use(RecoveryHandler())
 	m.Use(func(res http.ResponseWriter, req *http.Request) {
 		panic("here is a panic!")
 	})
 	m.ServeHTTP(recorder, (*http.Request)(nil))
-	// TODO verify that a log is written to
-  expect(t, recorder.Code, 500)
+	expect(t, recorder.Code, 500)
+	expect(t, buff.String(), "[martini] PANIC: here is a panic!\n")
+
 }

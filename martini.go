@@ -2,7 +2,9 @@ package martini
 
 import (
 	"github.com/codegangsta/inject"
+	"log"
 	"net/http"
+	"os"
 	"reflect"
 )
 
@@ -13,6 +15,7 @@ type Martini struct {
 
 func New() *Martini {
 	m := &Martini{injector: inject.New()}
+	m.Map(log.New(os.Stdout, "[martini] ", 0))
 	return m
 }
 
