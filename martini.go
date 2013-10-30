@@ -19,7 +19,7 @@ func (m *Martini) Use(handler interface{}) {
 
 func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	ctx := &context{inject.New(), m.handlers, 0}
-	ctx.MapTo(ctx, (Context)(nil))
+	ctx.MapTo(ctx, (*Context)(nil))
 	ctx.MapTo(res, (*http.ResponseWriter)(nil))
 	ctx.Map(req)
 	ctx.run()

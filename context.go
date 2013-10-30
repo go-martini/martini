@@ -7,6 +7,7 @@ import (
 
 type Context interface {
 	inject.Injector
+	Next()
 }
 
 type context struct {
@@ -33,6 +34,11 @@ func (c *context) Get(t reflect.Type) reflect.Value {
 
 func (c *context) SetParent(p inject.Injector) {
 	c.injector.SetParent(p)
+}
+
+func (c *context) Next() {
+	c.index += 1
+	c.run()
 }
 
 func (c *context) run() {

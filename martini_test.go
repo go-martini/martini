@@ -1,6 +1,7 @@
 package martini
 
 import (
+	"net/http"
 	"reflect"
 	"testing"
 )
@@ -33,4 +34,24 @@ func Test_Martini_Use(t *testing.T) {
 }
 
 func Test_Martini_ServeHTTP(t *testing.T) {
+
+	result := ""
+
+	m := New()
+	m.Use(func(c Context) {
+		result += "foo"
+		c.Next()
+		result += "ban"
+	})
+	m.Use(func(c Context) {
+		result += "bar"
+		c.Next()
+		result += "baz"
+	})
+	m.Use(func() {
+		result += "bat"
+	})
+	m.ServeHTTP(nil, (*http.Request)(nil))
+
+	expect(t, result, "foobarbatbazban")
 }
