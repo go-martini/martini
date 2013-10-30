@@ -7,7 +7,7 @@ import (
 )
 
 type Martini struct {
-	handlers []interface{}
+	handlers []Handler
 	injector inject.Injector
 }
 
@@ -24,7 +24,7 @@ func (m *Martini) MapTo(val interface{}, ifacePtr interface{}) {
 	m.injector.MapTo(val, ifacePtr)
 }
 
-func (m *Martini) Use(handler interface{}) {
+func (m *Martini) Use(handler Handler) {
 	m.handlers = append(m.handlers, handler)
 }
 
@@ -37,6 +37,8 @@ func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	ctx.run()
 }
 
+type Handler interface{}
+
 type Context interface {
 	inject.Injector
 	Next()
@@ -44,7 +46,7 @@ type Context interface {
 
 type context struct {
 	injector inject.Injector
-	handlers []interface{}
+	handlers []Handler
 	index    int
 }
 
