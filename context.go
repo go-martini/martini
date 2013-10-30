@@ -11,11 +11,8 @@ type Context interface {
 
 type context struct {
 	injector inject.Injector
+	handlers []interface{}
 	index    int
-}
-
-func newContext() *context {
-	return &context{inject.New(), 0}
 }
 
 func (c *context) Invoke(f interface{}) error {
@@ -38,5 +35,12 @@ func (c *context) SetParent(p inject.Injector) {
 	c.injector.SetParent(p)
 }
 
-func (c *context) run(handlers []interface{}) {
+func (c *context) run() {
+	for c.index < len(c.handlers) {
+		err := c.Invoke(c.handlers[c.index])
+		if err != nil {
+			panic(err)
+		}
+		c.index += 1
+	}
 }
