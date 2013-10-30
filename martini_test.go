@@ -18,16 +18,19 @@ func refute(t *testing.T, a interface{}, b interface{}) {
 	}
 }
 
-func Test_NewApp(t *testing.T) {
+func Test_New(t *testing.T) {
 	m := New()
 	refute(t, m, nil)
 }
 
-func Test_App_Use(t *testing.T) {
+func Test_Martini_Use(t *testing.T) {
 	handleFunc := func() {
 	}
 
 	m := New()
 	m.Use(handleFunc)
 	expect(t, len(m.handlers), 1)
+}
+
+func Test_Martini_ServeHTTP(t *testing.T) {
 }
