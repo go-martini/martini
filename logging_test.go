@@ -8,14 +8,14 @@ import (
 	"testing"
 )
 
-func Test_LoggingHandler(t *testing.T) {
+func Test_Logger(t *testing.T) {
 	buff := bytes.NewBufferString("")
 	recorder := httptest.NewRecorder()
 
 	m := New()
 	// replace log for testing
 	m.Map(log.New(buff, "[martini] ", 0))
-	m.Use(LoggingHandler())
+	m.Use(Logger)
 	m.Use(func(res http.ResponseWriter) {
 		res.WriteHeader(404)
 	})

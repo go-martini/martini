@@ -5,20 +5,18 @@ import (
 	"net/http"
 )
 
-func LoggingHandler() Handler {
-	return func(res http.ResponseWriter, req *http.Request, c Context, log *log.Logger) {
-		// log the request
-		log.Printf("\033[32;1m%s %s\033[0m\n", req.Method, req.URL.Path)
+func Logger(res http.ResponseWriter, req *http.Request, c Context, log *log.Logger) {
+	// log the request
+	log.Printf("\033[32;1m%s %s\033[0m\n", req.Method, req.URL.Path)
 
-		// override the response writer with a wrapped one
-		rl := &responseLogger{res, 0, 0}
-		c.MapTo(rl, (*http.ResponseWriter)(nil))
+	// override the response writer with a wrapped one
+	rl := &responseLogger{res, 0, 0}
+	c.MapTo(rl, (*http.ResponseWriter)(nil))
 
-		c.Next()
+	c.Next()
 
-		// log from responseLogger
-		log.Printf("%v - %v bytes \n\t\t%v\n", rl.status, rl.size, rl.Header())
-	}
+	// log from responseLogger
+	log.Printf("%v - %v bytes \n\t\t%v\n", rl.status, rl.size, rl.Header())
 }
 
 type responseLogger struct {
