@@ -8,14 +8,14 @@ import (
 	"testing"
 )
 
-func Test_RecoveryHandler(t *testing.T) {
+func Test_Recovery(t *testing.T) {
 	buff := bytes.NewBufferString("")
 	recorder := httptest.NewRecorder()
 
 	m := New()
 	// replace log for testing
 	m.Map(log.New(buff, "[martini] ", 0))
-	m.Use(RecoveryHandler())
+	m.Use(Recovery)
 	m.Use(func(res http.ResponseWriter, req *http.Request) {
 		panic("here is a panic!")
 	})
