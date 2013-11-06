@@ -3,11 +3,13 @@ package martini
 import (
 	"log"
 	"net/http"
+	"time"
 )
 
 func Logger(res http.ResponseWriter, req *http.Request, c Context, log *log.Logger) {
+	t0 := time.Now()
 	// log the request
-	log.Printf("\033[32;1m%s %s\033[0m\n", req.Method, req.URL.Path)
+	log.Printf("\033[32;1mStarted %s %s\033[0m\n", req.Method, req.URL.Path)
 
 	// override the response writer with a wrapped one
 	rl := &responseLogger{res, 0, 0}
@@ -15,8 +17,9 @@ func Logger(res http.ResponseWriter, req *http.Request, c Context, log *log.Logg
 
 	c.Next()
 
+	t1 := time.Now()
 	// log from responseLogger
-	log.Printf("%v - %v bytes \n\t\t%v\n", rl.status, rl.size, rl.Header())
+	log.Printf("Completed %v in %v\n", rl.status, t1.Sub(t0))
 }
 
 type responseLogger struct {

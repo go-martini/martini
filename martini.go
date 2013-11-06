@@ -43,6 +43,10 @@ func (m *Martini) Action(handler Handler) error {
 	return nil
 }
 
+func (m *Martini) Run() {
+	http.ListenAndServe(":3000", m)
+}
+
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
 	c := &context{inject.New(), append(m.handlers, m.action), 0}
 	c.SetParent(m)
