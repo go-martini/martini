@@ -7,22 +7,28 @@ import (
 	"os"
 )
 
-type Martini struct {
+type Martini interface {
+	inject.Injector
+	http.Handler
+	Use(Handler)
+}
+
+type martini struct {
 	inject.Injector
 	handlers []Handler
 }
 
-func New() *Martini {
-	m := &Martini{inject.New(), []Handler{}}
+func New() Martini {
+	m := &martini{inject.New(), []Handler{}}
 	m.Map(log.New(os.Stdout, "[martini] ", 0))
 	return m
 }
 
-func (m *Martini) Use(handler Handler) {
+func (m *martini) Use(handler Handler) {
 	m.handlers = append(m.handlers, handler)
 }
 
-func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+func (m *martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	ctx := &context{inject.New(), m.handlers, 0}
 	ctx.SetParent(m)
 	ctx.MapTo(ctx, (*Context)(nil))

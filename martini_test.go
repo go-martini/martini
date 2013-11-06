@@ -25,15 +25,6 @@ func Test_New(t *testing.T) {
 	refute(t, m, nil)
 }
 
-func Test_Martini_Use(t *testing.T) {
-	handleFunc := func() {
-	}
-
-	m := New()
-	m.Use(handleFunc)
-	expect(t, len(m.handlers), 1)
-}
-
 func Test_Martini_ServeHTTP(t *testing.T) {
 
 	result := ""
