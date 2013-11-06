@@ -52,21 +52,33 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 }
 
 func (r *router) addRoute(method string, pattern string, handlers []Handler) {
-  // todo validate handlers
-	r.routes = append(r.routes, route{method, pattern, handlers})
+	route := route{method, pattern, handlers}
+	if route.validate() == nil {
+		r.routes = append(r.routes, route)
+	}
 }
 
 type route struct {
-	method  string
-	pattern string
+	method   string
+	pattern  string
 	handlers []Handler
 }
 
+func (r route) validate() error {
+	for _, handler := range r.handlers {
+		err := validateHandler(handler)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (r route) handle(c Context) {
-  for _, handler := range r.handlers {
-    err := c.Invoke(handler)
-    if err != nil {
-      panic(err)
-    }
-  }
+	for _, handler := range r.handlers {
+		err := c.Invoke(handler)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
