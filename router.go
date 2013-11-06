@@ -10,7 +10,7 @@ type Router interface {
 	Put(string, Handler)
 	Delete(string, Handler)
 
-	Handle(Context, *http.Request)
+	Handle(http.ResponseWriter, *http.Request, Context)
 }
 
 type route struct {
@@ -43,7 +43,7 @@ func (r *router) Delete(pattern string, handler Handler) {
 	r.addRoute("DELETE", pattern, handler)
 }
 
-func (r *router) Handle(context Context, req *http.Request) {
+func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Context) {
 	for _, route := range r.routes {
 		// Be super strict for now. Eventually we will have some
 		// super awesome pattern matching here. But not today

@@ -9,24 +9,18 @@ import (
 	"reflect"
 )
 
-type Martini interface {
-	inject.Injector
-	http.Handler
-	Use(Handler) error
-}
-
-type martini struct {
+type Martini struct {
 	inject.Injector
 	handlers []Handler
 }
 
-func New() Martini {
-	m := &martini{inject.New(), []Handler{}}
+func New() *Martini {
+	m := &Martini{inject.New(), []Handler{}}
 	m.Map(log.New(os.Stdout, "[martini] ", 0))
 	return m
 }
 
-func (m *martini) Use(handler Handler) error {
+func (m *Martini) Use(handler Handler) error {
 	if err := validateHandler(handler); err != nil {
 		return err
 	}
@@ -35,13 +29,17 @@ func (m *martini) Use(handler Handler) error {
 	return nil
 }
 
-func (m *martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	ctx := &context{inject.New(), m.handlers, 0}
-	ctx.SetParent(m)
-	ctx.MapTo(ctx, (*Context)(nil))
-	ctx.MapTo(res, (*http.ResponseWriter)(nil))
-	ctx.Map(req)
-	ctx.run()
+func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	m.createContext(res, req).run()
+}
+
+func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
+	c := &context{inject.New(), m.handlers, 0}
+	c.SetParent(m)
+	c.MapTo(c, (*Context)(nil))
+	c.MapTo(res, (*http.ResponseWriter)(nil))
+	c.Map(req)
+	return c
 }
 
 type Handler interface{}
