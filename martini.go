@@ -9,22 +9,14 @@ import (
 )
 
 type Martini struct {
+	inject.Injector
 	handlers []Handler
-	injector inject.Injector
 }
 
 func New() *Martini {
-	m := &Martini{injector: inject.New()}
+	m := &Martini{inject.New(), []Handler{}}
 	m.Map(log.New(os.Stdout, "[martini] ", 0))
 	return m
-}
-
-func (m *Martini) Map(val interface{}) {
-	m.injector.Map(val)
-}
-
-func (m *Martini) MapTo(val interface{}, ifacePtr interface{}) {
-	m.injector.MapTo(val, ifacePtr)
 }
 
 func (m *Martini) Use(handler Handler) {
@@ -33,7 +25,7 @@ func (m *Martini) Use(handler Handler) {
 
 func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	ctx := &context{inject.New(), m.handlers, 0}
-	ctx.SetParent(m.injector)
+	ctx.SetParent(m)
 	ctx.MapTo(ctx, (*Context)(nil))
 	ctx.MapTo(res, (*http.ResponseWriter)(nil))
 	ctx.Map(req)
