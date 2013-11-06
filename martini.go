@@ -1,6 +1,7 @@
 package martini
 
 import (
+	"errors"
 	"github.com/codegangsta/inject"
 	"log"
 	"net/http"
@@ -9,38 +10,46 @@ import (
 )
 
 type Martini struct {
+	inject.Injector
 	handlers []Handler
-	injector inject.Injector
 }
 
 func New() *Martini {
-	m := &Martini{injector: inject.New()}
+	m := &Martini{inject.New(), []Handler{}}
 	m.Map(log.New(os.Stdout, "[martini] ", 0))
 	return m
 }
 
-func (m *Martini) Map(val interface{}) {
-	m.injector.Map(val)
-}
+func (m *Martini) Use(handler Handler) error {
+	if err := validateHandler(handler); err != nil {
+		return err
+	}
 
-func (m *Martini) MapTo(val interface{}, ifacePtr interface{}) {
-	m.injector.MapTo(val, ifacePtr)
-}
-
-func (m *Martini) Use(handler Handler) {
 	m.handlers = append(m.handlers, handler)
+	return nil
 }
 
 func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	ctx := &context{inject.New(), m.handlers, 0}
-	ctx.SetParent(m.injector)
-	ctx.MapTo(ctx, (*Context)(nil))
-	ctx.MapTo(res, (*http.ResponseWriter)(nil))
-	ctx.Map(req)
-	ctx.run()
+	m.createContext(res, req).run()
+}
+
+func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
+	c := &context{inject.New(), m.handlers, 0}
+	c.SetParent(m)
+	c.MapTo(c, (*Context)(nil))
+	c.MapTo(res, (*http.ResponseWriter)(nil))
+	c.Map(req)
+	return c
 }
 
 type Handler interface{}
+
+func validateHandler(handler Handler) error {
+	if reflect.TypeOf(handler).Kind() != reflect.Func {
+		return errors.New("martini handler must be a callable func")
+	}
+	return nil
+}
 
 type Context interface {
 	inject.Injector
@@ -48,33 +57,9 @@ type Context interface {
 }
 
 type context struct {
-	injector inject.Injector
+	inject.Injector
 	handlers []Handler
 	index    int
-}
-
-func (c *context) Invoke(f interface{}) error {
-	return c.injector.Invoke(f)
-}
-
-func (c *context) Apply(val interface{}) error {
-	return c.injector.Apply(val)
-}
-
-func (c *context) Map(val interface{}) {
-	c.injector.Map(val)
-}
-
-func (c *context) MapTo(val interface{}, ifacePtr interface{}) {
-	c.injector.MapTo(val, ifacePtr)
-}
-
-func (c *context) Get(t reflect.Type) reflect.Value {
-	return c.injector.Get(t)
-}
-
-func (c *context) SetParent(p inject.Injector) {
-	c.injector.SetParent(p)
 }
 
 func (c *context) Next() {
