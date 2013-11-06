@@ -1,16 +1,18 @@
 package martini
 
 import (
+	"errors"
 	"github.com/codegangsta/inject"
 	"log"
 	"net/http"
 	"os"
+	"reflect"
 )
 
 type Martini interface {
 	inject.Injector
 	http.Handler
-	Use(Handler)
+	Use(Handler) error
 }
 
 type martini struct {
@@ -24,8 +26,13 @@ func New() Martini {
 	return m
 }
 
-func (m *martini) Use(handler Handler) {
+func (m *martini) Use(handler Handler) error {
+	if err := validateHandler(handler); err != nil {
+		return err
+	}
+
 	m.handlers = append(m.handlers, handler)
+	return nil
 }
 
 func (m *martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
@@ -38,6 +45,13 @@ func (m *martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 }
 
 type Handler interface{}
+
+func validateHandler(handler Handler) error {
+	if reflect.TypeOf(handler).Kind() != reflect.Func {
+		return errors.New("martini handler must be a callable func")
+	}
+	return nil
+}
 
 type Context interface {
 	inject.Injector
