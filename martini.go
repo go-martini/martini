@@ -12,10 +12,11 @@ import (
 type Martini struct {
 	inject.Injector
 	handlers []Handler
+	action   Handler
 }
 
 func New() *Martini {
-	m := &Martini{inject.New(), []Handler{}}
+	m := &Martini{inject.New(), []Handler{}, func() {}}
 	m.Map(log.New(os.Stdout, "[martini] ", 0))
 	return m
 }
@@ -33,8 +34,17 @@ func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	m.createContext(res, req).run()
 }
 
+func (m *Martini) Action(handler Handler) error {
+	if err := validateHandler(handler); err != nil {
+		return err
+	}
+
+	m.action = handler
+	return nil
+}
+
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
-	c := &context{inject.New(), m.handlers, 0}
+	c := &context{inject.New(), append(m.handlers, m.action), 0}
 	c.SetParent(m)
 	c.MapTo(c, (*Context)(nil))
 	c.MapTo(res, (*http.ResponseWriter)(nil))

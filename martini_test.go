@@ -48,10 +48,11 @@ func Test_Martini_ServeHTTP(t *testing.T) {
 		c.Next()
 		result += "baz"
 	})
-	m.Use(func(res http.ResponseWriter, req *http.Request) {
+	m.Action(func(res http.ResponseWriter, req *http.Request) {
 		result += "bat"
 		res.WriteHeader(400)
 	})
+
 	m.ServeHTTP(response, (*http.Request)(nil))
 
 	expect(t, result, "foobarbatbazban")
