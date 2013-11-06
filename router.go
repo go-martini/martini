@@ -10,7 +10,7 @@ type Router interface {
 	Put(string, Handler)
 	Delete(string, Handler)
 
-	Handle(Context)
+	Handle(Context, *http.Request)
 }
 
 type route struct {
@@ -21,6 +21,10 @@ type route struct {
 
 type router struct {
 	routes []route
+}
+
+func NewRouter() Router {
+	return &router{}
 }
 
 func (r *router) Get(pattern string, handler Handler) {
