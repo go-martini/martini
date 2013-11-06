@@ -52,6 +52,20 @@ func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *con
 	return c
 }
 
+type ClassicMartini struct {
+	*Martini
+	Router
+}
+
+func Classic() *ClassicMartini {
+	r := NewRouter()
+	m := New()
+	m.Use(Logger)
+	m.Use(Recovery)
+	m.Action(r.Handle)
+	return &ClassicMartini{m, r}
+}
+
 type Handler interface{}
 
 func validateHandler(handler Handler) error {
