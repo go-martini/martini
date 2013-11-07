@@ -80,5 +80,8 @@ func (r route) handle(c Context) {
 		if err != nil {
 			panic(err)
 		}
+		if c.written() {
+			return
+		}
 	}
 }

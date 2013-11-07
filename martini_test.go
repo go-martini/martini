@@ -58,3 +58,26 @@ func Test_Martini_ServeHTTP(t *testing.T) {
 	expect(t, result, "foobarbatbazban")
 	expect(t, response.Code, 400)
 }
+
+func Test_Martini_EarlyWrite(t *testing.T) {
+	result := ""
+	response := httptest.NewRecorder()
+
+	m := New()
+	m.Use(func(res http.ResponseWriter) {
+		result += "foobar"
+		res.Write([]byte("Hello world"))
+	})
+	m.Use(func() {
+		result += "bat"
+	})
+	m.Action(func(res http.ResponseWriter) {
+		result += "baz"
+		res.WriteHeader(400)
+	})
+
+	m.ServeHTTP(response, (*http.Request)(nil))
+
+	expect(t, result, "foobar")
+	expect(t, response.Code, 200)
+}
