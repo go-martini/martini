@@ -8,17 +8,14 @@ import (
 
 func Logger(res http.ResponseWriter, req *http.Request, c Context, log *log.Logger) {
 	t0 := time.Now()
-	// log the request
 	log.Printf("\033[32;1mStarted %s %s\033[0m\n", req.Method, req.URL.Path)
 
-	// override the response writer with a wrapped one
 	rl := &responseLogger{res, 0, 0}
 	c.MapTo(rl, (*http.ResponseWriter)(nil))
 
 	c.Next()
 
 	t1 := time.Now()
-	// log from responseLogger
 	log.Printf("Completed %v in %v\n", rl.status, t1.Sub(t0))
 }
 
