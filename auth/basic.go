@@ -32,7 +32,6 @@ func unauthorized(res http.ResponseWriter) {
 func parseToken(token string) (username, password string) {
 	if token == "" {
 		return "", ""
-
 	}
 
 	// Check that the token supplied corresponds to the basic authorization
@@ -40,23 +39,19 @@ func parseToken(token string) (username, password string) {
 	ndx := strings.IndexRune(token, ' ')
 	if ndx < 1 || token[0:ndx] != "Basic" {
 		return "", ""
-
 	}
 
 	// Drop prefix, and decode the base64
 	buffer, err := base64.StdEncoding.DecodeString(token[ndx+1:])
 	if err != nil {
 		return "", ""
-
 	}
 	token = string(buffer)
 
 	ndx = strings.IndexRune(token, ':')
 	if ndx < 1 {
 		return "", ""
-
 	}
 
 	return token[0:ndx], token[ndx+1:]
-
 }
