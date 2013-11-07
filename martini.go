@@ -64,8 +64,8 @@ type ClassicMartini struct {
 func Classic() *ClassicMartini {
 	r := NewRouter()
 	m := New()
-	m.Use(Logger)
-	m.Use(Recovery)
+	m.Use(Logger())
+	m.Use(Recovery())
 	m.Action(r.Handle)
 	return &ClassicMartini{m, r}
 }

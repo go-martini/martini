@@ -15,7 +15,7 @@ func Test_Recovery(t *testing.T) {
 	m := New()
 	// replace log for testing
 	m.Map(log.New(buff, "[martini] ", 0))
-	m.Use(Recovery)
+	m.Use(Recovery())
 	m.Use(func(res http.ResponseWriter, req *http.Request) {
 		panic("here is a panic!")
 	})
