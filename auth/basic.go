@@ -10,6 +10,7 @@ func Basic(name string, password string) http.HandlerFunc {
 		p, _ := req.URL.User.Password()
 
 		if u != name || p != password {
+			res.Header().Set("WWW-Authenticate", "Basic realm=\"Authorization Required\"")
 			res.WriteHeader(401)
 		}
 	}

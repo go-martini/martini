@@ -26,4 +26,8 @@ func Test_BasicAuth(t *testing.T) {
 	if res.Code != 401 {
 		t.Errorf("response code is not 403 : %v", res.Code)
 	}
+
+	if res.Header().Get("WWW-Authenticate") != "Basic realm=\"Authorization Required\"" {
+		t.Error("Authentication header missing")
+	}
 }
