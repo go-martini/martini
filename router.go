@@ -42,7 +42,7 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 		// Be super strict for now. Eventually we will have some
 		// super awesome pattern matching here. But not today
 		if route.method == req.Method && req.URL.Path == route.pattern {
-			err := context.Invoke(route.handle)
+			_, err := context.Invoke(route.handle)
 			if err != nil {
 				panic(err)
 			}
@@ -77,11 +77,17 @@ func (r route) validate() error {
 	return nil
 }
 
-func (r route) handle(c Context) {
+func (r route) handle(c Context, res http.ResponseWriter) {
 	for _, handler := range r.handlers {
-		err := c.Invoke(handler)
+		vals, err := c.Invoke(handler)
 		if err != nil {
 			panic(err)
+		}
+
+		// if the handler returned something, write it to
+		// the http response
+		if len(vals) > 0 {
+			res.Write([]byte(vals[0].String()))
 		}
 		if c.written() {
 			return

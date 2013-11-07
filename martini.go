@@ -103,7 +103,7 @@ func (c *context) written() bool {
 
 func (c *context) run() {
 	for c.index < len(c.handlers) {
-		err := c.Invoke(c.handlers[c.index])
+		_, err := c.Invoke(c.handlers[c.index])
 		if err != nil {
 			panic(err)
 		}
