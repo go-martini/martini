@@ -38,14 +38,15 @@ func Test_Routing(t *testing.T) {
 	router.Put("/fizzbuzz", func() {
 		result += "fizzbuzz"
 	})
-	router.Delete("/baz", func(c Context) {
+	router.Delete("/bazzer", func(c Context) {
 		result += "baz"
 	})
 
 	router.Handle(recorder, req, context)
 	router.Handle(recorder, req2, context2)
 	router.Handle(recorder, req3, context3)
-	expect(t, result, "foobarbatbaz")
+	expect(t, result, "foobarbat")
+	expect(t, recorder.Code, http.StatusNotFound)
 }
 
 func Test_RouterHandlerStacking(t *testing.T) {
