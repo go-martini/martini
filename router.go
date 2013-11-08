@@ -57,6 +57,7 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 
 	// no routes exist, 404
 	res.WriteHeader(http.StatusNotFound)
+	res.Write([]byte(http.StatusText(http.StatusNotFound)))
 }
 
 func (r *router) addRoute(method string, pattern string, handlers []Handler) {
