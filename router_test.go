@@ -84,3 +84,31 @@ func Test_RouterHandlerStacking(t *testing.T) {
 	expect(t, result, "foobarbat")
 	expect(t, recorder.Body.String(), "Hello world")
 }
+
+var routeTests = []struct {
+	// in
+	method string
+	path   string
+
+	// out
+	ok     bool
+	params map[string]string
+}{
+	{"GET", "/foo/123/bat/321", true, map[string]string{"bar": "123", "baz": "321"}},
+	{"POST", "/foo/123/bat/321", false, map[string]string{}},
+	{"GET", "/foo/hello/bat/world", true, map[string]string{"bar": "hello", "baz": "world"}},
+	{"GET", "foo/hello/bat/world", false, map[string]string{}},
+	{"GET", "/foo/123/bat/321/", true, map[string]string{"bar": "123", "baz": "321"}},
+	{"GET", "/foo/123/bat/321//", false, map[string]string{}},
+	{"GET", "/foo/123//bat/321/", false, map[string]string{}},
+}
+
+func Test_RouteMatching(t *testing.T) {
+	route := newRoute("GET", "/foo/:bar/bat/:baz", nil)
+	for _, tt := range routeTests {
+		ok, params := route.match(tt.method, tt.path)
+		if ok != tt.ok || params["bar"] != tt.params["bar"] || params["baz"] != tt.params["baz"] {
+			t.Errorf("expected: (%v, %v) got: (%v, %v)", tt.ok, tt.params, ok, params)
+		}
+	}
+}

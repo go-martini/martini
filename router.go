@@ -1,7 +1,9 @@
 package martini
 
 import (
+	"fmt"
 	"net/http"
+	"regexp"
 )
 
 type Router interface {
@@ -39,9 +41,8 @@ func (r *router) Delete(pattern string, h ...Handler) {
 
 func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Context) {
 	for _, route := range r.routes {
-		// Be super strict for now. Eventually we will have some
-		// super awesome pattern matching here. But not today
-		if route.method == req.Method && req.URL.Path == route.pattern {
+		ok, _ := route.match(req.Method, req.URL.Path)
+		if ok {
 			_, err := context.Invoke(route.handle)
 			if err != nil {
 				panic(err)
@@ -55,7 +56,7 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 }
 
 func (r *router) addRoute(method string, pattern string, handlers []Handler) {
-	route := route{method, pattern, handlers}
+	route := newRoute(method, pattern, handlers)
 	if route.validate() == nil {
 		r.routes = append(r.routes, route)
 	}
@@ -63,8 +64,38 @@ func (r *router) addRoute(method string, pattern string, handlers []Handler) {
 
 type route struct {
 	method   string
-	pattern  string
+	regex    *regexp.Regexp
 	handlers []Handler
+}
+
+func newRoute(method string, pattern string, handlers []Handler) route {
+	route := route{method, nil, handlers}
+	r := regexp.MustCompile(`:[^/#?()\.\\]+`)
+	pattern = r.ReplaceAllStringFunc(pattern, func(m string) string {
+		return fmt.Sprintf(`(?P<%s>[^/#?]+)`, m[1:len(m)])
+
+	})
+	pattern += `\/?`
+	route.regex = regexp.MustCompile(pattern)
+	return route
+}
+
+func (r route) match(method string, path string) (bool, map[string]string) {
+	if method != r.method {
+		return false, nil
+	}
+
+	matches := r.regex.FindStringSubmatch(path)
+	if len(matches) > 0 && matches[0] == path {
+		params := make(map[string]string)
+		for i, name := range r.regex.SubexpNames() {
+			if len(name) > 0 {
+				params[name] = matches[i]
+			}
+		}
+		return true, params
+	}
+	return false, nil
 }
 
 func (r route) validate() error {
