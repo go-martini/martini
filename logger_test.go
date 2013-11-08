@@ -27,6 +27,5 @@ func Test_Logger(t *testing.T) {
 
 	m.ServeHTTP(recorder, req)
 	expect(t, recorder.Code, 404)
-	// TODO: CHeck via matches
-	// expect(t, buff.String(), "[martini] \033[32;1mGET /foobar\033[0m\n[martini] 404 - 0 bytes \n\t\tmap[]\n")
+	refute(t, len(buff.String()), 0)
 }
