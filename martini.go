@@ -73,6 +73,7 @@ func Classic() *ClassicMartini {
 	m := New()
 	m.Use(Logger())
 	m.Use(Recovery())
+	m.Use(Static("public"))
 	m.Action(r.Handle)
 	return &ClassicMartini{m, r}
 }
