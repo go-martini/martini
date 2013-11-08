@@ -13,11 +13,12 @@ type Martini struct {
 	inject.Injector
 	handlers []Handler
 	action   Handler
+	logger   *log.Logger
 }
 
 func New() *Martini {
-	m := &Martini{inject.New(), []Handler{}, func() {}}
-	m.Map(log.New(os.Stdout, "[martini] ", 0))
+	m := &Martini{inject.New(), []Handler{}, func() {}, log.New(os.Stdout, "[martini] ", 0)}
+	m.Map(m.logger)
 	return m
 }
 
@@ -44,7 +45,13 @@ func (m *Martini) Action(handler Handler) error {
 }
 
 func (m *Martini) Run() {
-	http.ListenAndServe(":3000", m)
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "3000"
+	}
+
+	m.logger.Println("listening on port " + port)
+	http.ListenAndServe(":"+port, m)
 }
 
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
