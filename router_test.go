@@ -48,6 +48,7 @@ func Test_Routing(t *testing.T) {
 	router.Handle(recorder, req3, context3)
 	expect(t, result, "foobarbat")
 	expect(t, recorder.Code, http.StatusNotFound)
+	expect(t, recorder.Body.String(), http.StatusText(http.StatusNotFound))
 }
 
 func Test_RouterHandlerStacking(t *testing.T) {
