@@ -32,7 +32,8 @@ func Test_Routing(t *testing.T) {
 	router.Get("/foo", func(req *http.Request) {
 		result += "foo"
 	})
-	router.Post("/bar/bat", func() {
+	router.Post("/bar/:id", func(params Params) {
+		expect(t, params["id"], "bat")
 		result += "barbat"
 	})
 	router.Put("/fizzbuzz", func() {

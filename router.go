@@ -6,6 +6,8 @@ import (
 	"regexp"
 )
 
+type Params map[string]string
+
 type Router interface {
 	Get(string, ...Handler)
 	Post(string, ...Handler)
@@ -41,8 +43,10 @@ func (r *router) Delete(pattern string, h ...Handler) {
 
 func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Context) {
 	for _, route := range r.routes {
-		ok, _ := route.match(req.Method, req.URL.Path)
+		ok, vals := route.match(req.Method, req.URL.Path)
 		if ok {
+			params := Params(vals)
+			context.Map(params)
 			_, err := context.Invoke(route.handle)
 			if err != nil {
 				panic(err)
