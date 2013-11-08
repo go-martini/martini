@@ -8,7 +8,7 @@ import (
 
 func Logger() Handler {
 	return func(res http.ResponseWriter, req *http.Request, c Context, log *log.Logger) {
-		t0 := time.Now()
+		start := time.Now()
 		log.Printf("\033[32;1mStarted %s %s\033[0m\n", req.Method, req.URL.Path)
 
 		rl := &responseLogger{res, 200, 0}
@@ -16,8 +16,7 @@ func Logger() Handler {
 
 		c.Next()
 
-		t1 := time.Now()
-		log.Printf("Completed %v in %v\n", rl.status, t1.Sub(t0))
+		log.Printf("Completed %v %s in %v\n", rl.status, http.StatusText(rl.status), time.Now().Sub(start))
 	}
 }
 
