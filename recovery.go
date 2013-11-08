@@ -11,7 +11,7 @@ func Recovery() Handler {
 		defer func() {
 			if err := recover(); err != nil {
 				res.WriteHeader(http.StatusInternalServerError)
-				logger.Printf("PANIC: %s\n %s", err, debug.Stack())
+				logger.Printf("PANIC: %s\n%s", err, debug.Stack())
 			}
 		}()
 
