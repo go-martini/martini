@@ -3,6 +3,7 @@ package martini
 import (
 	"log"
 	"net/http"
+	"runtime/debug"
 )
 
 func Recovery() Handler {
@@ -10,7 +11,7 @@ func Recovery() Handler {
 		defer func() {
 			if err := recover(); err != nil {
 				res.WriteHeader(http.StatusInternalServerError)
-				logger.Printf("PANIC: %v\n", err)
+				logger.Printf("PANIC: %s\n %s", err, debug.Stack())
 			}
 		}()
 

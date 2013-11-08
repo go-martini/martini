@@ -21,6 +21,6 @@ func Test_Recovery(t *testing.T) {
 	})
 	m.ServeHTTP(recorder, (*http.Request)(nil))
 	expect(t, recorder.Code, 500)
-	expect(t, buff.String(), "[martini] PANIC: here is a panic!\n")
+	refute(t, len(buff.String()), 0)
 
 }
