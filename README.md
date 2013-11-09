@@ -142,7 +142,7 @@ func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
 
 #### Mapping values to Interfaces
 One of the most powerful parts about services is the ability to map a service to an interface. For instance, if you wanted to override the `http.ResponseWriter` with an object that wrapped it and performed extra operations, you can write the following handler:
-~~~
+~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
   c.MapInterface(rw, (*http.ResponseWriter)(nil)) // override ResponseWriter with our wrapper ResponseWriter
