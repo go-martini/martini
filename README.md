@@ -41,14 +41,14 @@ go get github.com/codegangsta/martini
   * [Next()](#next)
 
 ## Classic Martini
-To get up and running quickly, `martini.Classic()` provides some reasonable defaults that work well for most web applications:
+To get up and running quickly, [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic) provides some reasonable defaults that work well for most web applications:
 ~~~ go
   m := martini.Classic()
   // ... middleware and routing goes here
   m.Run()
 ~~~
 
-Below is some of the functionality `martini.Classic()` pulls in automatically:
+Below is some of the functionality [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic) pulls in automatically:
   * Request/Response Logging - [martini.Logger](http://godoc.org/github.com/codegangsta/martini#Logger)
   * Panic Recovery - [martini.Recovery](http://godoc.org/github.com/codegangsta/martini#Recovery)
   * Static File serving - [martini.Static](http://godoc.org/github.com/codegangsta/martini#Static)
@@ -63,7 +63,7 @@ m.Get("/", func() {
 ~~~
 
 #### Return Values
-If a handler returns a `string`, Martini will write the result to the current `*http.Request`:
+If a handler returns a `string`, Martini will write the result to the current [*http.Request](http://godoc.org/net/http#Request):
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
@@ -80,7 +80,7 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are
 })
 ~~~
 
-The following services are included with `martini.Classic()`:
+The following services are included with [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic):
   * [*log.Logger](http://godoc.org/log#Logger) - Global logger for Martini.
   * [martini.Context](http://godoc.org/github.com/codegangsta/martini#Context) - http request context.
   * [martini.Params](http://godoc.org/github.com/codegangsta/martini#Params) - `map[string]string` of named params found by route matching.
@@ -111,7 +111,7 @@ m.Delete("/", func() {
 Routes are matched in the order they are defined. The first route that
 matches the request is invoked.
 
-Route patterns may include named parameters, accessible via the `martini.Params` service:
+Route patterns may include named parameters, accessible via the [martini.Params](http://godoc.org/github.com/codegangsta/martini#Params) service:
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
   return "Hello " + params["name"]
@@ -139,7 +139,7 @@ m.Run()
 ~~~
 
 #### Request-Level Mapping
-Mapping on the request level can be done in a handler via `martini.Context`:
+Mapping on the request level can be done in a handler via [martini.Context](http://godoc.org/github.com/codegangsta/martini#Context):
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
   logger := &MyCustomLogger{req}
@@ -148,7 +148,7 @@ func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
 ~~~
 
 #### Mapping values to Interfaces
-One of the most powerful parts about services is the ability to map a service to an interface. For instance, if you wanted to override the `http.ResponseWriter` with an object that wrapped it and performed extra operations, you can write the following handler:
+One of the most powerful parts about services is the ability to map a service to an interface. For instance, if you wanted to override the [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) with an object that wrapped it and performed extra operations, you can write the following handler:
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
@@ -157,8 +157,8 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 ~~~
 
 ### Serving Static Files
-A `martini.Classic()` instance automatically serves static files from the "public" directory in the root of your server.
-You can serve from more directories by adding more `martini.Static` handlers.
+A [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic) instance automatically serves static files from the "public" directory in the root of your server.
+You can serve from more directories by adding more [martini.Static](http://godoc.org/github.com/codegangsta/martini#Static) handlers.
 ~~~ go
 m.Use(martini.Static("assets")) // serve from the "assets" directory as well
 ~~~
