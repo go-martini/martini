@@ -21,6 +21,15 @@ Install the package:
 
 View at: http://localhost:3000
 
-## Table of contents
-* [Martini](#martini)
+## Table of Contents
+* [Martini](#martini-)
+  * [Table of Contents](#table-of-contents)
+  * [Classic Martini](#classic-martini)
+    * [Routing](#routing)
+    * [Handlers](#handlers)
+    * [Services](#services)
+    * [Serving Static Files](#serving-static-files)
+  * [Middleware Handlers](#middleware-handlers)
+    * [Next()](#next)
+    * [Injecting Services](#injecting-services)
 
