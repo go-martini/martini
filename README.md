@@ -83,19 +83,19 @@ Each route can take one or more handler methods:
 m := martini.Classic()
 
 m.Get("/", func() {
-  .. show something ..
+  // show something
 }
 
 m.Post("/", func() {
-  .. create something ..
+  // create something
 }
 
 m.Put("/", func() {
-  .. replace something ..
+  // replace something
 }
 
 m.Delete("/", func() {
-  .. destroy something ..
+  // destroy something
 }
 ```
 
