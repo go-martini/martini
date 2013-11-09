@@ -83,9 +83,7 @@ The following services are included with `martini.Classic()`:
 ### Routing
 In Martini, a route is an HTTP method paired with a URL-matching pattern.
 Each route can take one or more handler methods:
-``` go
-m := martini.Classic()
-
+~~~ go
 m.Get("/", func() {
   // show something
 }
@@ -101,7 +99,24 @@ m.Put("/", func() {
 m.Delete("/", func() {
   // destroy something
 }
-```
+~~~
+
+Routes are matched in the order they are defined. The first route that
+matches the request is invoked.
+
+Route patterns may include named parameters, accessible via the `martini.Params` service:
+~~~ go
+m.Get("/hello/:name", func(params martini.Params) string {
+  return "Hello " + params["name"]
+})
+~~~
+
+Route handlers can be stacked on top of each other, which is useful for things like authentication and authorization:
+~~~ go
+m.Get("/secret", authorize, func() {
+  // this will execute as long as authorize doesn't write a response
+})
+~~~
 
 ### Services
 ### Serving Static Files
