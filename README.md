@@ -23,7 +23,7 @@ go get github.com/codegangsta/martini
 
 ## Features
 * Extremely simple to use.
-* Non intrusive design.
+* Non-intrusive design.
 * Play nice with other Golang packages.
 * Awesome path matching and routing.
 * Modular design - Easy to add functionality, easy to rip stuff out.
