@@ -1,6 +1,6 @@
 # Martini [![Build Status](https://drone.io/github.com/codegangsta/martini/status.png)](https://drone.io/github.com/codegangsta/martini/latest)
 
-Martini is a package for quickly writing modular web applications/services in Golang.
+Martini is a powerful package for quickly writing modular web applications/services in Golang.
 
 ~~~ go
 package main
