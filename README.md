@@ -42,10 +42,10 @@ To get up and running quickly, `martini.Classic()` provides some reasonable defa
 ~~~
 
 Below is some of the functionality `martini.Classic()` pulls in automatically:
-  * Request/Response Logging - `martini.Logger()`
-  * Panic Recovery - `martini.Recovery()`
-  * Static File serving - `martini.Static("public")`
-  * Routing - `martini.Router`
+  * Request/Response Logging - [martini.Logger](http://godoc.org/github.com/codegangsta/martini#Logger)
+  * Panic Recovery - [martini.Recovery](http://godoc.org/github.com/codegangsta/martini#Recovery)
+  * Static File serving - [martini.Static](http://godoc.org/github.com/codegangsta/martini#Static)
+  * Routing - [martini.Router](http://godoc.org/github.com/codegangsta/martini#Router)
 
 ### Handlers
 Handlers are the heart and soul of Martini. A handler is basically any kind of callable function:
