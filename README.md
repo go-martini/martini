@@ -72,7 +72,7 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are
 })
 ~~~
 
-The following services are included with a `martini.Classic()`:
+The following services are included with `martini.Classic()`:
   * [*log.Logger](http://godoc.org/log#Logger) - Global logger for Martini
   * [martini.Context](http://godoc.org/github.com/codegangsta/martini#Context) - http request context
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface
