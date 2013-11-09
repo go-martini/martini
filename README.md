@@ -193,3 +193,6 @@ m.Use(func(c martini.Context, log *log.Logger){
   log.Println("after a request")
 })
 ~~~
+
+## About
+Martini is obsessively designed by none other than the [Code Gangsta](http://codegangsta.io/)
