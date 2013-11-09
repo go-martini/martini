@@ -150,7 +150,11 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 ~~~
 
 ### Serving Static Files
+A `martini.Classic()` instance automatically serves static files from the "public" directory in the root of your server.
+You can serve from more directories by adding more `martini.Static` handlers.
+~~~ go
+m.Use(martini.Static("assets")) // serve from the "assets" directory as well
+~~~
+
 ## Middleware Handlers
 ### Next()
-### Injecting Services
-
