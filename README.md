@@ -21,17 +21,24 @@ Install the package:
 go get github.com/codegangsta/martini
 ~~~
 
+## Features
+* Extremely simple to use.
+* Non intrusive design.
+* Play nice with other Golang packages.
+* Awesome path matching and routing.
+* Modular design - Easy to add functionality, easy to rip stuff out.
+* Lots of good handlers/middlewares to use.
+* Great 'out of the box' feature set.
+* **Fully compatible the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
+
 ## Table of Contents
-* [Martini](#martini-)
-  * [Table of Contents](#table-of-contents)
-  * [Classic Martini](#classic-martini)
-    * [Handlers](#handlers)
-    * [Routing](#routing)
-    * [Services](#services)
-    * [Serving Static Files](#serving-static-files)
-  * [Middleware Handlers](#middleware-handlers)
-    * [Next()](#next)
-    * [Injecting Services](#injecting-services)
+* [Classic Martini](#classic-martini)
+  * [Handlers](#handlers)
+  * [Routing](#routing)
+  * [Services](#services)
+  * [Serving Static Files](#serving-static-files)
+* [Middleware Handlers](#middleware-handlers)
+  * [Next()](#next)
 
 ## Classic Martini
 To get up and running quickly, `martini.Classic()` provides some reasonable defaults that work well for most web applications:
