@@ -121,7 +121,7 @@ m.Get("/secret", authorize, func() {
 ### Services
 Services are objects that are available to be injected into a Handler's argument list. You can map a service on a *Global* or *Request* level.
 
-### Global Mapping
+#### Global Mapping
 A Martini instance implements the inject.Injector interface, so mapping a service is easy:
 ~~~ go
 db := &MyDatabase{}
@@ -131,7 +131,7 @@ m.Map(db) // the service will be available to all handlers as *MyDatabase
 m.Run()
 ~~~
 
-### Request-Level Mapping
+#### Request-Level Mapping
 Mapping on the request level can be done in a handler via `martini.Context`:
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
@@ -141,7 +141,13 @@ func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
 ~~~
 
 #### Mapping values to Interfaces
-
+One of the most powerful parts about services is the ability to map a service to an interface. For instance, if you wanted to override the `http.ResponseWriter` with an object that wrapped it and performed extra operations, you can write the following handler:
+~~~
+func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
+  rw := NewSpecialResponseWriter(res)
+  c.MapInterface(rw, (*http.ResponseWriter)(nil)) // override ResponseWriter with our wrapper ResponseWriter
+}
+~~~
 
 ### Serving Static Files
 ## Middleware Handlers
