@@ -54,6 +54,7 @@ m.Get("/", func() {
 }
 ~~~
 
+#### Return Values
 If a handler returns a `string`, Martini will write the result to the current `*http.Request`:
 ~~~ go
 m.Get("/", func() string {
@@ -61,18 +62,19 @@ m.Get("/", func() string {
 })
 ~~~
 
-Handlers are invoked via reflection, so Martini can inject services into Handler arguments. This makes Martini completely  compatible with golang's `http.HandlerFunc` interface:
+#### Service Injection
+Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.** If you add an argument to your Handler, Martini will search it's list of services and attempt to resolve the dependency via type assertion:
 ~~~ go
-m.Get("/", func(res http.ResponseWriter, req *http.Request) {
+m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are injected by Martini
   res.WriteHead(200) // HTTP 200
 })
 ~~~
 
 The following services are included with a `martini.Classic()`:
-  * `*log.Logger` - Global logger for Martini
+  * [*log.Logger](http://godoc.org/log#Logger) - Global logger for Martini
   * [martini.Context](http://godoc.org/github.com/codegangsta/martini#Context) - http request context
-  * `http.ResponseWriter` - http Response writer interface
-  * `*http.Request` - http Request
+  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface
+  * [*http.Request](http://godoc.org/net/http/#Request) - http Request
 
 ### Routing
 In Martini, a route is an HTTP method paired with a URL-matching pattern.
