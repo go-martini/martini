@@ -17,7 +17,9 @@ func main() {
 ~~~
 
 Install the package:
-`go get github.com/codegangsta/martini`
+~~~
+go get github.com/codegangsta/martini
+~~~
 
 View at: http://localhost:3000
 
@@ -32,4 +34,26 @@ View at: http://localhost:3000
   * [Middleware Handlers](#middleware-handlers)
     * [Next()](#next)
     * [Injecting Services](#injecting-services)
+
+## Classic Martini
+To get up and running quickly, `martini.Classic()` provides some reasonable defaults that work well for most web applications:
+
+~~~ go
+  m := martini.Classic()
+  m.Run()
+~~~
+
+Below is some of the functionality `martini.Classic()` pulls in automatically:
+  * Request/Response Logging - `martini.Logger()`
+  * Panic Recovery - `martini.Recovery()`
+  * Static File serving - `martini.Static("public")`
+  * Routing - `martini.Router`
+
+### Routing
+### Handlers
+### Services
+### Serving Static Files
+## Middleware Handlers
+### Next()
+### Injecting Services
 
