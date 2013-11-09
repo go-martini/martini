@@ -49,8 +49,32 @@ Below is some of the functionality `martini.Classic()` pulls in automatically:
   * Static File serving - `martini.Static("public")`
   * Routing - `martini.Router`
 
-### Routing
 ### Handlers
+
+### Routing
+In Martini, a route is an HTTP method paired with a URL-matching pattern.
+Each route can take one or more handler methods:
+
+``` go
+m := martini.Classic()
+
+m.Get("/", func() {
+  .. show something ..
+}
+
+m.Post("/", func() {
+  .. create something ..
+}
+
+m.Put("/", func() {
+  .. replace something ..
+}
+
+m.Delete("/", func() {
+  .. destroy something ..
+}
+```
+
 ### Services
 ### Serving Static Files
 ## Middleware Handlers
