@@ -37,6 +37,7 @@ go get github.com/codegangsta/martini
 To get up and running quickly, `martini.Classic()` provides some reasonable defaults that work well for most web applications:
 ~~~ go
   m := martini.Classic()
+  // ... middleware and routing goes here
   m.Run()
 ~~~
 
