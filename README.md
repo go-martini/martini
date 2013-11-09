@@ -61,12 +61,18 @@ m.Get("/", func() string {
 })
 ~~~
 
-Handlers are invoked via reflection, so Martini can inject services into Handler arguments:
+Handlers are invoked via reflection, so Martini can inject services into Handler arguments. This makes Martini completely  compatible with golang's `http.HandlerFunc` interface:
 ~~~ go
 m.Get("/", func(res http.ResponseWriter, req *http.Request) {
   res.WriteHead(200) // HTTP 200
 })
 ~~~
+
+The following services are included with a `martini.Classic()`:
+  * `*log.Logger` - Global logger for Martini
+  * [martini.Context](http://godoc.org/github.com/codegangsta/martini#Context) - http request context
+  * `http.ResponseWriter` - http Response writer interface
+  * `*http.Request` - http Request
 
 ### Routing
 In Martini, a route is an HTTP method paired with a URL-matching pattern.
