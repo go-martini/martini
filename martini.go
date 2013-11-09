@@ -1,7 +1,6 @@
 package martini
 
 import (
-	"errors"
 	"github.com/codegangsta/inject"
 	"log"
 	"net/http"
@@ -22,26 +21,19 @@ func New() *Martini {
 	return m
 }
 
-func (m *Martini) Use(handler Handler) error {
-	if err := validateHandler(handler); err != nil {
-		return err
-	}
+func (m *Martini) Use(handler Handler) {
+	validateHandler(handler)
 
 	m.handlers = append(m.handlers, handler)
-	return nil
 }
 
 func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	m.createContext(res, req).run()
 }
 
-func (m *Martini) Action(handler Handler) error {
-	if err := validateHandler(handler); err != nil {
-		return err
-	}
-
+func (m *Martini) Action(handler Handler) {
+	validateHandler(handler)
 	m.action = handler
-	return nil
 }
 
 func (m *Martini) Run() {
@@ -80,11 +72,10 @@ func Classic() *ClassicMartini {
 
 type Handler interface{}
 
-func validateHandler(handler Handler) error {
+func validateHandler(handler Handler) {
 	if reflect.TypeOf(handler).Kind() != reflect.Func {
-		return errors.New("martini handler must be a callable func")
+		panic("martini handler must be a callable func")
 	}
-	return nil
 }
 
 type Context interface {

@@ -25,14 +25,6 @@ func Test_New(t *testing.T) {
 	refute(t, m, nil)
 }
 
-func Test_validateHandler(t *testing.T) {
-	one := func() {}
-	two := "Hello"
-
-	expect(t, validateHandler(one), nil)
-	refute(t, validateHandler(two), nil)
-}
-
 func Test_Martini_ServeHTTP(t *testing.T) {
 	result := ""
 	response := httptest.NewRecorder()

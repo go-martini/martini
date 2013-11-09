@@ -62,9 +62,8 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 
 func (r *router) addRoute(method string, pattern string, handlers []Handler) {
 	route := newRoute(method, pattern, handlers)
-	if route.validate() == nil {
-		r.routes = append(r.routes, route)
-	}
+	route.validate()
+	r.routes = append(r.routes, route)
 }
 
 type route struct {
@@ -103,14 +102,10 @@ func (r route) match(method string, path string) (bool, map[string]string) {
 	return false, nil
 }
 
-func (r route) validate() error {
+func (r route) validate() {
 	for _, handler := range r.handlers {
-		err := validateHandler(handler)
-		if err != nil {
-			return err
-		}
+		validateHandler(handler)
 	}
-	return nil
 }
 
 func (r route) handle(c Context, res http.ResponseWriter) {
