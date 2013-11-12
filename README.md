@@ -152,7 +152,7 @@ One of the most powerful parts about services is the ability to map a service to
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
-  c.MapInterface(rw, (*http.ResponseWriter)(nil)) // override ResponseWriter with our wrapper ResponseWriter
+  c.MapTo(rw, (*http.ResponseWriter)(nil)) // override ResponseWriter with our wrapper ResponseWriter
 }
 ~~~
 
