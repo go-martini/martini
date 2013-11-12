@@ -175,8 +175,8 @@ Middleware Handlers work really well for things like logging, authorization, aut
 ~~~ go
 // validate an api key
 m.Use(func(res http.ResponseWriter, req *http.Request) {
-  if req.Header().Get("X-API-KEY") != "secret123" {
-    res.WriteHead(http.StatusUnauthorized)
+  if req.Header.Get("X-API-KEY") != "secret123" {
+    res.WriteHeader(http.StatusUnauthorized)
   }
 })
 ~~~
