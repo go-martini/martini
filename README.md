@@ -21,6 +21,8 @@ Install the package:
 go get github.com/codegangsta/martini
 ~~~
 
+Join the [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
+
 ## Features
 * Extremely simple to use.
 * Non-intrusive design.
