@@ -196,5 +196,8 @@ m.Use(func(c martini.Context, log *log.Logger){
 })
 ~~~
 
+## Contributing
+Feel free to submit patches or file issues via GitHub. If you have an idea for a handler put up a Pull Request and we will find where it fits best!
+
 ## About
 Martini is obsessively designed by none other than the [Code Gangsta](http://codegangsta.io/)
