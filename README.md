@@ -78,7 +78,7 @@ Handlers are invoked via reflection. Martini makes use of *Dependency Injection*
 If you add an argument to your Handler, Martini will search it's list of services and attempt to resolve the dependency via type assertion:
 ~~~ go
 m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are injected by Martini
-  res.WriteHead(200) // HTTP 200
+  res.WriteHeader(200) // HTTP 200
 })
 ~~~
 
