@@ -65,7 +65,7 @@ m.Get("/", func() {
 ~~~
 
 #### Return Values
-If a handler returns something, Martini will write the result to the current [*http.Request](http://godoc.org/net/http#Request) as a string:
+If a handler returns something, Martini will write the result to the current [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) as a string:
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
