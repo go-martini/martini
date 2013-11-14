@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// Handler that authenticates via Basic Auth. Writes a http.StatusUnauthorized
+// Basic returns a Handler that authenticates via Basic Auth. Writes a http.StatusUnauthorized
 // if authentication fails
 func Basic(username string, password string) http.HandlerFunc {
 	var siteAuth = base64.StdEncoding.EncodeToString([]byte(username + ":" + password))

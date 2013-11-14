@@ -6,21 +6,21 @@ import (
 	"regexp"
 )
 
-// Map of name/value pairs for named routes. An instance of martini.Params is available to be injected into any route handler.
+// Params is a map of name/value pairs for named routes. An instance of martini.Params is available to be injected into any route handler.
 type Params map[string]string
 
-// Martini's de-facto routing interface. Supports HTTP verbs, stacked handlers, and dependency injection.
+// Router is Martini's de-facto routing interface. Supports HTTP verbs, stacked handlers, and dependency injection.
 type Router interface {
-	// Adds a route for a HTTP GET request to the specified matching pattern.
+	// Get adds a route for a HTTP GET request to the specified matching pattern.
 	Get(string, ...Handler)
-	// Adds a route for a HTTP POST request to the specified matching pattern.
+	// Ppst adds a route for a HTTP POST request to the specified matching pattern.
 	Post(string, ...Handler)
-	// Adds a route for a HTTP PUT request to the specified matching pattern.
+	// Put adds a route for a HTTP PUT request to the specified matching pattern.
 	Put(string, ...Handler)
-	// Adds a route for a HTTP DELETE request to the specified matching pattern.
+	// Delete adds a route for a HTTP DELETE request to the specified matching pattern.
 	Delete(string, ...Handler)
 
-	// Entry point for routing. This is used as a martini.Handler
+	// Handle is the entry point for routing. This is used as a martini.Handler
 	Handle(http.ResponseWriter, *http.Request, Context)
 }
 
@@ -28,7 +28,7 @@ type router struct {
 	routes []route
 }
 
-// Creates a new Router instance.
+// NewRouter creates a new Router instance.
 func NewRouter() Router {
 	return &router{}
 }
