@@ -31,7 +31,7 @@ Join the [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
 * Modular design - Easy to add functionality, easy to rip stuff out.
 * Lots of good handlers/middlewares to use.
 * Great 'out of the box' feature set.
-* **Fully compatible the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
+* **Fully compatible with the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
 
 ## Table of Contents
 * [Classic Martini](#classic-martini)
