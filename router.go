@@ -13,7 +13,7 @@ type Params map[string]string
 type Router interface {
 	// Get adds a route for a HTTP GET request to the specified matching pattern.
 	Get(string, ...Handler)
-	// Ppst adds a route for a HTTP POST request to the specified matching pattern.
+	// Post adds a route for a HTTP POST request to the specified matching pattern.
 	Post(string, ...Handler)
 	// Put adds a route for a HTTP PUT request to the specified matching pattern.
 	Put(string, ...Handler)
