@@ -6,6 +6,7 @@ import (
 	"runtime/debug"
 )
 
+// Middleware that recovers from any panics and writes a 500 if there was one.
 func Recovery() Handler {
 	return func(res http.ResponseWriter, c Context, logger *log.Logger) {
 		defer func() {
