@@ -3,16 +3,13 @@ package auth
 import (
 	"encoding/base64"
 	"github.com/codegangsta/martini"
+	. "github.com/smartystreets/goconvey/convey"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
 func Test_BasicAuth(t *testing.T) {
-	recorder := httptest.NewRecorder()
-
-	auth := "Basic " + base64.StdEncoding.EncodeToString([]byte("foo:bar"))
-
 	m := martini.New()
 	m.Use(Basic("foo", "bar"))
 	m.Use(func(res http.ResponseWriter, req *http.Request) {
@@ -21,25 +18,24 @@ func Test_BasicAuth(t *testing.T) {
 
 	r, _ := http.NewRequest("GET", "foo", nil)
 
-	m.ServeHTTP(recorder, r)
+	Convey("Martini should not serve unauthorized requests", t, func() {
+		recorder := httptest.NewRecorder()
+		m.ServeHTTP(recorder, r)
 
-	if recorder.Code != 401 {
-		t.Error("Response not 401")
-	}
+		So(recorder.Code, ShouldEqual, http.StatusUnauthorized)
+		So(recorder.Body.String(), ShouldNotEqual, "hello")
+	})
 
-	if recorder.Body.String() == "hello" {
-		t.Error("Auth block failed")
-	}
+	Convey("Given basic authentication", t, func() {
+		auth := "Basic " + base64.StdEncoding.EncodeToString([]byte("foo:bar"))
+		r.Header.Set("Authorization", auth)
 
-	recorder = httptest.NewRecorder()
-	r.Header.Set("Authorization", auth)
-	m.ServeHTTP(recorder, r)
+		Convey("Martini should authorize the authenticated request", func() {
+			recorder := httptest.NewRecorder()
+			m.ServeHTTP(recorder, r)
 
-	if recorder.Code == 401 {
-		t.Error("Response is 401")
-	}
-
-	if recorder.Body.String() != "hello" {
-		t.Error("Auth failed, got: ", recorder.Body.String())
-	}
+			So(recorder.Code, ShouldNotEqual, http.StatusUnauthorized)
+			So(recorder.Body.String(), ShouldEqual, "hello")
+		})
+	})
 }
