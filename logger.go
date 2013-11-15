@@ -3,14 +3,25 @@ package martini
 import (
 	"log"
 	"net/http"
+	"runtime"
 	"time"
 )
+
+var logFormat = getLogFormat()
+
+func getLogFormat() string {
+	format := "Started %s %s"
+	if runtime.GOOS != "windows" {
+		return "\033[32;1m" + format + "\033[0m\n"
+	}
+	return format
+}
 
 // Logger returns a middleware handler that logs the request as it goes in and the response as it goes out.
 func Logger() Handler {
 	return func(res http.ResponseWriter, req *http.Request, c Context, log *log.Logger) {
 		start := time.Now()
-		log.Printf("\033[32;1mStarted %s %s\033[0m\n", req.Method, req.URL.Path)
+		log.Printf(logFormat, req.Method, req.URL.Path)
 
 		rl := &responseLogger{res, 200, 0}
 		c.MapTo(rl, (*http.ResponseWriter)(nil))
