@@ -30,14 +30,11 @@ func assertEqualField(t *testing.T, fieldname string, testcasenumber int, expect
 	}
 }
 
-func handler(test formTest, t *testing.T, index int, post *BlogPost, reqerr *RequireError) {
-
-	if !test.ok && reqerr == nil {
+func handler(test formTest, t *testing.T, index int, post *BlogPost, errors Errors) {
+	if !test.ok && len(errors) == 0 {
 		t.Errorf("expected RequireError in Testcase:%i", index)
 	}
-
 	assertEqualField(t, "Title", index, test.ref.Title, post.Title)
-
 	assertEqualField(t, "Content", index, test.ref.Content, post.Content)
 
 }
@@ -47,10 +44,10 @@ func Test_FormTests(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		m := martini.Classic()
 		if test.method == "GET" {
-			m.Get("/blogposts/create", Form(&BlogPost{}), func(post *BlogPost, reqerr *RequireError) { handler(test, t, index, post, reqerr) })
+			m.Get("/blogposts/create", Form(&BlogPost{}), func(post *BlogPost, errors Errors) { handler(test, t, index, post, errors) })
 		}
 		if test.method == "POST" {
-			m.Post("/blogposts/create", Form(&BlogPost{}), func(post *BlogPost, reqerr *RequireError) { handler(test, t, index, post, reqerr) })
+			m.Post("/blogposts/create", Form(&BlogPost{}), func(post *BlogPost, errors Errors) { handler(test, t, index, post, errors) })
 		}
 		req, err := http.NewRequest(test.method, test.path, nil)
 		if err != nil {

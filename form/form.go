@@ -26,34 +26,25 @@
 package form
 
 import (
-	"fmt"
 	"martini"
 	"net/http"
 	"reflect"
 	"strings"
 )
 
-//Avaiable error if a formfield which was set as required, wasn't present.
-type RequireError struct {
-	Fields []string //Name of fields which weren't set
-}
+const (
+	RequireErrors string = "RequireErrors" //Key for fields, seperated with a comma, which are marked as required but weren't present in the form.
+)
 
-func newRequireError(fields []string) *RequireError {
-	return &RequireError{
-		fields,
-	}
-}
+//Available errors. Use len() to check if any errors occured.
+type Errors map[string]string
 
-func (re *RequireError) Error() string {
-	return fmt.Sprintf("Fields: %v are required", re.Fields)
-}
-
-//Create a new formhandler. If a required field isn't present, a *RequireError is avaiable.
+//Create a new formhandler. Errors are available via form.Errors-Service.
 func Form(formstruct interface{}) martini.Handler {
 	return func(context martini.Context, req *http.Request) {
 		req.ParseForm()
 		typ := reflect.TypeOf(formstruct).Elem()
-		errfields := make([]string, 0)
+		errors := make(Errors)
 
 		for i := 0; i < typ.NumField(); i++ {
 			field := typ.Field(i)
@@ -64,19 +55,18 @@ func Form(formstruct interface{}) martini.Handler {
 					reflect.ValueOf(formstruct).Elem().Field(i).SetString(val)
 					if len(args) > 1 {
 						if val == "" && strings.Contains(args[1], "required") {
-							errfields = append(errfields, args[0])
+							alreadyIn := errors[RequireErrors]
+							if len(alreadyIn) == 0 {
+								errors[RequireErrors] = args[0]
+							} else {
+								errors[RequireErrors] = strings.Join([]string{alreadyIn, args[0]}, ",")
+							}
 						}
 					}
 				}
 			}
-
 		}
-
-		if len(errfields) > 0 {
-			context.Map(newRequireError(errfields))
-		} else {
-			context.Map((*RequireError)(nil))
-		}
+		context.Map(errors)
 		context.Map(formstruct)
 	}
 }
