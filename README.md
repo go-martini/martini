@@ -61,7 +61,7 @@ Handlers are the heart and soul of Martini. A handler is basically any kind of c
 ~~~ go
 m.Get("/", func() {
   println("hello world")
-}
+})
 ~~~
 
 #### Return Values
@@ -95,19 +95,19 @@ Each route can take one or more handler methods:
 ~~~ go
 m.Get("/", func() {
   // show something
-}
+})
 
 m.Post("/", func() {
   // create something
-}
+})
 
 m.Put("/", func() {
   // replace something
-}
+})
 
 m.Delete("/", func() {
   // destroy something
-}
+})
 ~~~
 
 Routes are matched in the order they are defined. The first route that
