@@ -17,7 +17,7 @@ func Test_Routing(t *testing.T) {
 			result += "foo"
 		})
 		router.Post("/bar/:id", func(params Params) {
-			expect(t, params["id"], "bat")
+			So(params["id"], ShouldEqual, "bat")
 			result += "barbat"
 		})
 		router.Put("/fizzbuzz", func() {
