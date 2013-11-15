@@ -1,4 +1,4 @@
-# Martini [![Build Status](https://drone.io/github.com/codegangsta/martini/status.png)](https://drone.io/github.com/codegangsta/martini/latest)
+# Martini [![Build Status](https://drone.io/github.com/codegangsta/martini/status.png)](https://drone.io/github.com/codegangsta/martini/latest) [![GoDoc](https://godoc.org/github.com/codegangsta/martini?status.png)](http://godoc.org/github.com/codegangsta/martini)
 
 Martini is a powerful package for quickly writing modular web applications/services in Golang.
 
