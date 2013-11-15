@@ -10,7 +10,7 @@ import (
 func Logger() Handler {
 	return func(res http.ResponseWriter, req *http.Request, c Context, log *log.Logger) {
 		start := time.Now()
-		log.Printf("\033[32;1mStarted %s %s\033[0m\n", req.Method, req.URL.Path)
+		log.Printf("Started %s %s", req.Method, req.URL.Path)
 
 		rl := &responseLogger{res, 200, 0}
 		c.MapTo(rl, (*http.ResponseWriter)(nil))
