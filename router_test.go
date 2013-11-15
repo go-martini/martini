@@ -1,90 +1,108 @@
 package martini
 
 import (
+	. "github.com/smartystreets/goconvey/convey"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
 func Test_Routing(t *testing.T) {
-	router := NewRouter()
 	recorder := httptest.NewRecorder()
-
-	req, err := http.NewRequest("GET", "http://localhost:3000/foo", nil)
-	if err != nil {
-		t.Error(err)
-	}
-	context := New().createContext(recorder, req)
-
-	req2, err := http.NewRequest("POST", "http://localhost:3000/bar/bat", nil)
-	if err != nil {
-		t.Error(err)
-	}
-	context2 := New().createContext(recorder, req2)
-
-	req3, err := http.NewRequest("DELETE", "http://localhost:3000/baz", nil)
-	if err != nil {
-		t.Error(err)
-	}
-	context3 := New().createContext(recorder, req3)
-
 	result := ""
-	router.Get("/foo", func(req *http.Request) {
-		result += "foo"
-	})
-	router.Post("/bar/:id", func(params Params) {
-		expect(t, params["id"], "bat")
-		result += "barbat"
-	})
-	router.Put("/fizzbuzz", func() {
-		result += "fizzbuzz"
-	})
-	router.Delete("/bazzer", func(c Context) {
-		result += "baz"
-	})
 
-	router.Handle(recorder, req, context)
-	router.Handle(recorder, req2, context2)
-	router.Handle(recorder, req3, context3)
-	expect(t, result, "foobarbat")
-	expect(t, recorder.Code, http.StatusNotFound)
-	expect(t, recorder.Body.String(), http.StatusText(http.StatusNotFound))
+	Convey("Given a router with some routes and handlers", t, func() {
+		router := NewRouter()
+		router.Get("/foo", func(req *http.Request) {
+			result += "foo"
+		})
+		router.Post("/bar/:id", func(params Params) {
+			So(params["id"], ShouldEqual, "bat")
+			result += "barbat"
+		})
+		router.Put("/fizzbuzz", func() {
+			result += "fizzbuzz"
+		})
+		router.Delete("/bazzer", func(c Context) {
+			result += "baz"
+		})
+
+		Convey("And a series of requests to route", func() {
+			req, err := http.NewRequest("GET", "http://localhost:3000/foo", nil)
+			So(err, ShouldBeNil)
+			context := New().createContext(recorder, req)
+
+			req2, err := http.NewRequest("POST", "http://localhost:3000/bar/bat", nil)
+			So(err, ShouldBeNil)
+			context2 := New().createContext(recorder, req2)
+
+			req3, err := http.NewRequest("DELETE", "http://localhost:3000/baz", nil)
+			So(err, ShouldBeNil)
+			context3 := New().createContext(recorder, req3)
+
+			Convey("When the requests are handled in order", func() {
+				router.Handle(recorder, req, context)
+				router.Handle(recorder, req2, context2)
+				router.Handle(recorder, req3, context3)
+
+				Convey("The request should be routed and handled correctly", func() {
+					So(result, ShouldEqual, "foobarbat")
+					So(recorder.Code, ShouldEqual, http.StatusNotFound)
+					So(recorder.Body.String(), ShouldEqual, http.StatusText(http.StatusNotFound))
+				})
+			})
+		})
+	})
 }
 
 func Test_RouterHandlerStacking(t *testing.T) {
-	router := NewRouter()
 	recorder := httptest.NewRecorder()
-
-	req, err := http.NewRequest("GET", "http://localhost:3000/foo", nil)
-	if err != nil {
-		t.Error(err)
-	}
-	context := New().createContext(recorder, req)
-
 	result := ""
 
-	f1 := func() {
-		result += "foo"
-	}
+	Convey("With a router and set of handlers", t, func() {
+		router := NewRouter()
 
-	f2 := func() {
-		result += "bar"
-	}
+		req, err := http.NewRequest("GET", "http://localhost:3000/foo", nil)
+		So(err, ShouldBeNil)
+		context := New().createContext(recorder, req)
 
-	f3 := func() string {
-		result += "bat"
-		return "Hello world"
-	}
+		f1 := func() {
+			result += "foo"
+		}
+		f2 := func() {
+			result += "bar"
+		}
+		f3 := func() string {
+			result += "bat"
+			return "Hello world"
+		}
+		f4 := func() {
+			result += "baz"
+		}
 
-	f4 := func() {
-		result += "baz"
-	}
+		Convey("Stacked route should be handled as expected", func() {
+			router.Get("/foo", f1, f2, f3, f4)
+			router.Handle(recorder, req, context)
 
-	router.Get("/foo", f1, f2, f3, f4)
+			So(result, ShouldEqual, "foobarbat")
+			So(recorder.Body.String(), ShouldEqual, "Hello world")
+		})
+	})
+}
 
-	router.Handle(recorder, req, context)
-	expect(t, result, "foobarbat")
-	expect(t, recorder.Body.String(), "Hello world")
+func Test_RouteMatching(t *testing.T) {
+	Convey("With a route to match", t, func() {
+		route := newRoute("GET", "/foo/:bar/bat/:baz", nil)
+
+		Convey("Each route string should match the correct route", func() {
+			for _, tt := range routeTests {
+				ok, params := route.match(tt.method, tt.path)
+				So(ok, ShouldEqual, tt.ok)
+				So(params["bar"], ShouldEqual, tt.params["bar"])
+				So(params["baz"], ShouldEqual, tt.params["baz"])
+			}
+		})
+	})
 }
 
 var routeTests = []struct {
@@ -103,14 +121,4 @@ var routeTests = []struct {
 	{"GET", "/foo/123/bat/321/", true, map[string]string{"bar": "123", "baz": "321"}},
 	{"GET", "/foo/123/bat/321//", false, map[string]string{}},
 	{"GET", "/foo/123//bat/321/", false, map[string]string{}},
-}
-
-func Test_RouteMatching(t *testing.T) {
-	route := newRoute("GET", "/foo/:bar/bat/:baz", nil)
-	for _, tt := range routeTests {
-		ok, params := route.match(tt.method, tt.path)
-		if ok != tt.ok || params["bar"] != tt.params["bar"] || params["baz"] != tt.params["baz"] {
-			t.Errorf("expected: (%v, %v) got: (%v, %v)", tt.ok, tt.params, ok, params)
-		}
-	}
 }
