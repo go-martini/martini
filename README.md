@@ -196,6 +196,28 @@ m.Use(func(c martini.Context, log *log.Logger){
 })
 ~~~
 
+## Integration
+
+A Martini instance implements http.Handler, so it can easily be used to serve subtrees 
+on existing go servers. For example this is a working martini app for Google App Engine:
+
+~~~ go
+package hello
+
+import (
+  "net/http"
+  "github.com/codegangsta/martini"
+)
+
+func init() {
+  m := martini.Classic()
+  m.Get("/", func() string {
+    return "Hello world!"
+  })
+  http.Handle("/", m)
+}
+~~~
+
 ## Contributing
 Feel free to submit patches or file issues via GitHub. If you have an idea for a handler put up a Pull Request and we will find where it fits best!
 
