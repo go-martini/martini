@@ -33,7 +33,7 @@ import (
 )
 
 const (
-	RequireErrors string = "RequireErrors" //Key for fields, seperated with a comma, which are marked as required but weren't present in the form.
+	RequireError string = "RequireError" //Error for fields which are marked as required but weren't present in the form.
 )
 
 //Available errors. Use len() to check if any errors occured.
@@ -55,12 +55,7 @@ func Form(formstruct interface{}) martini.Handler {
 					reflect.ValueOf(formstruct).Elem().Field(i).SetString(val)
 					if len(args) > 1 {
 						if val == "" && strings.Contains(args[1], "required") {
-							alreadyIn := errors[RequireErrors]
-							if len(alreadyIn) == 0 {
-								errors[RequireErrors] = args[0]
-							} else {
-								errors[RequireErrors] = strings.Join([]string{alreadyIn, args[0]}, ",")
-							}
+							errors[args[0]] = RequireError
 						}
 					}
 				}
