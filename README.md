@@ -16,7 +16,7 @@ func main() {
 }
 ~~~
 
-Install the package:
+Install the package (**go 1.1** and greater is required):
 ~~~
 go get github.com/codegangsta/martini
 ~~~
