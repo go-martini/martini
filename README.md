@@ -198,8 +198,8 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ## Integration
 
-A Martini instance implements http.Handler, so it can easily be used to serve subtrees 
-on existing go servers. For example this is a working martini app for Google App Engine:
+A Martini instance implements `http.Handler`, so it can easily be used to serve subtrees 
+on existing go servers. For example this is a working Martini app for Google App Engine:
 
 ~~~ go
 package hello
