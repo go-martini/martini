@@ -1,4 +1,4 @@
-//Package form implements a handler for post and get forms.
+// Package form implements a handler for post and get forms.
 //
 // For a full guide visit http://github.com/codegangsta/martini
 //
@@ -26,7 +26,7 @@
 package form
 
 import (
-	"martini"
+	"github.com/codegangsta/martini"
 	"net/http"
 	"reflect"
 	"strings"

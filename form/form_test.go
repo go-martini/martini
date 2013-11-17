@@ -1,7 +1,7 @@
 package form
 
 import (
-	"martini"
+	"github.com/codegangsta/martini"
 	"net/http"
 	"net/http/httptest"
 	"testing"
