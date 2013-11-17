@@ -33,13 +33,14 @@ import (
 )
 
 const (
-	RequireError string = "RequireError" //Error for fields which are marked as required but weren't present in the form.
+	// Error for fields which are marked as required but weren't present in the form.
+	RequireError string = "RequireError"
 )
 
-//Available errors. Use len() to check if any errors occured.
+// Available errors. Use len() to check if any errors occured.
 type Errors map[string]string
 
-//Create a new formhandler. Errors are available via form.Errors-Service.
+// Create a new formhandler. Errors are available via form.Errors-Service.
 func Form(formstruct interface{}) martini.Handler {
 	return func(context martini.Context, req *http.Request) {
 		req.ParseForm()
@@ -51,11 +52,12 @@ func Form(formstruct interface{}) martini.Handler {
 			if tag := field.Tag.Get("form"); tag != "" {
 				args := strings.Split(tag, ",")
 				if len(args) > 0 {
-					val := req.Form.Get(args[0])
+					name := args[0]
+					val := req.Form.Get(name)
 					reflect.ValueOf(formstruct).Elem().Field(i).SetString(val)
 					if len(args) > 1 {
 						if val == "" && strings.Contains(args[1], "required") {
-							errors[args[0]] = RequireError
+							errors[name] = RequireError
 						}
 					}
 				}
