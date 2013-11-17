@@ -56,6 +56,13 @@ Below is some of the functionality [martini.Classic()](http://godoc.org/github.c
   * Static File serving - [martini.Static](http://godoc.org/github.com/codegangsta/martini#Static)
   * Routing - [martini.Router](http://godoc.org/github.com/codegangsta/martini#Router)
 
+You can also specify a custom binding address and port with a "RunConfig" struct:
+~~~ go
+  m := martini.Classic()
+  mConfig := &martini.RunConfig{Addr: "127.0.0.1", Port: 1337}
+  m.Run(mConfig)
+~~~
+
 ### Handlers
 Handlers are the heart and soul of Martini. A handler is basically any kind of callable function:
 ~~~ go

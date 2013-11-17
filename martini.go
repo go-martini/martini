@@ -23,6 +23,7 @@ import (
 	"net/http"
 	"os"
 	"reflect"
+	"strconv"
 )
 
 // Martini represents the top level web application. inject.Injector methods can be invoked to map services on a global level.
@@ -58,15 +59,39 @@ func (m *Martini) Action(handler Handler) {
 	m.action = handler
 }
 
-// Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
-func (m *Martini) Run() {
-	port := os.Getenv("PORT")
-	if len(port) == 0 {
-		port = "3000"
-	}
+type RunConfig struct {
+	Addr string
+	Port int
+}
 
-	m.logger.Println("listening on port " + port)
-	http.ListenAndServe(":"+port, m)
+var defaultConfig = &RunConfig{Port: 3000, Addr: "0.0.0.0"}
+
+// Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
+// You can use a martini.RunConfig to use a customized run config.
+func (m *Martini) Run(config ...*RunConfig) {
+	// Martini config management
+	var martiniConfig *RunConfig
+	if len(config) == 0 {
+		// No RunConfig given: we use the default config, and see if
+		// Env variables "PORT" and "ADDR" has been set.
+		martiniConfig = defaultConfig
+		addr := os.Getenv("ADDR")
+		if len(addr) > 0 {
+			martiniConfig.Addr = addr
+		}
+		port, err := strconv.Atoi(os.Getenv("PORT"))
+		if err != nil && port > 0 {
+			martiniConfig.Port = port
+		}
+	} else {
+		// A RunConfig has been provided: we'll use that one!
+		martiniConfig = config[0]
+	}
+	port := strconv.Itoa(martiniConfig.Port)
+	addr := martiniConfig.Addr
+
+	m.logger.Println("listening on address '" + addr + "', port " + port)
+	http.ListenAndServe(addr+":"+port, m)
 }
 
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
