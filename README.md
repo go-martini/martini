@@ -226,7 +226,7 @@ func init() {
 Martini's `Run` function looks for the PORT environment variable and uses that. Otherwise Martini will default to port 3000.
 To have more flexibility over port and host, use the `http.ListenAndServe` function instead.
 
-~~~
+~~~ go
   m := martini.Classic()
   // ...
   http.ListenAndServe(":8080", m)
