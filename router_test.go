@@ -48,7 +48,7 @@ func Test_Routing(t *testing.T) {
 	router.Handle(recorder, req3, context3)
 	expect(t, result, "foobarbat")
 	expect(t, recorder.Code, http.StatusNotFound)
-	expect(t, recorder.Body.String(), http.StatusText(http.StatusNotFound))
+	expect(t, recorder.Body.String(), "404 page not found\n")
 }
 
 func Test_RouterHandlerStacking(t *testing.T) {
@@ -113,4 +113,20 @@ func Test_RouteMatching(t *testing.T) {
 			t.Errorf("expected: (%v, %v) got: (%v, %v)", tt.ok, tt.params, ok, params)
 		}
 	}
+}
+
+func Test_NotFound(t *testing.T) {
+	router := NewRouter()
+	recorder := httptest.NewRecorder()
+
+	req, _ := http.NewRequest("GET", "http://localhost:3000/foo", nil)
+	context := New().createContext(recorder, req)
+
+	router.NotFound(func(res http.ResponseWriter) {
+		http.Error(res, "Nope", http.StatusNotFound)
+	})
+
+	router.Handle(recorder, req, context)
+	expect(t, recorder.Code, http.StatusNotFound)
+	expect(t, recorder.Body.String(), "Nope\n")
 }

@@ -20,17 +20,21 @@ type Router interface {
 	// Delete adds a route for a HTTP DELETE request to the specified matching pattern.
 	Delete(string, ...Handler)
 
+	// NotFound sets the handler that is called when a no route matches a request. Throws a basic 404 by default.
+	NotFound(Handler)
+
 	// Handle is the entry point for routing. This is used as a martini.Handler
 	Handle(http.ResponseWriter, *http.Request, Context)
 }
 
 type router struct {
-	routes []route
+	routes   []route
+	notFound Handler
 }
 
 // NewRouter creates a new Router instance.
 func NewRouter() Router {
-	return &router{}
+	return &router{notFound: http.NotFound}
 }
 
 func (r *router) Get(pattern string, h ...Handler) {
@@ -64,8 +68,14 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 	}
 
 	// no routes exist, 404
-	res.WriteHeader(http.StatusNotFound)
-	res.Write([]byte(http.StatusText(http.StatusNotFound)))
+	_, err := context.Invoke(r.notFound)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (r *router) NotFound(handler Handler) {
+	r.notFound = handler
 }
 
 func (r *router) addRoute(method string, pattern string, handlers []Handler) {
