@@ -199,6 +199,10 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ## FAQ
 
+### Where do I find middleware X?
+
+Start by looking in the [martini-contrib](http://github.com/codegangsta/martini-contrib) package. If it is not there feel free to put up a Pull Request for one.
+
 ### How do I integrate with existing servers?
 
 A Martini instance implements `http.Handler`, so it can easily be used to serve subtrees 
@@ -233,7 +237,7 @@ To have more flexibility over port and host, use the `http.ListenAndServe` funct
 ~~~
 
 ## Contributing
-Feel free to submit patches or file issues via GitHub. If you have an idea for a handler put up a Pull Request and we will find where it fits best!
+Martini is meant to be kept tiny and clean. Most contributions should end up in the [martini-contrib](http://github.com/codegangsta/martini-contrib) repository. If you do have a contribution for the core of Martini feel free to put up a Pull Request.
 
 ## About
 Martini is obsessively designed by none other than the [Code Gangsta](http://codegangsta.io/)
