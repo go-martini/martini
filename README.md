@@ -41,6 +41,7 @@ Join the [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
   * [Serving Static Files](#serving-static-files)
 * [Middleware Handlers](#middleware-handlers)
   * [Next()](#next)
+* [FAQ](#faq)
 
 ## Classic Martini
 To get up and running quickly, [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic) provides some reasonable defaults that work well for most web applications:
@@ -196,10 +197,12 @@ m.Use(func(c martini.Context, log *log.Logger){
 })
 ~~~
 
-## Integration
+## FAQ
+
+### How do I integrate with existing servers?
 
 A Martini instance implements `http.Handler`, so it can easily be used to serve subtrees 
-on existing go servers. For example this is a working Martini app for Google App Engine:
+on existing Go servers. For example this is a working Martini app for Google App Engine:
 
 ~~~ go
 package hello
@@ -216,6 +219,17 @@ func init() {
   })
   http.Handle("/", m)
 }
+~~~
+
+### How do I change the port/host?
+
+Martini's `Run` function looks for the PORT environment variable and uses that. Otherwise Martini will default to port 3000.
+To have more flexibility over port and host, use the `http.ListenAndServe` function instead.
+
+~~~
+  m := martini.Classic()
+  // ...
+  http.ListenAndServe(":8080", m)
 ~~~
 
 ## Contributing
