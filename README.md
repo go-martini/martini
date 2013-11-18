@@ -112,6 +112,10 @@ m.Put("/", func() {
 m.Delete("/", func() {
   // destroy something
 })
+
+m.NotFound(func() {
+  // handle 404
+})
 ~~~
 
 Routes are matched in the order they are defined. The first route that
