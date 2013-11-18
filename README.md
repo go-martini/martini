@@ -33,6 +33,9 @@ Join the [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
 * Great 'out of the box' feature set.
 * **Fully compatible with the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
 
+## More Middleware
+For more middleware and functionality, check out the [martini-contrib](http://github.com/codegangsta/martini-contrib) repository.
+
 ## Table of Contents
 * [Classic Martini](#classic-martini)
   * [Handlers](#handlers)
