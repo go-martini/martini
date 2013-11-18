@@ -2,6 +2,7 @@ package martini
 
 import (
 	"log"
+	"path/filepath"
 	"net/http"
 )
 
@@ -18,8 +19,19 @@ func Static(path string) Handler {
 		defer f.Close()
 
 		fi, err := f.Stat()
-		if err != nil || fi.IsDir() {
+		if err != nil {
 			return
+		}
+		if fi.IsDir() {
+			file = filepath.Join(file, "index.html")
+			f, err = dir.Open(file)
+			if err != nil {
+				return
+			}
+			fi, err = f.Stat()
+			if err != nil || fi.IsDir() {
+				return
+			}
 		}
 
 		log.Println("[Static] Serving " + file)
