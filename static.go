@@ -25,7 +25,7 @@ func Static(path string) Handler {
 
 		// Try to serve index.html
 		if fi.IsDir() {
-			file = filepath.Join(file, "index.html")
+			file += "/index.html"
 			f, err = dir.Open(file)
 			if err != nil {
 				return
