@@ -76,6 +76,13 @@ m.Get("/", func() string {
 })
 ~~~
 
+You can also optionally return a status code:
+~~~ go
+m.Get("/", func() (int, string) {
+  return 418, "i'm a teapot" // HTTP 418 : "i'm a teapot"
+})
+~~~
+
 #### Service Injection
 Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.** 
 
