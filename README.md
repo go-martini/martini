@@ -110,6 +110,10 @@ m.Get("/", func() {
   // show something
 })
 
+m.Patch("/", func() {
+  // update something
+})
+
 m.Post("/", func() {
   // create something
 })
