@@ -142,11 +142,33 @@ func (r route) handle(c Context, res http.ResponseWriter) {
 
 		// if the handler returned something, write it to
 		// the http response
-		if len(vals) > 1 && vals[0].Kind() == reflect.Int {
-			res.WriteHeader(int(vals[0].Int()))
-			res.Write([]byte(vals[1].String()))
-		} else if len(vals) > 0 {
-			res.Write([]byte(vals[0].String()))
+		nvals := len(vals)
+		if nvals > 1 && vals[0].Kind() == reflect.Int {
+			v1, v2 := vals[0], vals[1]
+			res.WriteHeader(int(v1.Int()))
+			if v2.Kind() == reflect.String {
+				res.Write([]byte(v2.String()))
+			} else if v2.IsValid() {
+				iface := v2.Interface()
+				if err, ok := iface.(error); ok {
+					res.Write([]byte(err.Error()))
+				} else if str, ok := iface.(fmt.Stringer); ok {
+					res.Write([]byte(str.String()))
+				}
+			}
+		} else if nvals > 0 {
+			v1 := vals[0]
+			if v1.Kind() == reflect.String {
+				res.Write([]byte(v1.String()))
+			} else if v1.IsValid() {
+				iface := v1.Interface()
+				if err, ok := iface.(error); ok {
+					res.WriteHeader(http.StatusInternalServerError)
+					res.Write([]byte(err.Error()))
+				} else if str, ok := iface.(fmt.Stringer); ok {
+					res.Write([]byte(str.String()))
+				}
+			}
 		}
 		if c.written() {
 			return
