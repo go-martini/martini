@@ -70,7 +70,7 @@ func (m *Martini) Run() {
 }
 
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
-	c := &context{inject.New(), append(m.handlers, m.action), &responseWriter{res, false}, 0}
+	c := &context{inject.New(), append(m.handlers, m.action), NewResponseWriter(res), 0}
 	c.SetParent(m)
 	c.MapTo(c, (*Context)(nil))
 	c.MapTo(c.rw, (*http.ResponseWriter)(nil))
@@ -118,7 +118,7 @@ type Context interface {
 type context struct {
 	inject.Injector
 	handlers []Handler
-	rw       *responseWriter
+	rw       ResponseWriter
 	index    int
 }
 
@@ -128,7 +128,7 @@ func (c *context) Next() {
 }
 
 func (c *context) written() bool {
-	return c.rw.written
+	return c.rw.Written()
 }
 
 func (c *context) run() {
@@ -139,27 +139,8 @@ func (c *context) run() {
 		}
 		c.index += 1
 
-		if c.rw.written {
+		if c.rw.Written() {
 			return
 		}
 	}
-}
-
-type responseWriter struct {
-	w       http.ResponseWriter
-	written bool
-}
-
-func (r *responseWriter) Header() http.Header {
-	return r.w.Header()
-}
-
-func (r *responseWriter) Write(b []byte) (int, error) {
-	r.written = true
-	return r.w.Write(b)
-}
-
-func (r *responseWriter) WriteHeader(s int) {
-	r.written = true
-	r.w.WriteHeader(s)
 }
