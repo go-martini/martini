@@ -3,7 +3,6 @@ package martini
 import (
 	"log"
 	"net/http"
-	"path/filepath"
 )
 
 // Static returns a middleware handler that serves static files in the given path.
