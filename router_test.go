@@ -28,9 +28,19 @@ func Test_Routing(t *testing.T) {
 	}
 	context3 := New().createContext(recorder, req3)
 
+	req4, err := http.NewRequest("PATCH", "http://localhost:3000/bar/foo", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	context4 := New().createContext(recorder, req4)
+
 	result := ""
 	router.Get("/foo", func(req *http.Request) {
 		result += "foo"
+	})
+	router.Patch("/bar/:id", func(params Params) {
+		expect(t, params["id"], "foo")
+		result += "barfoo"
 	})
 	router.Post("/bar/:id", func(params Params) {
 		expect(t, params["id"], "bat")
@@ -46,7 +56,8 @@ func Test_Routing(t *testing.T) {
 	router.Handle(recorder, req, context)
 	router.Handle(recorder, req2, context2)
 	router.Handle(recorder, req3, context3)
-	expect(t, result, "foobarbat")
+	router.Handle(recorder, req4, context4)
+	expect(t, result, "foobarbatbarfoo")
 	expect(t, recorder.Code, http.StatusNotFound)
 	expect(t, recorder.Body.String(), "404 page not found\n")
 }

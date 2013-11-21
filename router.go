@@ -14,6 +14,8 @@ type Params map[string]string
 type Router interface {
 	// Get adds a route for a HTTP GET request to the specified matching pattern.
 	Get(string, ...Handler)
+	// Patch adds a route for a HTTP PATCH request to the specified matching pattern.
+	Patch(string, ...Handler)
 	// Post adds a route for a HTTP POST request to the specified matching pattern.
 	Post(string, ...Handler)
 	// Put adds a route for a HTTP PUT request to the specified matching pattern.
@@ -40,6 +42,10 @@ func NewRouter() Router {
 
 func (r *router) Get(pattern string, h ...Handler) {
 	r.addRoute("GET", pattern, h)
+}
+
+func (r *router) Patch(pattern string, h ...Handler) {
+	r.addRoute("PATCH", pattern, h)
 }
 
 func (r *router) Post(pattern string, h ...Handler) {
