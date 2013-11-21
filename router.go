@@ -3,6 +3,7 @@ package martini
 import (
 	"fmt"
 	"net/http"
+	"reflect"
 	"regexp"
 )
 
@@ -135,7 +136,7 @@ func (r route) handle(c Context, res http.ResponseWriter) {
 
 		// if the handler returned something, write it to
 		// the http response
-		if len(vals) > 1 {
+		if len(vals) > 1 && vals[0].Kind() == reflect.Int {
 			res.WriteHeader(int(vals[0].Int()))
 			res.Write([]byte(vals[1].String()))
 		} else if len(vals) > 0 {
