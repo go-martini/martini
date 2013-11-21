@@ -56,10 +56,14 @@ func Test_RouterHandlerStatusCode(t *testing.T) {
 	router.Get("/foo", func() string {
 		return "foo"
 	})
-	router.Post("/bar", func() (int, string) {
-		return http.StatusCreated, "bar"
+	router.Get("/bar", func() (int, string) {
+		return http.StatusForbidden, "bar"
+	})
+	router.Get("/baz", func() (string, string) {
+		return "baz", "BAZ!"
 	})
 
+	// code should be 200 if none is returned from the handler
 	recorder := httptest.NewRecorder()
 	req, err := http.NewRequest("GET", "http://localhost:3000/foo", nil)
 	if err != nil {
@@ -70,15 +74,27 @@ func Test_RouterHandlerStatusCode(t *testing.T) {
 	expect(t, recorder.Code, http.StatusOK)
 	expect(t, recorder.Body.String(), "foo")
 
+	// if a status code is returned, it should be used
 	recorder = httptest.NewRecorder()
-	req, err = http.NewRequest("POST", "http://localhost:3000/bar", nil)
+	req, err = http.NewRequest("GET", "http://localhost:3000/bar", nil)
 	if err != nil {
 		t.Error(err)
 	}
 	context = New().createContext(recorder, req)
 	router.Handle(recorder, req, context)
-	expect(t, recorder.Code, http.StatusCreated)
+	expect(t, recorder.Code, http.StatusForbidden)
 	expect(t, recorder.Body.String(), "bar")
+
+	// shouldn't use the first returned value as a status code if not an integer
+	recorder = httptest.NewRecorder()
+	req, err = http.NewRequest("GET", "http://localhost:3000/baz", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	context = New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
+	expect(t, recorder.Code, http.StatusOK)
+	expect(t, recorder.Body.String(), "baz")
 }
 
 func Test_RouterHandlerStacking(t *testing.T) {
