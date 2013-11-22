@@ -103,3 +103,24 @@ func Test_Martini_EarlyWrite(t *testing.T) {
 	expect(t, result, "foobar")
 	expect(t, response.Code, 200)
 }
+
+func Test_Martini_UrlFor(t *testing.T) {
+	m := Classic()
+
+	m.Get("/foo", func() {
+		// Nothing
+	}).Name("foo_route")
+
+	m.Post("/bar/:id", func(params Params) {
+		// Nothing
+	}).Name("bar_route")
+
+	m.Post("/bar/:id/:name", func(params Params) {
+		// Nothing
+	}).Name("bar_id_name_route")
+
+	expect(t, m.UrlFor("foo_route", nil), "/foo")
+	expect(t, m.UrlFor("bar_route", 5), "/bar/5")
+	expect(t, m.UrlFor("bar_id_name_route", 5, "john"), "/bar/5/john")
+	expect(t, m.UrlFor("non_existent_route", nil), "")
+}
