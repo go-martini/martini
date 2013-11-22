@@ -69,6 +69,8 @@ func (m *Martini) Run() {
 	http.ListenAndServe(":"+port, m)
 }
 
+// Handlers sets the entire middleware stack with the given Handlers. This will clear any current middleware handlers.
+// Will panic if any of the handlers is not a callable function
 func (m *Martini) Handlers(handlers ...Handler) {
 	m.handlers = make([]Handler, 0)
 	for _, handler := range handlers {
