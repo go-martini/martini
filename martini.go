@@ -18,11 +18,11 @@
 package martini
 
 import (
-    "fmt"
 	"github.com/codegangsta/inject"
 	"log"
 	"net/http"
 	"os"
+    "strconv"
 	"reflect"
 )
 
@@ -102,7 +102,7 @@ func (m *ClassicMartini) UrlFor(routeName string, params ...interface{}) string 
 	for _, param := range params {
 		switch v := param.(type) {
 		case int:
-			args = append(args, fmt.Sprintf("%d", v))
+			args = append(args, strconv.FormatInt(int64(v), 10))
 		case string:
 			args = append(args, v)
 		default:
