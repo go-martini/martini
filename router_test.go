@@ -1,6 +1,7 @@
 package martini
 
 import (
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -73,6 +74,18 @@ func Test_RouterHandlerStatusCode(t *testing.T) {
 	router.Get("/baz", func() (string, string) {
 		return "baz", "BAZ!"
 	})
+	router.Get("/err1", func() error {
+		return errors.New("err1")
+	})
+	router.Get("/err2", func() (int, error) {
+		return http.StatusForbidden, errors.New("err2")
+	})
+	router.Get("/err3", func() interface{} {
+		return nil
+	})
+	router.Get("/err4", func() (int, interface{}) {
+		return http.StatusForbidden, nil
+	})
 
 	// code should be 200 if none is returned from the handler
 	recorder := httptest.NewRecorder()
@@ -95,6 +108,50 @@ func Test_RouterHandlerStatusCode(t *testing.T) {
 	router.Handle(recorder, req, context)
 	expect(t, recorder.Code, http.StatusForbidden)
 	expect(t, recorder.Body.String(), "bar")
+
+	// if an error is returned, it should be used with a 500 status code
+	recorder = httptest.NewRecorder()
+	req, err = http.NewRequest("GET", "http://localhost:3000/err1", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	context = New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
+	expect(t, recorder.Code, http.StatusInternalServerError)
+	expect(t, recorder.Body.String(), "err1")
+
+	// if an integer and error are returned, they should be used as teh status code and body
+	recorder = httptest.NewRecorder()
+	req, err = http.NewRequest("GET", "http://localhost:3000/err2", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	context = New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
+	expect(t, recorder.Code, http.StatusForbidden)
+	expect(t, recorder.Body.String(), "err2")
+
+	// if nil is returned, don't write anyting
+	recorder = httptest.NewRecorder()
+	req, err = http.NewRequest("GET", "http://localhost:3000/err3", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	context = New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
+	expect(t, recorder.Code, http.StatusOK)
+	expect(t, recorder.Body.String(), "")
+
+	// if status and nil is returned, just write the status
+	recorder = httptest.NewRecorder()
+	req, err = http.NewRequest("GET", "http://localhost:3000/err4", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	context = New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
+	expect(t, recorder.Code, http.StatusForbidden)
+	expect(t, recorder.Body.String(), "")
 
 	// shouldn't use the first returned value as a status code if not an integer
 	recorder = httptest.NewRecorder()

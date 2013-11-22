@@ -143,13 +143,43 @@ func (r route) handle(c Context, res http.ResponseWriter) {
 		// if the handler returned something, write it to
 		// the http response
 		if len(vals) > 1 && vals[0].Kind() == reflect.Int {
-			res.WriteHeader(int(vals[0].Int()))
-			res.Write([]byte(vals[1].String()))
+			writeReturnValue(res, vals[1], int(vals[0].Int()))
 		} else if len(vals) > 0 {
-			res.Write([]byte(vals[0].String()))
+			writeReturnValue(res, vals[0], 0)
 		}
 		if c.written() {
 			return
 		}
+	}
+}
+
+func writeReturnValue(res http.ResponseWriter, v reflect.Value, status int) {
+	var body string
+	defer func() {
+		if status != 0 {
+			res.WriteHeader(status)
+		}
+		if body != "" {
+			res.Write([]byte(body))
+		}
+	}()
+	if !v.IsValid() {
+		return
+	}
+	// these are the most common cases so they should be faster
+	// for the less common cases Sprintf can take over
+	switch x := v.Interface().(type) {
+	case nil:
+	case string:
+		body = x
+	case fmt.Stringer:
+		body = x.String()
+	case error:
+		body = x.Error()
+		if status == 0 {
+			status = http.StatusInternalServerError
+		}
+	default:
+		body = fmt.Sprintf("%v", v.Interface())
 	}
 }
