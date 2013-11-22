@@ -30,6 +30,8 @@ Then run your server:
 go run server.go
 ~~~
 
+You will now have a Martini webserver running on `localhost:3000`.
+
 ## Getting Help
 
 Join the [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
