@@ -1,6 +1,9 @@
 package martini
 
 import (
+	"bufio"
+	"fmt"
+	"net"
 	"net/http"
 )
 
@@ -53,4 +56,12 @@ func (rw *responseWriter) Size() int {
 
 func (rw *responseWriter) Written() bool {
 	return rw.status != 0
+}
+
+func (rw *responseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
+	hijacker, ok := rw.ResponseWriter.(http.Hijacker)
+	if !ok {
+		return nil, nil, fmt.Errorf("ResponseWriter doesn't support Hijacker interface")
+	}
+	return hijacker.Hijack()
 }
