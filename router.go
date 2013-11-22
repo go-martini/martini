@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"reflect"
 	"regexp"
+	"strconv"
 )
 
 // Params is a map of name/value pairs for named routes. An instance of martini.Params is available to be injected into any route handler.
@@ -142,36 +143,37 @@ func (r route) handle(c Context, res http.ResponseWriter) {
 
 		// if the handler returned something, write it to
 		// the http response
-		nvals := len(vals)
-		if nvals > 1 && vals[0].Kind() == reflect.Int {
-			v1, v2 := vals[0], vals[1]
-			res.WriteHeader(int(v1.Int()))
-			if v2.Kind() == reflect.String {
-				res.Write([]byte(v2.String()))
-			} else if v2.IsValid() {
-				iface := v2.Interface()
-				if err, ok := iface.(error); ok {
-					res.Write([]byte(err.Error()))
-				} else if str, ok := iface.(fmt.Stringer); ok {
-					res.Write([]byte(str.String()))
-				}
-			}
-		} else if nvals > 0 {
-			v1 := vals[0]
-			if v1.Kind() == reflect.String {
-				res.Write([]byte(v1.String()))
-			} else if v1.IsValid() {
-				iface := v1.Interface()
-				if err, ok := iface.(error); ok {
-					res.WriteHeader(http.StatusInternalServerError)
-					res.Write([]byte(err.Error()))
-				} else if str, ok := iface.(fmt.Stringer); ok {
-					res.Write([]byte(str.String()))
-				}
-			}
+		if len(vals) > 1 && vals[0].Kind() == reflect.Int {
+			code := int(vals[0].Int())
+			writeReturnValue(res, vals[1], code, code)
+		} else if len(vals) > 0 {
+			writeReturnValue(res, vals[0], http.StatusOK, http.StatusInternalServerError)
 		}
 		if c.written() {
 			return
 		}
+	}
+}
+
+func writeReturnValue(res http.ResponseWriter, v reflect.Value, okCode, errCode int) {
+	if !v.IsValid() {
+		res.WriteHeader(okCode)
+		return
+	}
+	switch x := v.Interface().(type) {
+	case string:
+		res.WriteHeader(okCode)
+		res.Write([]byte(x))
+	case int:
+		res.WriteHeader(okCode)
+		res.Write([]byte(strconv.FormatInt(int64(x), 10)))
+	case fmt.Stringer:
+		res.WriteHeader(okCode)
+		res.Write([]byte(x.String()))
+	case error:
+		res.WriteHeader(errCode)
+		res.Write([]byte(x.Error()))
+	default:
+		res.WriteHeader(okCode)
 	}
 }
