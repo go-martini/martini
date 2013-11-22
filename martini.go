@@ -69,6 +69,13 @@ func (m *Martini) Run() {
 	http.ListenAndServe(":"+port, m)
 }
 
+func (m *Martini) Handlers(handlers ...Handler) {
+	m.handlers = make([]Handler, 0)
+	for _, handler := range handlers {
+		m.Use(handler)
+	}
+}
+
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
 	c := &context{inject.New(), append(m.handlers, m.action), NewResponseWriter(res), 0}
 	c.SetParent(m)
