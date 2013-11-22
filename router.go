@@ -154,11 +154,11 @@ func (r route) handle(c Context, res http.ResponseWriter) {
 	}
 }
 
-func writeReturnValue(res http.ResponseWriter, v reflect.Value, code int) {
+func writeReturnValue(res http.ResponseWriter, v reflect.Value, status int) {
 	var body string
 	defer func() {
-		if code != 0 {
-			res.WriteHeader(code)
+		if status != 0 {
+			res.WriteHeader(status)
 		}
 		if body != "" {
 			res.Write([]byte(body))
@@ -176,8 +176,8 @@ func writeReturnValue(res http.ResponseWriter, v reflect.Value, code int) {
 		body = x.String()
 	case error:
 		body = x.Error()
-		if code == 0 {
-			code = http.StatusInternalServerError
+		if status == 0 {
+			status = http.StatusInternalServerError
 		}
 	}
 }
