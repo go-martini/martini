@@ -165,7 +165,7 @@ var routeTests = []struct {
 func Test_RouteMatching(t *testing.T) {
 	route := newRoute("GET", "/foo/:bar/bat/:baz", nil)
 	for _, tt := range routeTests {
-		ok, params := route.match(tt.method, tt.path)
+		ok, params := route.Match(tt.method, tt.path)
 		if ok != tt.ok || params["bar"] != tt.params["bar"] || params["baz"] != tt.params["baz"] {
 			t.Errorf("expected: (%v, %v) got: (%v, %v)", tt.ok, tt.params, ok, params)
 		}

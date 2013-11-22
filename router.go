@@ -13,15 +13,15 @@ type Params map[string]string
 // Router is Martini's de-facto routing interface. Supports HTTP verbs, stacked handlers, and dependency injection.
 type Router interface {
 	// Get adds a route for a HTTP GET request to the specified matching pattern.
-	Get(string, ...Handler) *route
+	Get(string, ...Handler) Route
 	// Patch adds a route for a HTTP PATCH request to the specified matching pattern.
-	Patch(string, ...Handler) *route
+	Patch(string, ...Handler) Route
 	// Post adds a route for a HTTP POST request to the specified matching pattern.
-	Post(string, ...Handler) *route
+	Post(string, ...Handler) Route
 	// Put adds a route for a HTTP PUT request to the specified matching pattern.
-	Put(string, ...Handler) *route
+	Put(string, ...Handler) Route
 	// Delete adds a route for a HTTP DELETE request to the specified matching pattern.
-	Delete(string, ...Handler) *route
+	Delete(string, ...Handler) Route
 
 	// NotFound sets the handler that is called when a no route matches a request. Throws a basic 404 by default.
 	NotFound(Handler)
@@ -30,11 +30,11 @@ type Router interface {
 	Handle(http.ResponseWriter, *http.Request, Context)
     
     // GetRoutes returns all the routes the router has
-    GetRoutes() []*route
+    GetRoutes() []Route
 }
 
 type router struct {
-	routes   []*route
+	routes   []Route
 	notFound Handler
 }
 
@@ -43,33 +43,33 @@ func NewRouter() Router {
 	return &router{notFound: http.NotFound}
 }
 
-func (r *router) Get(pattern string, h ...Handler) *route {
+func (r *router) Get(pattern string, h ...Handler) Route {
 	return r.addRoute("GET", pattern, h)
 }
 
-func (r *router) Patch(pattern string, h ...Handler) *route {
+func (r *router) Patch(pattern string, h ...Handler) Route {
 	return r.addRoute("PATCH", pattern, h)
 }
 
-func (r *router) Post(pattern string, h ...Handler) *route {
+func (r *router) Post(pattern string, h ...Handler) Route {
 	return r.addRoute("POST", pattern, h)
 }
 
-func (r *router) Put(pattern string, h ...Handler) *route {
+func (r *router) Put(pattern string, h ...Handler) Route {
 	return r.addRoute("PUT", pattern, h)
 }
 
-func (r *router) Delete(pattern string, h ...Handler) *route {
+func (r *router) Delete(pattern string, h ...Handler) Route {
 	return r.addRoute("DELETE", pattern, h)
 }
 
 func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Context) {
 	for _, route := range r.routes {
-		ok, vals := route.match(req.Method, req.URL.Path)
+		ok, vals := route.Match(req.Method, req.URL.Path)
 		if ok {
 			params := Params(vals)
 			context.Map(params)
-			_, err := context.Invoke(route.handle)
+			_, err := context.Invoke(route.Handle)
 			if err != nil {
 				panic(err)
 			}
@@ -88,15 +88,25 @@ func (r *router) NotFound(handler Handler) {
 	r.notFound = handler
 }
 
-func (r *router) GetRoutes() []*route {
+func (r *router) GetRoutes() []Route {
     return r.routes
 }
 
 func (r *router) addRoute(method string, pattern string, handlers []Handler) *route {
 	route := newRoute(method, pattern, handlers)
-	route.validate()
+	route.Validate()
 	r.routes = append(r.routes, route)
 	return route
+}
+
+// Route is the default route interface.
+type Route interface {
+    Name(string)
+    GetName() string
+    UrlWith([]string) string
+    Match(string, string) (bool, map[string]string)
+    Validate()
+    Handle(Context, http.ResponseWriter)
 }
 
 type route struct {
@@ -119,7 +129,7 @@ func newRoute(method string, pattern string, handlers []Handler) *route {
 	return &route
 }
 
-func (r route) match(method string, path string) (bool, map[string]string) {
+func (r *route) Match(method string, path string) (bool, map[string]string) {
 	if method != r.method {
 		return false, nil
 	}
@@ -137,13 +147,13 @@ func (r route) match(method string, path string) (bool, map[string]string) {
 	return false, nil
 }
 
-func (r route) validate() {
+func (r *route) Validate() {
 	for _, handler := range r.handlers {
 		validateHandler(handler)
 	}
 }
 
-func (r route) handle(c Context, res http.ResponseWriter) {
+func (r *route) Handle(c Context, res http.ResponseWriter) {
 	for _, handler := range r.handlers {
 		vals, err := c.Invoke(handler)
 		if err != nil {
@@ -167,6 +177,10 @@ func (r route) handle(c Context, res http.ResponseWriter) {
 // Name adds a name to the route so it can be accessed with UrlFor
 func (r *route) Name(name string) {
 	r.RouteName = name
+}
+
+func (r *route) GetName() string {
+    return r.RouteName
 }
 
 // UrlWith returns the url pattern replacing the parameters for its values
