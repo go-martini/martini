@@ -113,7 +113,7 @@ func (m *ClassicMartini) UrlFor(routeName string, params ...interface{}) string 
 	}
 
 	for _, route := range m.Router.GetRoutes() {
-		if route.RouteName == routeName {
+		if route.GetName() == routeName {
 			return route.UrlWith(args)
 		}
 	}
