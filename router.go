@@ -144,10 +144,9 @@ func (r route) handle(c Context, res http.ResponseWriter) {
 		// if the handler returned something, write it to
 		// the http response
 		if len(vals) > 1 && vals[0].Kind() == reflect.Int {
-			code := int(vals[0].Int())
-			writeReturnValue(res, vals[1], code, code)
+			writeReturnValue(res, vals[1], int(vals[0].Int()))
 		} else if len(vals) > 0 {
-			writeReturnValue(res, vals[0], http.StatusOK, http.StatusInternalServerError)
+			writeReturnValue(res, vals[0], 0)
 		}
 		if c.written() {
 			return
@@ -155,25 +154,30 @@ func (r route) handle(c Context, res http.ResponseWriter) {
 	}
 }
 
-func writeReturnValue(res http.ResponseWriter, v reflect.Value, okCode, errCode int) {
+func writeReturnValue(res http.ResponseWriter, v reflect.Value, code int) {
+	var body string
+	defer func() {
+		if code != 0 {
+			res.WriteHeader(code)
+		}
+		if body != "" {
+			res.Write([]byte(body))
+		}
+	}()
 	if !v.IsValid() {
-		res.WriteHeader(okCode)
 		return
 	}
 	switch x := v.Interface().(type) {
 	case string:
-		res.WriteHeader(okCode)
-		res.Write([]byte(x))
+		body = x
 	case int:
-		res.WriteHeader(okCode)
-		res.Write([]byte(strconv.FormatInt(int64(x), 10)))
+		body = strconv.FormatInt(int64(x), 10)
 	case fmt.Stringer:
-		res.WriteHeader(okCode)
-		res.Write([]byte(x.String()))
+		body = x.String()
 	case error:
-		res.WriteHeader(errCode)
-		res.Write([]byte(x.Error()))
-	default:
-		res.WriteHeader(okCode)
+		body = x.Error()
+		if code == 0 {
+			code = http.StatusInternalServerError
+		}
 	}
 }
