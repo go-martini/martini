@@ -2,6 +2,10 @@
 
 Martini is a powerful package for quickly writing modular web applications/services in Golang.
 
+## Getting Started
+
+After installing Go and setting up your [GOPATH](http://golang.org/doc/code.html#GOPATH), create your first `.go` file. We'll call it `server.go`.
+
 ~~~ go
 package main
 
@@ -16,10 +20,17 @@ func main() {
 }
 ~~~
 
-Install the package (**go 1.1** and greater is required):
+Then install the Martini package (**go 1.1** and greater is required):
 ~~~
 go get github.com/codegangsta/martini
 ~~~
+
+Then run your server:
+~~~
+go run server.go
+~~~
+
+## Getting Help
 
 Join the [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
 
