@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"reflect"
 	"regexp"
-	"strconv"
 )
 
 // Params is a map of name/value pairs for named routes. An instance of martini.Params is available to be injected into any route handler.
@@ -167,11 +166,12 @@ func writeReturnValue(res http.ResponseWriter, v reflect.Value, status int) {
 	if !v.IsValid() {
 		return
 	}
+	// these are the most common cases so they should be faster
+	// for the less common cases Sprintf can take over
 	switch x := v.Interface().(type) {
+	case nil:
 	case string:
 		body = x
-	case int:
-		body = strconv.FormatInt(int64(x), 10)
 	case fmt.Stringer:
 		body = x.String()
 	case error:
@@ -179,5 +179,7 @@ func writeReturnValue(res http.ResponseWriter, v reflect.Value, status int) {
 		if status == 0 {
 			status = http.StatusInternalServerError
 		}
+	default:
+		body = fmt.Sprintf("%v", v.Interface())
 	}
 }
