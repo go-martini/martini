@@ -187,3 +187,31 @@ func Test_NotFound(t *testing.T) {
 	expect(t, recorder.Code, http.StatusNotFound)
 	expect(t, recorder.Body.String(), "Nope\n")
 }
+
+func Test_UrlFor(t *testing.T) {
+	router := NewRouter()
+    
+	router.Get("/foo", func() {
+		// Nothing
+	}).Name("foo_route")
+
+	router.Post("/bar/:id", func(params Params) {
+		// Nothing
+	}).Name("bar_route")
+
+	router.Get("/bar/:id/:name", func(params Params, rh *RouteHelper) {
+        expect(t, rh.UrlFor("foo_route", nil), "/foo")
+        expect(t, rh.UrlFor("bar_route", 5), "/bar/5")
+        expect(t, rh.UrlFor("bar_id_name_route", 5, "john"), "/bar/5/john")
+        expect(t, rh.UrlFor("non_existent_route", nil), "")
+	}).Name("bar_id_name_route")
+
+	// code should be 200 if none is returned from the handler
+	recorder := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", "http://localhost:3000/bar/foo/bar", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	context := New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
+}
