@@ -22,7 +22,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-    "strconv"
 	"reflect"
 )
 
@@ -92,33 +91,9 @@ func Classic() *ClassicMartini {
 	m.Use(Logger())
 	m.Use(Recovery())
 	m.Use(Static("public"))
+    m.Map(&RouteHelper{r})
 	m.Action(r.Handle)
 	return &ClassicMartini{m, r}
-}
-
-// UrlFor returns the url for the given route name.
-func (m *ClassicMartini) UrlFor(routeName string, params ...interface{}) string {
-	var args []string
-	for _, param := range params {
-		switch v := param.(type) {
-		case int:
-			args = append(args, strconv.FormatInt(int64(v), 10))
-		case string:
-			args = append(args, v)
-		default:
-			if v != nil {
-				panic("Arguments passed to UrlFor must be integers or strings")
-			}
-		}
-	}
-
-	for _, route := range m.Router.GetRoutes() {
-		if route.GetName() == routeName {
-			return route.UrlWith(args)
-		}
-	}
-
-	return ""
 }
 
 // Handler can be any callable function. Martini attempts to inject services into the handler's argument list.

@@ -69,6 +69,8 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 		if ok {
 			params := Params(vals)
 			context.Map(params)
+            rh := &RouteHelper{r}
+            context.Map(rh)
 			_, err := context.Invoke(route.Handle)
 			if err != nil {
 				panic(err)
