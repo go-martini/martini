@@ -100,7 +100,6 @@ func Classic() *ClassicMartini {
 	m.Use(Logger())
 	m.Use(Recovery())
 	m.Use(Static("public"))
-    m.Map(&RouteHelper{r})
 	m.Action(r.Handle)
 	return &ClassicMartini{m, r}
 }
