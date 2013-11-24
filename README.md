@@ -207,6 +207,15 @@ m.Use(func() {
 })
 ~~~
 
+You can have full control over the middleware stack with the `Handlers` function:
+~~~ go
+m.Handlers(
+  Middleware1,
+  Middleware2,
+  Middleware3,
+)
+~~~
+
 Middleware Handlers work really well for things like logging, authorization, authentication, sessions, gzipping, error pages and any other operations that must happen before or after an http request:
 ~~~ go
 // validate an api key
