@@ -1,10 +1,10 @@
 package martini
 
 import (
-    "strconv"
+	"strconv"
 )
 
-type Routes struct {}
+type Routes struct{}
 
 // UrlFor returns the url for the given route name.
 func (rh Routes) UrlFor(route Route, params ...interface{}) string {
@@ -22,5 +22,5 @@ func (rh Routes) UrlFor(route Route, params ...interface{}) string {
 		}
 	}
 
-    return route.UrlWith(args)
+	return route.UrlWith(args)
 }

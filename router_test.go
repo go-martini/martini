@@ -190,8 +190,8 @@ func Test_NotFound(t *testing.T) {
 
 func Test_UrlFor(t *testing.T) {
 	router := NewRouter()
-    var barIdNameRoute, fooRoute, barRoute Route
-    
+	var barIdNameRoute, fooRoute, barRoute Route
+
 	fooRoute = router.Get("/foo", func() {
 		// Nothing
 	})
@@ -201,9 +201,9 @@ func Test_UrlFor(t *testing.T) {
 	})
 
 	barIdNameRoute = router.Get("/bar/:id/:name", func(params Params, routes Routes) {
-        expect(t, routes.UrlFor(fooRoute, nil), "/foo")
-        expect(t, routes.UrlFor(barRoute, 5), "/bar/5")
-        expect(t, routes.UrlFor(barIdNameRoute, 5, "john"), "/bar/5/john")
+		expect(t, routes.UrlFor(fooRoute, nil), "/foo")
+		expect(t, routes.UrlFor(barRoute, 5), "/bar/5")
+		expect(t, routes.UrlFor(barIdNameRoute, 5, "john"), "/bar/5/john")
 	})
 
 	// code should be 200 if none is returned from the handler
