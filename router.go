@@ -28,9 +28,6 @@ type Router interface {
 
 	// Handle is the entry point for routing. This is used as a martini.Handler
 	Handle(http.ResponseWriter, *http.Request, Context)
-    
-    // GetRoutes returns all the routes the router has
-    GetRoutes() []Route
 }
 
 type router struct {
@@ -69,7 +66,7 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 		if ok {
 			params := Params(vals)
 			context.Map(params)
-            rh := &RouteHelper{r}
+            rh := Routes{}
             context.Map(rh)
 			_, err := context.Invoke(route.Handle)
 			if err != nil {
@@ -90,10 +87,6 @@ func (r *router) NotFound(handler Handler) {
 	r.notFound = handler
 }
 
-func (r *router) GetRoutes() []Route {
-    return r.routes
-}
-
 func (r *router) addRoute(method string, pattern string, handlers []Handler) *route {
 	route := newRoute(method, pattern, handlers)
 	route.Validate()
@@ -103,8 +96,6 @@ func (r *router) addRoute(method string, pattern string, handlers []Handler) *ro
 
 // Route is the default route interface.
 type Route interface {
-    Name(string)
-    GetName() string
     UrlWith([]string) string
     Match(string, string) (bool, map[string]string)
     Validate()
@@ -174,15 +165,6 @@ func (r *route) Handle(c Context, res http.ResponseWriter) {
 			return
 		}
 	}
-}
-
-// Name adds a name to the route so it can be accessed with UrlFor
-func (r *route) Name(name string) {
-	r.RouteName = name
-}
-
-func (r *route) GetName() string {
-    return r.RouteName
 }
 
 // UrlWith returns the url pattern replacing the parameters for its values
