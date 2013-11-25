@@ -4,12 +4,10 @@ import (
     "strconv"
 )
 
-type RouteHelper struct {
-    Router Router
-}
+type Routes struct {}
 
 // UrlFor returns the url for the given route name.
-func (rh *RouteHelper) UrlFor(routeName string, params ...interface{}) string {
+func (rh Routes) UrlFor(route Route, params ...interface{}) string {
 	var args []string
 	for _, param := range params {
 		switch v := param.(type) {
@@ -24,11 +22,5 @@ func (rh *RouteHelper) UrlFor(routeName string, params ...interface{}) string {
 		}
 	}
 
-	for _, route := range rh.Router.GetRoutes() {
-		if route.GetName() == routeName {
-			return route.UrlWith(args)
-		}
-	}
-
-	return ""
+    return route.UrlWith(args)
 }
