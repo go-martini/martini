@@ -165,7 +165,7 @@ var routeTests = []struct {
 func Test_RouteMatching(t *testing.T) {
 	route := newRoute("GET", "/foo/:bar/bat/:baz", nil)
 	for _, tt := range routeTests {
-		ok, params := route.match(tt.method, tt.path)
+		ok, params := route.Match(tt.method, tt.path)
 		if ok != tt.ok || params["bar"] != tt.params["bar"] || params["baz"] != tt.params["baz"] {
 			t.Errorf("expected: (%v, %v) got: (%v, %v)", tt.ok, tt.params, ok, params)
 		}
@@ -186,4 +186,32 @@ func Test_NotFound(t *testing.T) {
 	router.Handle(recorder, req, context)
 	expect(t, recorder.Code, http.StatusNotFound)
 	expect(t, recorder.Body.String(), "Nope\n")
+}
+
+func Test_UrlFor(t *testing.T) {
+	router := NewRouter()
+	var barIdNameRoute, fooRoute, barRoute Route
+
+	fooRoute = router.Get("/foo", func() {
+		// Nothing
+	})
+
+	barRoute = router.Post("/bar/:id", func(params Params) {
+		// Nothing
+	})
+
+	barIdNameRoute = router.Get("/bar/:id/:name", func(params Params, routes Routes) {
+		expect(t, routes.UrlFor(fooRoute, nil), "/foo")
+		expect(t, routes.UrlFor(barRoute, 5), "/bar/5")
+		expect(t, routes.UrlFor(barIdNameRoute, 5, "john"), "/bar/5/john")
+	})
+
+	// code should be 200 if none is returned from the handler
+	recorder := httptest.NewRecorder()
+	req, err := http.NewRequest("GET", "http://localhost:3000/bar/foo/bar", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	context := New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
 }

@@ -16,10 +16,10 @@ func newHijackableResponse() *hijackableResponse {
 	return &hijackableResponse{}
 }
 
-func (h *hijackableResponse) Header() http.Header { return nil }
+func (h *hijackableResponse) Header() http.Header           { return nil }
 func (h *hijackableResponse) Write(buf []byte) (int, error) { return 0, nil }
-func (h *hijackableResponse) WriteHeader(code int) {}
-func (h *hijackableResponse) Flush() {}
+func (h *hijackableResponse) WriteHeader(code int)          {}
+func (h *hijackableResponse) Flush()                        {}
 func (h *hijackableResponse) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 	h.Hijacked = true
 	return nil, nil, nil
