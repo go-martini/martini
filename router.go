@@ -66,8 +66,8 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 		if ok {
 			params := Params(vals)
 			context.Map(params)
-            rh := Routes{}
-            context.Map(rh)
+			rh := Routes{}
+			context.Map(rh)
 			_, err := context.Invoke(route.Handle)
 			if err != nil {
 				panic(err)
@@ -96,10 +96,10 @@ func (r *router) addRoute(method string, pattern string, handlers []Handler) *ro
 
 // Route is the default route interface.
 type Route interface {
-    UrlWith([]string) string
-    Match(string, string) (bool, map[string]string)
-    Validate()
-    Handle(Context, http.ResponseWriter)
+	UrlWith([]string) string
+	Match(string, string) (bool, map[string]string)
+	Validate()
+	Handle(Context, http.ResponseWriter)
 }
 
 type route struct {
