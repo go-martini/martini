@@ -63,6 +63,18 @@ func Test_ResponseWriter_WritingHeader(t *testing.T) {
 	expect(t, rw.Size(), 0)
 }
 
+func Test_ResponseWriter_AfterClosed(t *testing.T) {
+	rec := httptest.NewRecorder()
+	rw := NewResponseWriter(rec)
+
+	rw.WriteHeader(200)
+	rw.Close()
+	rw.WriteHeader(500)
+
+	expect(t, rec.Code, rw.Status())
+	expect(t, rw.Status(), 200)
+}
+
 func Test_ResponseWriter_Hijack(t *testing.T) {
 	hijackable := newHijackableResponse()
 	rw := NewResponseWriter(hijackable)

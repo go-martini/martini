@@ -122,6 +122,7 @@ type Context interface {
 	// happen after an http request
 	Next()
 	written() bool
+	close()
 }
 
 type context struct {
@@ -140,15 +141,20 @@ func (c *context) written() bool {
 	return c.rw.Written()
 }
 
+func (c *context) close() {
+	c.rw.Close()
+}
+
 func (c *context) run() {
+
 	for c.index < len(c.handlers) {
 		_, err := c.Invoke(c.handlers[c.index])
 		if err != nil {
 			panic(err)
 		}
-		c.index += 1
 
-		if c.rw.Written() {
+		c.index += 1
+		if c.written() {
 			return
 		}
 	}

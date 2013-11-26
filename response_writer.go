@@ -18,25 +18,33 @@ type ResponseWriter interface {
 	Written() bool
 	// Size returns the size of the response body.
 	Size() int
+	// The ResponseWriter can no longer be written to.
+	Close()
 }
 
 // NewResponseWriter creates a ResponseWriter that wraps an http.ResponseWriter
 func NewResponseWriter(rw http.ResponseWriter) ResponseWriter {
-	return &responseWriter{rw, 0, 0}
+	return &responseWriter{rw, 0, 0, false}
 }
 
 type responseWriter struct {
 	http.ResponseWriter
 	status int
 	size   int
+	closed bool
 }
 
 func (rw *responseWriter) WriteHeader(s int) {
-	rw.ResponseWriter.WriteHeader(s)
-	rw.status = s
+	if !rw.closed {
+		rw.ResponseWriter.WriteHeader(s)
+		rw.status = s
+	}
 }
 
 func (rw *responseWriter) Write(b []byte) (int, error) {
+	if rw.closed {
+		return 0, fmt.Errorf("ResponseWriter is now closed. Have you already written a response?")
+	}
 	if !rw.Written() {
 		// The status will be StatusOK if WriteHeader has not been called yet
 		rw.status = http.StatusOK
@@ -56,6 +64,10 @@ func (rw *responseWriter) Size() int {
 
 func (rw *responseWriter) Written() bool {
 	return rw.status != 0
+}
+
+func (rw *responseWriter) Close() {
+	rw.closed = true
 }
 
 func (rw *responseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
