@@ -112,6 +112,7 @@ The following services are included with [martini.Classic()](http://godoc.org/gi
   * [*log.Logger](http://godoc.org/log#Logger) - Global logger for Martini.
   * [martini.Context](http://godoc.org/github.com/codegangsta/martini#Context) - http request context.
   * [martini.Params](http://godoc.org/github.com/codegangsta/martini#Params) - `map[string]string` of named params found by route matching.
+  * [martini.Routes](http://godoc.org/github.com/codegangsta/martini#Routes) - Route helper service.
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface.
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
 
