@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"reflect"
 	"regexp"
+	"strconv"
 )
 
 // Params is a map of name/value pairs for named routes. An instance of martini.Params is available to be injected into any route handler.
@@ -31,7 +32,7 @@ type Router interface {
 }
 
 type router struct {
-	routes   []Route
+	routes   []*route
 	notFound Handler
 }
 
@@ -66,8 +67,8 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 		if ok {
 			params := Params(vals)
 			context.Map(params)
-			rh := Routes{}
-			context.Map(rh)
+			r := routes{}
+			context.MapTo(r, (*Routes)(nil))
 			_, err := context.Invoke(route.Handle)
 			if err != nil {
 				panic(err)
@@ -94,24 +95,21 @@ func (r *router) addRoute(method string, pattern string, handlers []Handler) *ro
 	return route
 }
 
-// Route is the default route interface.
+// Route is an interface representing a Route in Martini's routing layer.
 type Route interface {
-	UrlWith([]string) string
-	Match(string, string) (bool, map[string]string)
-	Validate()
-	Handle(Context, http.ResponseWriter)
+	// URLWith returns a rendering of the Route's url with the given string params.
+	URLWith([]string) string
 }
 
 type route struct {
-	method    string
-	regex     *regexp.Regexp
-	handlers  []Handler
-	RouteName string
-	Pattern   string
+	method   string
+	regex    *regexp.Regexp
+	handlers []Handler
+	pattern  string
 }
 
 func newRoute(method string, pattern string, handlers []Handler) *route {
-	route := route{method, nil, handlers, "", pattern}
+	route := route{method, nil, handlers, pattern}
 	r := regexp.MustCompile(`:[^/#?()\.\\]+`)
 	pattern = r.ReplaceAllStringFunc(pattern, func(m string) string {
 		return fmt.Sprintf(`(?P<%s>[^/#?]+)`, m[1:len(m)])
@@ -167,13 +165,13 @@ func (r *route) Handle(c Context, res http.ResponseWriter) {
 	}
 }
 
-// UrlWith returns the url pattern replacing the parameters for its values
-func (r *route) UrlWith(args []string) string {
+// URLWith returns the url pattern replacing the parameters for its values
+func (r *route) URLWith(args []string) string {
 	if len(args) > 0 {
 		reg := regexp.MustCompile(`:[^/#?()\.\\]+`)
 		argCount := len(args)
 		i := 0
-		url := reg.ReplaceAllStringFunc(r.Pattern, func(m string) string {
+		url := reg.ReplaceAllStringFunc(r.pattern, func(m string) string {
 			var val interface{}
 			if i < argCount {
 				val = args[i]
@@ -186,6 +184,33 @@ func (r *route) UrlWith(args []string) string {
 
 		return url
 	} else {
-		return r.Pattern
+		return r.pattern
 	}
+}
+
+// Routes is a helper service for Martini's routing layer.
+type Routes interface {
+	// URLFor returns a rendered URL for the given route. Optional params can be passed to fulfill named parameters in the route.
+	URLFor(route Route, params ...interface{}) string
+}
+
+type routes struct{}
+
+// UrlFor returns the url for the given route name.
+func (r routes) URLFor(route Route, params ...interface{}) string {
+	var args []string
+	for _, param := range params {
+		switch v := param.(type) {
+		case int:
+			args = append(args, strconv.FormatInt(int64(v), 10))
+		case string:
+			args = append(args, v)
+		default:
+			if v != nil {
+				panic("Arguments passed to UrlFor must be integers or strings")
+			}
+		}
+	}
+
+	return route.URLWith(args)
 }
