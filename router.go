@@ -160,7 +160,7 @@ func (r *route) Handle(c Context, res http.ResponseWriter) {
 			res.Write([]byte(vals[0].String()))
 		}
 		if c.written() {
-			return
+			c.close()
 		}
 	}
 }
