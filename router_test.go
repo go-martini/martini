@@ -34,6 +34,24 @@ func Test_Routing(t *testing.T) {
 	}
 	context4 := New().createContext(recorder, req4)
 
+	req5, err := http.NewRequest("GET", "http://localhost:3000/fez/this/should/match", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	context5 := New().createContext(recorder, req5)
+
+	req6, err := http.NewRequest("PUT", "http://localhost:3000/pop/blah/blah/blah/bap/foo/", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	context6 := New().createContext(recorder, req6)
+
+	req7, err := http.NewRequest("DELETE", "http://localhost:3000/wap//pow", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	context7 := New().createContext(recorder, req6)
+
 	result := ""
 	router.Get("/foo", func(req *http.Request) {
 		result += "foo"
@@ -52,12 +70,29 @@ func Test_Routing(t *testing.T) {
 	router.Delete("/bazzer", func(c Context) {
 		result += "baz"
 	})
+	router.Get("/fez/**", func(params Params) {
+		expect(t, params["_1"], "this/should/match")
+		result += "fez"
+	})
+	router.Put("/pop/**/bap/:id/**", func(params Params) {
+		expect(t, params["id"], "foo")
+		expect(t, params["_1"], "blah/blah/blah")
+		expect(t, params["_2"], "")
+		result += "popbap"
+	})
+	router.Delete("/wap/**/pow", func(params Params) {
+		expect(t, params["_1"], "")
+		result += "wappow"
+	})
 
 	router.Handle(recorder, req, context)
 	router.Handle(recorder, req2, context2)
 	router.Handle(recorder, req3, context3)
 	router.Handle(recorder, req4, context4)
-	expect(t, result, "foobarbatbarfoo")
+	router.Handle(recorder, req5, context5)
+	router.Handle(recorder, req6, context6)
+	router.Handle(recorder, req7, context7)
+	expect(t, result, "foobarbatbarfoofezpopbapwappow")
 	expect(t, recorder.Code, http.StatusNotFound)
 	expect(t, recorder.Body.String(), "404 page not found\n")
 }
