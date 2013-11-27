@@ -113,8 +113,13 @@ func newRoute(method string, pattern string, handlers []Handler) *route {
 	route := route{method, nil, handlers, pattern}
 	r := regexp.MustCompile(`:[^/#?()\.\\]+`)
 	pattern = r.ReplaceAllStringFunc(pattern, func(m string) string {
-		return fmt.Sprintf(`(?P<%s>[^/#?]+)`, m[1:len(m)])
-
+		return fmt.Sprintf(`(?P<%s>[^/#?]+)`, m[1:])
+	})
+	r2 := regexp.MustCompile(`\*\*`)
+	var index int
+	pattern = r2.ReplaceAllStringFunc(pattern, func(m string) string {
+		index++
+		return fmt.Sprintf(`(?P<_%d>[^#?]+)`, index)
 	})
 	pattern += `\/?`
 	route.regex = regexp.MustCompile(pattern)
