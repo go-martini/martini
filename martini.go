@@ -66,7 +66,7 @@ func (m *Martini) Run() {
 	}
 
 	m.logger.Println("listening on port " + port)
-	http.ListenAndServe(":"+port, m)
+	m.logger.Fatalln(http.ListenAndServe(":"+port, m))
 }
 
 // Handlers sets the entire middleware stack with the given Handlers. This will clear any current middleware handlers.
