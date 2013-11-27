@@ -124,8 +124,10 @@ func Test_RouterHandlerStacking(t *testing.T) {
 		result += "foo"
 	}
 
-	f2 := func() {
+	f2 := func(c Context) {
 		result += "bar"
+		c.Next()
+		result += "bing"
 	}
 
 	f3 := func() string {
@@ -140,7 +142,7 @@ func Test_RouterHandlerStacking(t *testing.T) {
 	router.Get("/foo", f1, f2, f3, f4)
 
 	router.Handle(recorder, req, context)
-	expect(t, result, "foobarbat")
+	expect(t, result, "foobarbatbing")
 	expect(t, recorder.Body.String(), "Hello world")
 }
 

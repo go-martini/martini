@@ -2,6 +2,7 @@ package martini
 
 import (
 	"fmt"
+	"github.com/codegangsta/inject"
 	"net/http"
 	"reflect"
 	"regexp"
@@ -145,24 +146,9 @@ func (r *route) Validate() {
 }
 
 func (r *route) Handle(c Context, res http.ResponseWriter) {
-	for _, handler := range r.handlers {
-		vals, err := c.Invoke(handler)
-		if err != nil {
-			panic(err)
-		}
-
-		// if the handler returned something, write it to
-		// the http response
-		if len(vals) > 1 && vals[0].Kind() == reflect.Int {
-			res.WriteHeader(int(vals[0].Int()))
-			res.Write([]byte(vals[1].String()))
-		} else if len(vals) > 0 {
-			res.Write([]byte(vals[0].String()))
-		}
-		if c.written() {
-			return
-		}
-	}
+	context := &routeContext{c, 0, r.handlers}
+	c.MapTo(context, (*Context)(nil))
+	context.run()
 }
 
 // URLWith returns the url pattern replacing the parameters for its values
@@ -213,4 +199,40 @@ func (r routes) URLFor(route Route, params ...interface{}) string {
 	}
 
 	return route.URLWith(args)
+}
+
+type routeContext struct {
+	Context
+	index    int
+	handlers []Handler
+}
+
+func (r *routeContext) Next() {
+	r.index += 1
+	r.run()
+}
+
+func (r *routeContext) run() {
+	for r.index < len(r.handlers) {
+		handler := r.handlers[r.index]
+		vals, err := r.Invoke(handler)
+		if err != nil {
+			panic(err)
+		}
+		r.index += 1
+
+		// if the handler returned something, write it to
+		// the http response
+		rv := r.Get(inject.InterfaceOf((*http.ResponseWriter)(nil)))
+		res := rv.Interface().(http.ResponseWriter)
+		if len(vals) > 1 && vals[0].Kind() == reflect.Int {
+			res.WriteHeader(int(vals[0].Int()))
+			res.Write([]byte(vals[1].String()))
+		} else if len(vals) > 0 {
+			res.Write([]byte(vals[0].String()))
+		}
+		if r.written() {
+			return
+		}
+	}
 }
