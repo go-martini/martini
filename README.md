@@ -155,7 +155,7 @@ m.Get("/hello/:name", func(params martini.Params) string {
 })
 ~~~
 
-Routes can be matched with regular expressions and globs:
+Routes can be matched with regular expressions and globs as well:
 ~~~ go
 m.Get("/hello/**", func(params martini.Params) string {
   return "Hello " + params["_1"]
