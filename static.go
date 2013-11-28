@@ -3,6 +3,7 @@ package martini
 import (
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
 // Static returns a middleware handler that serves static files in the given path.
@@ -24,7 +25,14 @@ func Static(path string) Handler {
 
 		// Try to serve index.html
 		if fi.IsDir() {
-			file += "/index.html"
+
+			// redirect if missing trailing slash
+			if file[len(file)-1] != '/' {
+				http.Redirect(res, req, file+"/", http.StatusFound)
+				return
+			}
+
+			file = filepath.Join(file, "index.html")
 			f, err = dir.Open(file)
 			if err != nil {
 				return
