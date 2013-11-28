@@ -155,6 +155,13 @@ m.Get("/hello/:name", func(params martini.Params) string {
 })
 ~~~
 
+Routes can be matched with regular expressions and globs:
+~~~ go
+m.Get("/hello/**", func(params martini.Params) string {
+  return "Hello " + params["_1"]
+})
+~~~
+
 Route handlers can be stacked on top of each other, which is useful for things like authentication and authorization:
 ~~~ go
 m.Get("/secret", authorize, func() {
