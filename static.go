@@ -7,9 +7,9 @@ import (
 	"strings"
 )
 
-// Static returns a middleware handler that serves static files in the given path.
-func Static(path string) Handler {
-	dir := http.Dir(path)
+// Static returns a middleware handler that serves static files in the given directory.
+func Static(directory string) Handler {
+	dir := http.Dir(directory)
 	return func(res http.ResponseWriter, req *http.Request, log *log.Logger) {
 		file := req.URL.Path
 		f, err := dir.Open(file)
