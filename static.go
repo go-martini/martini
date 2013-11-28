@@ -3,7 +3,7 @@ package martini
 import (
 	"log"
 	"net/http"
-	"path/filepath"
+	"path"
 	"strings"
 )
 
@@ -33,7 +33,7 @@ func Static(path string) Handler {
 				return
 			}
 
-			file = filepath.Join(file, "index.html")
+			file = path.Join(file, "index.html")
 			f, err = dir.Open(file)
 			if err != nil {
 				return
