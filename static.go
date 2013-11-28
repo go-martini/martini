@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"strings"
 )
 
 // Static returns a middleware handler that serves static files in the given path.
@@ -27,7 +28,7 @@ func Static(path string) Handler {
 		if fi.IsDir() {
 
 			// redirect if missing trailing slash
-			if file[len(file)-1] != '/' {
+			if !strings.HasSuffix(file, "/") {
 				http.Redirect(res, req, file+"/", http.StatusFound)
 				return
 			}
