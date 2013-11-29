@@ -227,7 +227,7 @@ func Test_NotFound(t *testing.T) {
 
 func Test_URLFor(t *testing.T) {
 	router := NewRouter()
-	var barIdNameRoute, fooRoute, barRoute Route
+	var barIDNameRoute, fooRoute, barRoute Route
 
 	fooRoute = router.Get("/foo", func() {
 		// Nothing
