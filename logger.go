@@ -17,6 +17,6 @@ func Logger() Handler {
 
 		c.Next()
 
-		log.Printf("Completed %v %s in %v\n", rw.Status(), http.StatusText(rw.Status()), time.Now().Sub(start))
+		log.Printf("Completed %v %s in %v\n", rw.Status(), http.StatusText(rw.Status()), time.Since(start))
 	}
 }
