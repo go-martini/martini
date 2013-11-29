@@ -1,7 +1,6 @@
 package martini
 
 import (
-	"io"
 	"log"
 	"net/http"
 	"path"
@@ -11,13 +10,6 @@ import (
 // Static returns a middleware handler that serves static files in the given directory.
 func Static(directory string) Handler {
 	dir := http.Dir(directory)
-
-	closeOrPanic := func(c io.Closer) {
-		if err := c.Close(); err != nil {
-			panic(err)
-		}
-	}
-
 	return func(res http.ResponseWriter, req *http.Request, log *log.Logger) {
 		file := req.URL.Path
 		f, err := dir.Open(file)
@@ -25,7 +17,7 @@ func Static(directory string) Handler {
 			// discard the error?
 			return
 		}
-		defer closeOrPanic(f)
+		defer f.Close()
 
 		fi, err := f.Stat()
 		if err != nil {
@@ -46,7 +38,7 @@ func Static(directory string) Handler {
 			if err != nil {
 				return
 			}
-			defer closeOrPanic(f)
+			defer f.Close()
 
 			fi, err = f.Stat()
 			if err != nil || fi.IsDir() {
