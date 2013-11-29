@@ -33,7 +33,7 @@ func Test_ResponseWriter_WritingString(t *testing.T) {
 
 	expect(t, rec.Code, rw.Status())
 	expect(t, rec.Body.String(), "Hello world")
-	expect(t, rw.Status(), 200)
+	expect(t, rw.Status(), http.StatusOK)
 	expect(t, rw.Size(), 11)
 	expect(t, rw.Written(), true)
 }
@@ -47,7 +47,7 @@ func Test_ResponseWriter_WritingStrings(t *testing.T) {
 
 	expect(t, rec.Code, rw.Status())
 	expect(t, rec.Body.String(), "Hello worldfoo bar bat baz")
-	expect(t, rw.Status(), 200)
+	expect(t, rw.Status(), http.StatusOK)
 	expect(t, rw.Size(), 26)
 }
 
@@ -55,11 +55,11 @@ func Test_ResponseWriter_WritingHeader(t *testing.T) {
 	rec := httptest.NewRecorder()
 	rw := NewResponseWriter(rec)
 
-	rw.WriteHeader(404)
+	rw.WriteHeader(http.StatusNotFound)
 
 	expect(t, rec.Code, rw.Status())
 	expect(t, rec.Body.String(), "")
-	expect(t, rw.Status(), 404)
+	expect(t, rw.Status(), http.StatusNotFound)
 	expect(t, rw.Size(), 0)
 }
 

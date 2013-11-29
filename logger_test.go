@@ -17,7 +17,7 @@ func Test_Logger(t *testing.T) {
 	m.Map(log.New(buff, "[martini] ", 0))
 	m.Use(Logger())
 	m.Use(func(res http.ResponseWriter) {
-		res.WriteHeader(404)
+		res.WriteHeader(http.StatusNotFound)
 	})
 
 	req, err := http.NewRequest("GET", "http://localhost:3000/foobar", nil)
@@ -26,6 +26,6 @@ func Test_Logger(t *testing.T) {
 	}
 
 	m.ServeHTTP(recorder, req)
-	expect(t, recorder.Code, 404)
+	expect(t, recorder.Code, http.StatusNotFound)
 	refute(t, len(buff.String()), 0)
 }
