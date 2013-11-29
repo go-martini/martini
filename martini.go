@@ -1,4 +1,4 @@
-// Martini is a powerful package for quickly writing modular web applications/services in Golang.
+// Package martini is a powerful package for quickly writing modular web applications/services in Golang.
 //
 // For a full guide visit http://github.com/codegangsta/martini
 //

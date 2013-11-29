@@ -42,13 +42,13 @@ func Test_Martini_ServeHTTP(t *testing.T) {
 	})
 	m.Action(func(res http.ResponseWriter, req *http.Request) {
 		result += "bat"
-		res.WriteHeader(400)
+		res.WriteHeader(http.StatusBadRequest)
 	})
 
 	m.ServeHTTP(response, (*http.Request)(nil))
 
 	expect(t, result, "foobarbatbazban")
-	expect(t, response.Code, 400)
+	expect(t, response.Code, http.StatusBadRequest)
 }
 
 func Test_Martini_Handlers(t *testing.T) {
@@ -72,13 +72,13 @@ func Test_Martini_Handlers(t *testing.T) {
 	)
 	m.Action(func(res http.ResponseWriter, req *http.Request) {
 		result += "bat"
-		res.WriteHeader(400)
+		res.WriteHeader(http.StatusBadRequest)
 	})
 
 	m.ServeHTTP(response, (*http.Request)(nil))
 
 	expect(t, result, "batman!batman!batman!bat")
-	expect(t, response.Code, 400)
+	expect(t, response.Code, http.StatusBadRequest)
 }
 
 func Test_Martini_EarlyWrite(t *testing.T) {
@@ -95,11 +95,11 @@ func Test_Martini_EarlyWrite(t *testing.T) {
 	})
 	m.Action(func(res http.ResponseWriter) {
 		result += "baz"
-		res.WriteHeader(400)
+		res.WriteHeader(http.StatusBadRequest)
 	})
 
 	m.ServeHTTP(response, (*http.Request)(nil))
 
 	expect(t, result, "foobar")
-	expect(t, response.Code, 200)
+	expect(t, response.Code, http.StatusOK)
 }

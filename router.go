@@ -174,9 +174,8 @@ func (r *route) URLWith(args []string) string {
 		})
 
 		return url
-	} else {
-		return r.pattern
 	}
+	return r.pattern
 }
 
 // Routes is a helper service for Martini's routing layer.
@@ -187,7 +186,7 @@ type Routes interface {
 
 type routes struct{}
 
-// UrlFor returns the url for the given route name.
+// URLFor returns the url for the given route name.
 func (r routes) URLFor(route Route, params ...interface{}) string {
 	var args []string
 	for _, param := range params {
