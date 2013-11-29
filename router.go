@@ -24,6 +24,8 @@ type Router interface {
 	Put(string, ...Handler) Route
 	// Delete adds a route for a HTTP DELETE request to the specified matching pattern.
 	Delete(string, ...Handler) Route
+	// Options adds a route for a HTTP OPTIONS request to the specified matching pattern.
+	Options(string, ...Handler) Route
 
 	// NotFound sets the handler that is called when a no route matches a request. Throws a basic 404 by default.
 	NotFound(Handler)
@@ -60,6 +62,10 @@ func (r *router) Put(pattern string, h ...Handler) Route {
 
 func (r *router) Delete(pattern string, h ...Handler) Route {
 	return r.addRoute("DELETE", pattern, h)
+}
+
+func (r *router) Options(pattern string, h ...Handler) Route {
+	return r.addRoute("OPTIONS", pattern, h)
 }
 
 func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Context) {
