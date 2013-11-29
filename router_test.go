@@ -237,10 +237,10 @@ func Test_URLFor(t *testing.T) {
 		// Nothing
 	})
 
-	barIdNameRoute = router.Get("/bar/:id/:name", func(params Params, routes Routes) {
+	barIDNameRoute = router.Get("/bar/:id/:name", func(params Params, routes Routes) {
 		expect(t, routes.URLFor(fooRoute, nil), "/foo")
 		expect(t, routes.URLFor(barRoute, 5), "/bar/5")
-		expect(t, routes.URLFor(barIdNameRoute, 5, "john"), "/bar/5/john")
+		expect(t, routes.URLFor(barIDNameRoute, 5, "john"), "/bar/5/john")
 	})
 
 	// code should be 200 if none is returned from the handler
