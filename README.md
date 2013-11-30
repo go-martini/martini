@@ -140,6 +140,10 @@ m.Delete("/", func() {
   // destroy something
 })
 
+m.Options("/", func() {
+  // http options
+})
+
 m.NotFound(func() {
   // handle 404
 })
