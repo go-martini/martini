@@ -20,6 +20,7 @@ package martini
 import (
 	"github.com/codegangsta/inject"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"reflect"
@@ -58,15 +59,27 @@ func (m *Martini) Action(handler Handler) {
 	m.action = handler
 }
 
-// Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
+// Run the http server. Listening on os.GetEnv("PORT") or os.GetEnv("SOCKPATH") or :3000 by default.
 func (m *Martini) Run() {
 	port := os.Getenv("PORT")
+	path := os.Getenv("SOCKPATH")
+
 	if len(port) == 0 {
 		port = "3000"
 	}
 
-	m.logger.Println("listening on port " + port)
-	m.logger.Fatalln(http.ListenAndServe(":"+port, m))
+	if len(path) == 0 {
+		m.logger.Println("listening on port " + port)
+		m.logger.Fatalln(http.ListenAndServe(":"+port, m))
+	} else {
+		m.logger.Println("listening on socket "+path)
+		l, err := net.Listen("unix", path)
+		if err != nil {
+			m.logger.Println(err)
+		} else {
+			m.logger.Fatalln(http.Serve(l, m))
+		}
+	}
 }
 
 // Handlers sets the entire middleware stack with the given Handlers. This will clear any current middleware handlers.
