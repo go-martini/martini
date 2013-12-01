@@ -225,6 +225,29 @@ func Test_NotFound(t *testing.T) {
 	expect(t, recorder.Body.String(), "Nope\n")
 }
 
+func Test_Any(t *testing.T) {
+	router := NewRouter()
+	router.Any("/foo", func(res http.ResponseWriter) {
+		http.Error(res, "Nope", http.StatusNotFound)
+	})
+
+	recorder := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "http://localhost:3000/foo", nil)
+	context := New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
+
+	expect(t, recorder.Code, http.StatusNotFound)
+	expect(t, recorder.Body.String(), "Nope\n")
+
+	recorder = httptest.NewRecorder()
+	req, _ = http.NewRequest("PUT", "http://localhost:3000/foo", nil)
+	context = New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
+
+	expect(t, recorder.Code, http.StatusNotFound)
+	expect(t, recorder.Body.String(), "Nope\n")
+}
+
 func Test_URLFor(t *testing.T) {
 	router := NewRouter()
 	var barIDNameRoute, fooRoute, barRoute Route
