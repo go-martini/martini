@@ -29,21 +29,21 @@ type Router interface {
 	// Any adds a route for any HTTP method request to the specified matching pattern.
 	Any(string, ...Handler) Route
 
-	// NotFound sets the handler that is called when a no route matches a request. Throws a basic 404 by default.
-	NotFound(Handler)
+	// NotFound sets the handlers that are called when a no route matches a request. Throws a basic 404 by default.
+	NotFound(...Handler)
 
 	// Handle is the entry point for routing. This is used as a martini.Handler
 	Handle(http.ResponseWriter, *http.Request, Context)
 }
 
 type router struct {
-	routes   []*route
-	notFound Handler
+	routes    []*route
+	notFounds []Handler
 }
 
 // NewRouter creates a new Router instance.
 func NewRouter() Router {
-	return &router{notFound: http.NotFound}
+	return &router{notFounds: []Handler{http.NotFound}}
 }
 
 func (r *router) Get(pattern string, h ...Handler) Route {
@@ -91,14 +91,13 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 	}
 
 	// no routes exist, 404
-	_, err := context.Invoke(r.notFound)
-	if err != nil {
-		panic(err)
-	}
+	c := &routeContext{context, 0, r.notFounds}
+	context.MapTo(c, (*Context)(nil))
+	c.run()
 }
 
-func (r *router) NotFound(handler Handler) {
-	r.notFound = handler
+func (r *router) NotFound(handler ...Handler) {
+	r.notFounds = handler
 }
 
 func (r *router) addRoute(method string, pattern string, handlers []Handler) *route {
