@@ -18,20 +18,28 @@ type ResponseWriter interface {
 	Written() bool
 	// Size returns the size of the response body.
 	Size() int
+	// Before allows for a function to be called before the ResponseWriter has been written to. This is
+	// useful for setting headers or any other operations that must happen before a response has been written.
+	Before(BeforeFunc)
 }
+
+// BeforeFunc is a function that is called before the ResponseWriter has been written to.
+type BeforeFunc func(ResponseWriter)
 
 // NewResponseWriter creates a ResponseWriter that wraps an http.ResponseWriter
 func NewResponseWriter(rw http.ResponseWriter) ResponseWriter {
-	return &responseWriter{rw, 0, 0}
+	return &responseWriter{rw, 0, 0, nil}
 }
 
 type responseWriter struct {
 	http.ResponseWriter
-	status int
-	size   int
+	status      int
+	size        int
+	beforeFuncs []BeforeFunc
 }
 
 func (rw *responseWriter) WriteHeader(s int) {
+	rw.callBefore()
 	rw.ResponseWriter.WriteHeader(s)
 	rw.status = s
 }
@@ -39,7 +47,7 @@ func (rw *responseWriter) WriteHeader(s int) {
 func (rw *responseWriter) Write(b []byte) (int, error) {
 	if !rw.Written() {
 		// The status will be StatusOK if WriteHeader has not been called yet
-		rw.status = http.StatusOK
+		rw.WriteHeader(http.StatusOK)
 	}
 	size, err := rw.ResponseWriter.Write(b)
 	rw.size += size
@@ -58,10 +66,20 @@ func (rw *responseWriter) Written() bool {
 	return rw.status != 0
 }
 
+func (rw *responseWriter) Before(before BeforeFunc) {
+	rw.beforeFuncs = append(rw.beforeFuncs, before)
+}
+
 func (rw *responseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 	hijacker, ok := rw.ResponseWriter.(http.Hijacker)
 	if !ok {
 		return nil, nil, fmt.Errorf("ResponseWriter doesn't support Hijacker interface")
 	}
 	return hijacker.Hijack()
+}
+
+func (rw *responseWriter) callBefore() {
+	for i := len(rw.beforeFuncs) - 1; i >= 0; i-- {
+		rw.beforeFuncs[i](rw)
+	}
 }
