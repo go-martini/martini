@@ -262,6 +262,9 @@ Start by looking in the [martini-contrib](http://github.com/codegangsta/martini-
 * [gzip](https://github.com/codegangsta/martini-contrib/tree/master/gzip) - Handler for adding gzip compress to requests
 * [render](https://github.com/codegangsta/martini-contrib/tree/master/render) - Handler that provides a service for easily rendering JSON and HTML templates.
 * [acceptlang](https://github.com/codegangsta/martini-contrib/tree/master/acceptlang) - Handler for parsing the `Accept-Language` HTTP header.
+* [sessions](https://github.com/codegangsta/martini-contrib/tree/master/sessions) - Handler that provides a Session service.
+* [web](https://github.com/codegangsta/martini-contrib/tree/master/web) - web.go Context compatibility.
+* [strip](https://github.com/codegangsta/martini-contrib/tree/master/strip) - URL Prefix stripping.
 
 ### How do I integrate with existing servers?
 
