@@ -101,7 +101,7 @@ m.Get("/", func() (int, string) {
 #### Service Injection
 Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.** 
 
-If you add an argument to your Handler, Martini will search it's list of services and attempt to resolve the dependency via type assertion:
+If you add an argument to your Handler, Martini will search its list of services and attempt to resolve the dependency via type assertion:
 ~~~ go
 m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are injected by Martini
   res.WriteHeader(200) // HTTP 200
