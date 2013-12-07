@@ -2,9 +2,7 @@ package martini
 
 import (
 	"fmt"
-	"github.com/codegangsta/inject"
 	"net/http"
-	"reflect"
 	"regexp"
 	"strconv"
 )
@@ -237,15 +235,12 @@ func (r *routeContext) run() {
 		}
 		r.index += 1
 
-		// if the handler returned something, write it to
-		// the http response
-		rv := r.Get(inject.InterfaceOf((*http.ResponseWriter)(nil)))
-		res := rv.Interface().(http.ResponseWriter)
-		if len(vals) > 1 && vals[0].Kind() == reflect.Int {
-			res.WriteHeader(int(vals[0].Int()))
-			res.Write([]byte(vals[1].String()))
-		} else if len(vals) > 0 {
-			res.Write([]byte(vals[0].String()))
+		if count := len(vals); count > 0 {
+			values := make(Values, count)
+			for i, val := range vals {
+				values[i] = val.Interface()
+			}
+			r.Map(values)
 		}
 		if r.written() {
 			return

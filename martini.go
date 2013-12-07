@@ -100,6 +100,7 @@ func Classic() *ClassicMartini {
 	m.Use(Logger())
 	m.Use(Recovery())
 	m.Use(Static("public"))
+	m.Use(Printer())
 	m.Action(r.Handle)
 	return &ClassicMartini{m, r}
 }
@@ -113,6 +114,9 @@ func validateHandler(handler Handler) {
 		panic("martini handler must be a callable func")
 	}
 }
+
+// Values contains the values returned by a Handler. The values can be printed or encoded using middleware.
+type Values []interface{}
 
 // Context represents a request context. Services can be mapped on the request level from this interface.
 type Context interface {
@@ -142,12 +146,19 @@ func (c *context) written() bool {
 
 func (c *context) run() {
 	for c.index < len(c.handlers) {
-		_, err := c.Invoke(c.handlers[c.index])
+		vals, err := c.Invoke(c.handlers[c.index])
 		if err != nil {
 			panic(err)
 		}
 		c.index += 1
 
+		if count := len(vals); count > 0 {
+			values := make(Values, count)
+			for i, val := range vals {
+				values[i] = val.Interface()
+			}
+			c.Map(values)
+		}
 		if c.rw.Written() {
 			return
 		}
