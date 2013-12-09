@@ -73,7 +73,7 @@ func (rw *responseWriter) Before(before BeforeFunc) {
 func (rw *responseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 	hijacker, ok := rw.ResponseWriter.(http.Hijacker)
 	if !ok {
-		return nil, nil, fmt.Errorf("ResponseWriter doesn't support Hijacker interface")
+		return nil, nil, fmt.Errorf("the ResponseWriter doesn't support Hijacker interface")
 	}
 	return hijacker.Hijack()
 }
