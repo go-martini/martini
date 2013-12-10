@@ -26,6 +26,8 @@ type Router interface {
 	Delete(string, ...Handler) Route
 	// Options adds a route for a HTTP OPTIONS request to the specified matching pattern.
 	Options(string, ...Handler) Route
+	// Head adds a route for a HTTP HEAD request to the specified matching pattern.
+	Head(string, ...Handler) Route
 	// Any adds a route for any HTTP method request to the specified matching pattern.
 	Any(string, ...Handler) Route
 
@@ -68,6 +70,10 @@ func (r *router) Delete(pattern string, h ...Handler) Route {
 
 func (r *router) Options(pattern string, h ...Handler) Route {
 	return r.addRoute("OPTIONS", pattern, h)
+}
+
+func (r *router) Head(pattern string, h ...Handler) Route {
+	return r.addRoute("HEAD", pattern, h)
 }
 
 func (r *router) Any(pattern string, h ...Handler) Route {
