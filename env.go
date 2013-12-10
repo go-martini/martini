@@ -4,6 +4,7 @@ import (
 	"os"
 )
 
+// Envs
 const (
 	Dev  string = "development"
 	Prod string = "production"
@@ -11,7 +12,7 @@ const (
 )
 
 // Env is the environment that Martini is executing in. The MARTINI_ENV is read on initialization to set this variable.
-var Env string = Dev
+var Env = Dev
 
 func setENV(e string) {
 	if len(e) > 0 {
