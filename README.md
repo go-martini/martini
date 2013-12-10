@@ -258,7 +258,7 @@ m.Use(func(c martini.Context, log *log.Logger){
 Start by looking in the [martini-contrib](http://github.com/codegangsta/martini-contrib) package. If it is not there feel free to put up a Pull Request for one.
 
 * [auth](https://github.com/codegangsta/martini-contrib/tree/master/auth) - Handlers for authentication.
-* [form](https://github.com/codegangsta/martini-contrib/tree/master/form) - Handler for parsing and mapping form fields.
+* [binding](https://github.com/codegangsta/martini-contrib/tree/master/binding) - Handler for mapping/validating a raw request into a structure.
 * [gzip](https://github.com/codegangsta/martini-contrib/tree/master/gzip) - Handler for adding gzip compress to requests
 * [render](https://github.com/codegangsta/martini-contrib/tree/master/render) - Handler that provides a service for easily rendering JSON and HTML templates.
 * [acceptlang](https://github.com/codegangsta/martini-contrib/tree/master/acceptlang) - Handler for parsing the `Accept-Language` HTTP header.
