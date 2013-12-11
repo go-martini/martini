@@ -235,12 +235,20 @@ func (r *routeContext) run() {
 		}
 		r.index += 1
 
-		if count := len(vals); count > 0 {
-			values := make(Values, count)
+		var count int
+		if len(vals) > 0 {
+			values := make(Values, len(vals))
 			for i, val := range vals {
-				values[i] = val.Interface()
+				v := val.Interface()
+				if !isZero(v) {
+					count++
+				}
+				values[i] = v
 			}
 			r.Map(values)
+		}
+		if count > 0 {
+			return
 		}
 		if r.written() {
 			return
