@@ -5,13 +5,13 @@ import (
 	"reflect"
 )
 
-// ResponseEncoder is a service that Martini provides that is called
-// when a route handler returns something. The ResponseEncoder is
+// ReturnHandler is a service that Martini provides that is called
+// when a route handler returns something. The ReturnHandler is
 // responsible for writing to the ResponseWriter based on the values
 // that are passed into this function.
-type ResponseEncoder func(http.ResponseWriter, []reflect.Value)
+type ReturnHandler func(http.ResponseWriter, []reflect.Value)
 
-func defaultResponseEncoder(res http.ResponseWriter, vals []reflect.Value) {
+func defaultReturnHandler(res http.ResponseWriter, vals []reflect.Value) {
 	if len(vals) > 1 && vals[0].Kind() == reflect.Int {
 		res.WriteHeader(int(vals[0].Int()))
 		res.Write([]byte(vals[1].String()))

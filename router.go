@@ -246,9 +246,9 @@ func (r *routeContext) run() {
 		// if the handler returned something, write it to the http response
 		if len(vals) > 0 {
 			rv := r.Get(inject.InterfaceOf((*http.ResponseWriter)(nil)))
-			ev := r.Get(reflect.TypeOf(ResponseEncoder(nil)))
-			encode := ev.Interface().(ResponseEncoder)
-			encode(rv.Interface().(http.ResponseWriter), vals)
+			ev := r.Get(reflect.TypeOf(ReturnHandler(nil)))
+			handleReturn := ev.Interface().(ReturnHandler)
+			handleReturn(rv.Interface().(http.ResponseWriter), vals)
 		}
 
 		if r.written() {
