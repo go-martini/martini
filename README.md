@@ -1,4 +1,4 @@
-# Martini [![Build Status](https://drone.io/github.com/codegangsta/martini/status.png)](https://drone.io/github.com/codegangsta/martini/latest) [![GoDoc](https://godoc.org/github.com/codegangsta/martini?status.png)](http://godoc.org/github.com/codegangsta/martini)
+# Martini  [![wercker status](https://app.wercker.com/status/174bef7e3c999e103cacfe2770102266 "wercker status")](https://app.wercker.com/project/bykey/174bef7e3c999e103cacfe2770102266) [![Codebot](https://codebot.io/badge/github.com/codegangsta/martini.png)](http://codebot.io/doc/pkg/github.com/codegangsta/martini "Codebot") [![GoDoc](https://godoc.org/github.com/codegangsta/martini?status.png)](http://godoc.org/github.com/codegangsta/martini)
 
 Martini is a powerful package for quickly writing modular web applications/services in Golang.
 
