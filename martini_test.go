@@ -25,6 +25,11 @@ func Test_New(t *testing.T) {
 	refute(t, m, nil)
 }
 
+func Test_Martini_Run(t *testing.T) {
+	// just test that Run doesn't bomb
+	go New().Run()
+}
+
 func Test_Martini_ServeHTTP(t *testing.T) {
 	result := ""
 	response := httptest.NewRecorder()
