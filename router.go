@@ -143,9 +143,13 @@ func newRoute(method string, pattern string, handlers []Handler) *route {
 	return &route
 }
 
+func (r route) MatchMethod(method string) bool {
+	return r.method == "*" || method == r.method || (method == "HEAD" && r.method == "GET")
+}
+
 func (r route) Match(method string, path string) (bool, map[string]string) {
 	// add Any method matching support
-	if r.method != "*" && method != r.method && !(method == "HEAD" && r.method == "GET") {
+	if !r.MatchMethod(method) {
 		return false, nil
 	}
 
