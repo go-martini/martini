@@ -37,7 +37,7 @@ type Martini struct {
 func New() *Martini {
 	m := &Martini{inject.New(), []Handler{}, func() {}, log.New(os.Stdout, "[martini] ", 0)}
 	m.Map(m.logger)
-	m.Map(ReturnHandler(defaultReturnHandler))
+	m.Map(defaultReturnHandler())
 	return m
 }
 
