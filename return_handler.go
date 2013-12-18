@@ -20,13 +20,21 @@ func defaultReturnHandler() ReturnHandler {
 		} else if len(vals) > 0 {
 			responseVal = vals[0]
 		}
-		if responseVal.Kind() == reflect.Interface || responseVal.Kind() == reflect.Ptr {
+		if canDeref(responseVal) {
 			responseVal = responseVal.Elem()
 		}
-		if responseVal.Kind() == reflect.Slice && responseVal.Type().Elem().Kind() == reflect.Uint8 {
+		if isByteSlice(responseVal) {
 			res.Write(responseVal.Bytes())
 		} else {
 			res.Write([]byte(responseVal.String()))
 		}
 	}
+}
+
+func isByteSlice(val reflect.Value) bool {
+	return val.Kind() == reflect.Slice && val.Type().Elem().Kind() == reflect.Uint8
+}
+
+func canDeref(val reflect.Value) bool {
+	return val.Kind() == reflect.Interface || val.Kind() == reflect.Ptr
 }

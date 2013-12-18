@@ -106,6 +106,12 @@ func Test_RouterHandlerStatusCode(t *testing.T) {
 	router.Get("/baz", func() (string, string) {
 		return "baz", "BAZ!"
 	})
+	router.Get("/bytes", func() []byte {
+		return []byte("Bytes!")
+	})
+	router.Get("/interface", func() interface{} {
+		return "Interface!"
+	})
 
 	// code should be 200 if none is returned from the handler
 	recorder := httptest.NewRecorder()
@@ -130,6 +136,22 @@ func Test_RouterHandlerStatusCode(t *testing.T) {
 	router.Handle(recorder, req, context)
 	expect(t, recorder.Code, http.StatusOK)
 	expect(t, recorder.Body.String(), "baz")
+
+	// Should render bytes as a return value as well.
+	recorder = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "http://localhost:3000/bytes", nil)
+	context = New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
+	expect(t, recorder.Code, http.StatusOK)
+	expect(t, recorder.Body.String(), "Bytes!")
+
+	// Should render interface{} values.
+	recorder = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "http://localhost:3000/interface", nil)
+	context = New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
+	expect(t, recorder.Code, http.StatusOK)
+	expect(t, recorder.Body.String(), "Interface!")
 }
 
 func Test_RouterHandlerStacking(t *testing.T) {
