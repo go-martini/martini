@@ -219,7 +219,7 @@ m.Use(func() {
 })
 ~~~
 
-You can have full control over the middleware stack with the `Handlers` function:
+You can have full control over the middleware stack with the `Handlers` function. This will replace any handlers that have been previosuly set:
 ~~~ go
 m.Handlers(
   Middleware1,
