@@ -41,6 +41,21 @@ func New() *Martini {
 	return m
 }
 
+// Handlers sets the entire middleware stack with the given Handlers. This will clear any current middleware handlers.
+// Will panic if any of the handlers is not a callable function
+func (m *Martini) Handlers(handlers ...Handler) {
+	m.handlers = make([]Handler, 0)
+	for _, handler := range handlers {
+		m.Use(handler)
+	}
+}
+
+// Action sets the handler that will be called after all the middleware has been invoked. This is set to martini.Router in a martini.Classic().
+func (m *Martini) Action(handler Handler) {
+	validateHandler(handler)
+	m.action = handler
+}
+
 // Use adds a middleware Handler to the stack. Will panic if the handler is not a callable func. Middleware Handlers are invoked in the order that they are added.
 func (m *Martini) Use(handler Handler) {
 	validateHandler(handler)
@@ -53,12 +68,6 @@ func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	m.createContext(res, req).run()
 }
 
-// Action sets the handler that will be called after all the middleware has been invoked. This is set to martini.Router in a martini.Classic().
-func (m *Martini) Action(handler Handler) {
-	validateHandler(handler)
-	m.action = handler
-}
-
 // Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
 func (m *Martini) Run() {
 	port := os.Getenv("PORT")
@@ -68,15 +77,6 @@ func (m *Martini) Run() {
 
 	m.logger.Println("listening on port " + port)
 	m.logger.Fatalln(http.ListenAndServe(":"+port, m))
-}
-
-// Handlers sets the entire middleware stack with the given Handlers. This will clear any current middleware handlers.
-// Will panic if any of the handlers is not a callable function
-func (m *Martini) Handlers(handlers ...Handler) {
-	m.handlers = make([]Handler, 0)
-	for _, handler := range handlers {
-		m.Use(handler)
-	}
 }
 
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
