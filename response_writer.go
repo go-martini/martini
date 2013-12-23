@@ -12,6 +12,7 @@ import (
 // if the functionality calls for it.
 type ResponseWriter interface {
 	http.ResponseWriter
+	http.Flusher
 	// Status returns the status code of the response or 0 if the response has not been written.
 	Status() int
 	// Written returns whether or not the ResponseWriter has been written.
@@ -86,4 +87,8 @@ func (rw *responseWriter) callBefore() {
 	for i := len(rw.beforeFuncs) - 1; i >= 0; i-- {
 		rw.beforeFuncs[i](rw)
 	}
+}
+
+func (rw *responseWriter) Flush() {
+	rw.Flush()
 }

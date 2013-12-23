@@ -140,3 +140,12 @@ func Test_ResponseWriter_CloseNotify(t *testing.T) {
 	}
 	expect(t, closed, true)
 }
+
+func Test_ResponseWriter_Flusher(t *testing.T) {
+
+	rec := httptest.NewRecorder()
+	rw := NewResponseWriter(rec)
+
+	_, ok := rw.(http.Flusher)
+	expect(t, ok, true)
+}
