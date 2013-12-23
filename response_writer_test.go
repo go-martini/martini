@@ -2,6 +2,7 @@ package martini
 
 import (
 	"bufio"
+	"io"
 	"net"
 	"net/http"
 	"net/http/httptest"
@@ -148,4 +149,35 @@ func Test_ResponseWriter_Flusher(t *testing.T) {
 
 	_, ok := rw.(http.Flusher)
 	expect(t, ok, true)
+}
+
+func Test_ResponseWriter_FlusherHandler(t *testing.T) {
+
+	// New martini instance
+	m := New()
+
+	m.Use(func(w http.ResponseWriter, r *http.Request) {
+		// Should support the flusher interface
+		f, ok := w.(http.Flusher)
+		expect(t, ok, true)
+
+		io.WriteString(w, "hello")
+		f.Flush()
+		time.Sleep(10 * time.Millisecond)
+		//io.WriteString(w, "howdy")
+		//f.Flush()
+	})
+
+	recorder := httptest.NewRecorder()
+	r, _ := http.NewRequest("GET", "events", nil)
+	m.ServeHTTP(recorder, r)
+
+	if recorder.Code != 200 {
+		t.Error("Response not 200")
+	}
+
+	if recorder.Body.String() != "hello" {
+		t.Error("Didn't receive correct body, got:", recorder.Body.String())
+	}
+
 }

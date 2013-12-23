@@ -90,5 +90,9 @@ func (rw *responseWriter) callBefore() {
 }
 
 func (rw *responseWriter) Flush() {
-	rw.Flush()
+	_, readerWriter, err := rw.Hijack()
+	if err != nil {
+		return
+	}
+	readerWriter.Flush()
 }
