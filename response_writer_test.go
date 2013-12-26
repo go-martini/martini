@@ -181,7 +181,7 @@ func Test_ResponseWriter_FlusherHandler(t *testing.T) {
 		t.Error("Response not 200")
 	}
 
-	if recorder.Body.String() != "data: Hello\n\n" {
+	if recorder.Body.String() != "data: Hello\n\ndata: Hello\n\n" {
 		t.Error("Didn't receive correct body, got:", recorder.Body.String())
 	}
 
