@@ -69,10 +69,11 @@ func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 }
 
 // Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
-func (m *Martini) Run() {
+//added parameter porta here
+func (m *Martini) Run(porta string) {
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
-		port = "3000"
+		port = porta
 	}
 
 	m.logger.Println("listening on port " + port)
