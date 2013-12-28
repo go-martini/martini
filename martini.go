@@ -122,7 +122,7 @@ type Context interface {
 	// the other Handlers have been executed. This works really well for any operations that must
 	// happen after an http request
 	Next()
-	written() bool
+	Written() bool
 }
 
 type context struct {
@@ -137,7 +137,7 @@ func (c *context) Next() {
 	c.run()
 }
 
-func (c *context) written() bool {
+func (c *context) Written() bool {
 	return c.rw.Written()
 }
 
