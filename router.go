@@ -84,7 +84,17 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 	for _, route := range r.routes {
 		ok, vals := route.Match(req.Method, req.URL.Path)
 		if ok {
-			params := Params(vals)
+			var params Params
+			p := context.Get(reflect.TypeOf(Params(nil)))
+			if p.IsValid() {
+				params = p.Interface().(Params)
+			} else {
+				params = Params(make(map[string]string))
+			}
+
+			for k, v := range vals {
+				params[k] = v
+			}
 			context.Map(params)
 			r := routes{}
 			context.MapTo(r, (*Routes)(nil))
