@@ -255,7 +255,7 @@ func (r *routeContext) run() {
 			handleReturn(rv.Interface().(http.ResponseWriter), vals)
 		}
 
-		if r.written() {
+		if r.Written() {
 			return
 		}
 	}
