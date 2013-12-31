@@ -122,6 +122,7 @@ type Context interface {
 	// the other Handlers have been executed. This works really well for any operations that must
 	// happen after an http request
 	Next()
+	// Written returns whether or not the response for this context has been written.
 	Written() bool
 }
 
@@ -149,7 +150,7 @@ func (c *context) run() {
 		}
 		c.index += 1
 
-		if c.rw.Written() {
+		if c.Written() {
 			return
 		}
 	}
