@@ -26,8 +26,10 @@ func Test_Static_As_Post(t *testing.T) {
 	response := httptest.NewRecorder()
 
 	m := New()
+	r := NewRouter()
 
 	m.Use(Static("."))
+	m.Action(r.Handle)
 
 	req, err := http.NewRequest("POST", "http://localhost:3000/martini.go", nil)
 	if err != nil {
