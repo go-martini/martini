@@ -11,14 +11,9 @@ import (
 func Static(directory string) Handler {
 	dir := http.Dir(directory)
 	return func(res http.ResponseWriter, req *http.Request, log *log.Logger) {
-		if req.Method != "GET" {
-			res.WriteHeader(http.StatusNotFound)
-			return
-		}
-
 		file := req.URL.Path
 		f, err := dir.Open(file)
-		if err != nil {
+		if err != nil || req.Method != "GET" {
 			// discard the error?
 			return
 		}
