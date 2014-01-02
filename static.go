@@ -13,6 +13,7 @@ func Static(directory string) Handler {
 	return func(res http.ResponseWriter, req *http.Request, log *log.Logger) {
 		if req.Method != "GET" {
 			res.WriteHeader(http.StatusNotFound)
+			return
 		}
 
 		file := req.URL.Path
