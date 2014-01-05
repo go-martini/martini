@@ -8,7 +8,7 @@ import (
 )
 
 // Static returns a middleware handler that serves static files in the given directory.
-func Static(directory string) Handler {
+func Static(directory string, skipLogging ...bool) Handler {
 	dir := http.Dir(directory)
 	return func(res http.ResponseWriter, req *http.Request, log *log.Logger) {
 		file := req.URL.Path
@@ -46,7 +46,9 @@ func Static(directory string) Handler {
 			}
 		}
 
-		log.Println("[Static] Serving " + file)
+		if len(skipLogging) == 0 || !skipLogging[0] {
+			log.Println("[Static] Serving " + file)
+		}
 		http.ServeContent(res, req, file, fi.ModTime(), f)
 	}
 }
