@@ -57,7 +57,7 @@ func Test_Static_BadDir(t *testing.T) {
 	refute(t, response.Code, http.StatusOK)
 }
 
-func Test_Static_Logging(t *testing.T) {
+func Test_Static_Options_Logging(t *testing.T) {
 	response := httptest.NewRecorder()
 
 	var buffer bytes.Buffer
@@ -65,7 +65,8 @@ func Test_Static_Logging(t *testing.T) {
 	m.Map(m.logger)
 	m.Map(defaultReturnHandler())
 
-	m.Use(Static("."))
+	opt := StaticOptions{}
+	m.Use(Static(".", opt))
 
 	req, err := http.NewRequest("GET", "http://localhost:3000/martini.go", nil)
 	if err != nil {
@@ -74,11 +75,22 @@ func Test_Static_Logging(t *testing.T) {
 
 	m.ServeHTTP(response, req)
 	expect(t, response.Code, http.StatusOK)
+	expect(t, buffer.String(), "[martini] [Static] Serving /martini.go\n")
 
-	expect(t, buffer.String(), "[martini] [Static] Serving /martini.go\n") // Check logging output
+	// Now without logging
+	m.Handlers()
+	buffer.Reset()
+
+	// This should disable logging
+	opt.SkipLogging = true
+	m.Use(Static(".", opt))
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusOK)
+	expect(t, buffer.String(), "")
 }
 
-func Test_Static_NoLogging(t *testing.T) {
+func Test_Static_Options_ServeIndex(t *testing.T) {
 	response := httptest.NewRecorder()
 
 	var buffer bytes.Buffer
@@ -86,15 +98,27 @@ func Test_Static_NoLogging(t *testing.T) {
 	m.Map(m.logger)
 	m.Map(defaultReturnHandler())
 
-	m.Use(Static(".", true)) // Skip logging
+	opt := StaticOptions{IndexFile: "martini.go"} // Define martini.go as index file
+	m.Use(Static(".", opt))
 
-	req, err := http.NewRequest("GET", "http://localhost:3000/martini.go", nil)
+	req, err := http.NewRequest("GET", "http://localhost:3000/", nil)
 	if err != nil {
 		t.Error(err)
 	}
 
 	m.ServeHTTP(response, req)
 	expect(t, response.Code, http.StatusOK)
+	expect(t, buffer.String(), "[martini] [Static] Serving /martini.go\n")
 
-	expect(t, buffer.String(), "") // Check logging output
+	// Now without index serving
+	m.Handlers()
+	buffer.Reset()
+
+	// This should make Static() stop serving index.html (or martini.go in this case)
+	opt.SkipServeIndex = true
+	m.Use(Static(".", opt))
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusOK)
+	expect(t, buffer.String(), "[martini] [Static] Serving /\n")
 }
