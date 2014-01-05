@@ -3,6 +3,7 @@ package martini
 import (
 	"fmt"
 	"github.com/codegangsta/inject"
+	"log"
 	"net/http"
 	"reflect"
 	"regexp"
@@ -84,8 +85,7 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 	for _, route := range r.routes {
 		ok, vals := route.Match(req.Method, req.URL.Path)
 		if ok {
-			params := Params(vals)
-			context.Map(params)
+			addToParams(vals, context)
 			r := routes{}
 			context.MapTo(r, (*Routes)(nil))
 			_, err := context.Invoke(route.Handle)
@@ -111,6 +111,20 @@ func (r *router) addRoute(method string, pattern string, handlers []Handler) *ro
 	route.Validate()
 	r.routes = append(r.routes, route)
 	return route
+}
+
+func addToParams(vals map[string]string, context Context) {
+	var params Params
+	p := context.Get(reflect.TypeOf(Params(nil)))
+	if p.IsValid() {
+		params = p.Interface().(Params)
+	} else {
+		params = Params(make(map[string]string))
+	}
+	for k, v := range vals {
+		params[k] = v
+	}
+	context.Map(params)
 }
 
 // Route is an interface representing a Route in Martini's routing layer.
