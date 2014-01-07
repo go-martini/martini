@@ -22,6 +22,22 @@ func Test_Static(t *testing.T) {
 	expect(t, response.Code, http.StatusOK)
 }
 
+func Test_Static_Head(t *testing.T) {
+	response := httptest.NewRecorder()
+
+	m := New()
+
+	m.Use(Static("."))
+
+	req, err := http.NewRequest("HEAD", "http://localhost:3000/martini.go", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusOK)
+}
+
 func Test_Static_As_Post(t *testing.T) {
 	response := httptest.NewRecorder()
 

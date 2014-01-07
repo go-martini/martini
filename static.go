@@ -11,9 +11,12 @@ import (
 func Static(directory string) Handler {
 	dir := http.Dir(directory)
 	return func(res http.ResponseWriter, req *http.Request, log *log.Logger) {
+		if req.Method != "GET" && req.Method != "HEAD" {
+			return
+		}
 		file := req.URL.Path
 		f, err := dir.Open(file)
-		if err != nil || req.Method != "GET" {
+		if err != nil {
 			// discard the error?
 			return
 		}
