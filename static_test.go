@@ -11,18 +11,45 @@ import (
 
 func Test_Static(t *testing.T) {
 	response := httptest.NewRecorder()
+	response.Body = new(bytes.Buffer)
 
 	m := New()
+	r := NewRouter()
 
 	m.Use(Static("."))
+	m.Action(r.Handle)
 
 	req, err := http.NewRequest("GET", "http://localhost:3000/martini.go", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusOK)
+	if response.Body.Len() == 0 {
+		t.Errorf("Got empty body for GET request")
+	}
+}
+
+func Test_Static_Head(t *testing.T) {
+	response := httptest.NewRecorder()
+	response.Body = new(bytes.Buffer)
+
+	m := New()
+	r := NewRouter()
+
+	m.Use(Static("."))
+	m.Action(r.Handle)
+
+	req, err := http.NewRequest("HEAD", "http://localhost:3000/martini.go", nil)
 	if err != nil {
 		t.Error(err)
 	}
 
 	m.ServeHTTP(response, req)
 	expect(t, response.Code, http.StatusOK)
+	if response.Body.Len() != 0 {
+		t.Errorf("Got non-empty body for HEAD request")
+	}
 }
 
 func Test_Static_As_Post(t *testing.T) {
@@ -115,10 +142,27 @@ func Test_Static_Options_ServeIndex(t *testing.T) {
 	buffer.Reset()
 
 	// This should make Static() stop serving index.html (or martini.go in this case)
+	// But since we make a request on the root URL.Path "/", it will not do anything at all
 	opt.SkipServeIndex = true
 	m.Use(Static(".", opt))
 
 	m.ServeHTTP(response, req)
 	expect(t, response.Code, http.StatusOK)
-	expect(t, buffer.String(), "[martini] [Static] Serving /\n")
+	expect(t, buffer.String(), "")
+
+	// A new request is now needed for testing non-root path requests
+	req, err = http.NewRequest("GET", "http://localhost:3000/testdata/", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	m.Handlers()
+	buffer.Reset()
+
+	opt.SkipServeIndex = true
+	m.Use(Static(".", opt))
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusOK)
+	expect(t, buffer.String(), "[martini] [Static] Serving /testdata/\n")
 }

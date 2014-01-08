@@ -7,25 +7,28 @@ import (
 	"strings"
 )
 
+// StaticOptions is a struct for specifying configuration options for the martini.Static middleware.
 type StaticOptions struct {
-	SkipLogging    bool
+	// SkipLogging can be used to switch log messages to *log.logger off.
+	SkipLogging bool
+	// SkipServeIndex is used to determine whether or not an index file should be tried to serve by the martini.Static middleware.
 	SkipServeIndex bool
-	IndexFile      string
+	// IndexFile defines which file to serve as index if it exists. Has no effect if SkipServeIndex is true.
+	IndexFile string
 }
 
 func prepareStaticOptions(options []StaticOptions) StaticOptions {
+	var opt StaticOptions
 	if len(options) > 0 {
-		// Default index file to serve should be index.html
-		if options[0].IndexFile == "" {
-			options[0].IndexFile = "index.html"
-		}
-		return options[0]
+		opt = options[0]
 	}
-	return StaticOptions{
-		SkipLogging:    false,        // Logging is on by default
-		SkipServeIndex: false,        // Try to serve index.html by default
-		IndexFile:      "index.html", // Default index file to serve
+
+	// Defaults
+	if len(opt.IndexFile) == 0 {
+		opt.IndexFile = "index.html"
 	}
+
+	return opt
 }
 
 // Static returns a middleware handler that serves static files in the given directory.
@@ -34,9 +37,16 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 	opt := prepareStaticOptions(staticOpt)
 
 	return func(res http.ResponseWriter, req *http.Request, log *log.Logger) {
+		if req.Method != "GET" && req.Method != "HEAD" {
+			return
+		}
+		// Do nothing if we are not serving any index file and the request is at the root URL path.
+		if opt.SkipServeIndex && req.URL.Path == "/" {
+			return
+		}
 		file := req.URL.Path
 		f, err := dir.Open(file)
-		if err != nil || req.Method != "GET" {
+		if err != nil {
 			// discard the error?
 			return
 		}
@@ -48,7 +58,7 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 		}
 
 		if !opt.SkipServeIndex {
-			// Try to serve index.html
+			// try to serve index file
 			if fi.IsDir() {
 
 				// redirect if missing trailing slash
