@@ -11,9 +11,7 @@ import (
 type StaticOptions struct {
 	// SkipLogging can be used to switch log messages to *log.logger off.
 	SkipLogging bool
-	// SkipServeIndex is used to determine whether or not an index file should be tried to serve by the martini.Static middleware.
-	SkipServeIndex bool
-	// IndexFile defines which file to serve as index if it exists. Has no effect if SkipServeIndex is true.
+	// IndexFile defines which file to serve as index if it exists.
 	IndexFile string
 }
 
@@ -40,10 +38,6 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 		if req.Method != "GET" && req.Method != "HEAD" {
 			return
 		}
-		// Do nothing if we are not serving any index file and the request is at the root URL path.
-		if opt.SkipServeIndex && req.URL.Path == "/" {
-			return
-		}
 		file := req.URL.Path
 		f, err := dir.Open(file)
 		if err != nil {
@@ -57,27 +51,25 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 			return
 		}
 
-		if !opt.SkipServeIndex {
-			// try to serve index file
-			if fi.IsDir() {
+		// try to serve index file
+		if fi.IsDir() {
 
-				// redirect if missing trailing slash
-				if !strings.HasSuffix(file, "/") {
-					http.Redirect(res, req, file+"/", http.StatusFound)
-					return
-				}
+			// redirect if missing trailing slash
+			if !strings.HasSuffix(file, "/") {
+				http.Redirect(res, req, file+"/", http.StatusFound)
+				return
+			}
 
-				file = path.Join(file, opt.IndexFile)
-				f, err = dir.Open(file)
-				if err != nil {
-					return
-				}
-				defer f.Close()
+			file = path.Join(file, opt.IndexFile)
+			f, err = dir.Open(file)
+			if err != nil {
+				return
+			}
+			defer f.Close()
 
-				fi, err = f.Stat()
-				if err != nil || fi.IsDir() {
-					return
-				}
+			fi, err = f.Stat()
+			if err != nil || fi.IsDir() {
+				return
 			}
 		}
 

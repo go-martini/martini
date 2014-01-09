@@ -136,33 +136,4 @@ func Test_Static_Options_ServeIndex(t *testing.T) {
 	m.ServeHTTP(response, req)
 	expect(t, response.Code, http.StatusOK)
 	expect(t, buffer.String(), "[martini] [Static] Serving /martini.go\n")
-
-	// Now without index serving
-	m.Handlers()
-	buffer.Reset()
-
-	// This should make Static() stop serving index.html (or martini.go in this case)
-	// But since we make a request on the root URL.Path "/", it will not do anything at all
-	opt.SkipServeIndex = true
-	m.Use(Static(".", opt))
-
-	m.ServeHTTP(response, req)
-	expect(t, response.Code, http.StatusOK)
-	expect(t, buffer.String(), "")
-
-	// A new request is now needed for testing non-root path requests
-	req, err = http.NewRequest("GET", "http://localhost:3000/testdata/", nil)
-	if err != nil {
-		t.Error(err)
-	}
-
-	m.Handlers()
-	buffer.Reset()
-
-	opt.SkipServeIndex = true
-	m.Use(Static(".", opt))
-
-	m.ServeHTTP(response, req)
-	expect(t, response.Code, http.StatusOK)
-	expect(t, buffer.String(), "[martini] [Static] Serving /testdata/\n")
 }
