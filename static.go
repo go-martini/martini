@@ -9,6 +9,8 @@ import (
 
 // StaticOptions is a struct for specifying configuration options for the martini.Static middleware.
 type StaticOptions struct {
+	// Prefix is the optional prefix used to serve the static directory content
+	Prefix string
 	// SkipLogging can be used to switch log messages to *log.logger off.
 	SkipLogging bool
 	// IndexFile defines which file to serve as index if it exists.
@@ -25,7 +27,15 @@ func prepareStaticOptions(options []StaticOptions) StaticOptions {
 	if len(opt.IndexFile) == 0 {
 		opt.IndexFile = "index.html"
 	}
-
+	// Normalize the prefix if provided
+	if opt.Prefix != "" {
+		// Ensure we have a leading '/'
+		if opt.Prefix[0] != '/' {
+			opt.Prefix = "/" + opt.Prefix
+		}
+		// Remove any trailing '/'
+		opt.Prefix = strings.TrimRight(opt.Prefix, "/")
+	}
 	return opt
 }
 
@@ -39,6 +49,16 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 			return
 		}
 		file := req.URL.Path
+		// if we have a prefix, filter requests by stripping the prefix
+		if opt.Prefix != "" {
+			if !strings.HasPrefix(file, opt.Prefix) {
+				return
+			}
+			file = file[len(opt.Prefix):]
+			if file != "" && file[0] != '/' {
+				return
+			}
+		}
 		f, err := dir.Open(file)
 		if err != nil {
 			// discard the error?
@@ -53,10 +73,9 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 
 		// try to serve index file
 		if fi.IsDir() {
-
 			// redirect if missing trailing slash
-			if !strings.HasSuffix(file, "/") {
-				http.Redirect(res, req, file+"/", http.StatusFound)
+			if !strings.HasSuffix(req.URL.Path, "/") {
+				http.Redirect(res, req, req.URL.Path+"/", http.StatusFound)
 				return
 			}
 

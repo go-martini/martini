@@ -2,11 +2,12 @@ package martini
 
 import (
 	"bytes"
-	"github.com/codegangsta/inject"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/codegangsta/inject"
 )
 
 func Test_Static(t *testing.T) {
@@ -136,4 +137,42 @@ func Test_Static_Options_ServeIndex(t *testing.T) {
 	m.ServeHTTP(response, req)
 	expect(t, response.Code, http.StatusOK)
 	expect(t, buffer.String(), "[martini] [Static] Serving /martini.go\n")
+}
+
+func Test_Static_Options_Prefix(t *testing.T) {
+	response := httptest.NewRecorder()
+
+	var buffer bytes.Buffer
+	m := &Martini{inject.New(), []Handler{}, func() {}, log.New(&buffer, "[martini] ", 0)}
+	m.Map(m.logger)
+	m.Map(defaultReturnHandler())
+
+	// Serve current directory under /public
+	m.Use(Static(".", StaticOptions{Prefix: "/public"}))
+
+	// Check file content behaviour
+	req, err := http.NewRequest("GET", "http://localhost:3000/public/martini.go", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusOK)
+	expect(t, buffer.String(), "[martini] [Static] Serving /martini.go\n")
+}
+
+func Test_Static_Redirect(t *testing.T) {
+	response := httptest.NewRecorder()
+
+	m := New()
+	m.Use(Static(".", StaticOptions{Prefix: "/public"}))
+
+	req, err := http.NewRequest("GET", "http://localhost:3000/public", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusFound)
+	expect(t, response.Header().Get("Location"), "/public/")
 }
