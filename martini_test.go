@@ -9,15 +9,55 @@ import (
 
 /* Test Helpers */
 func expect(t *testing.T, a interface{}, b interface{}) {
-	if a != b {
+	if b == nil {
+		mustBeNil(t, a)
+	} else if a != b {
 		t.Errorf("Expected %v (type %v) - Got %v (type %v)", b, reflect.TypeOf(b), a, reflect.TypeOf(a))
 	}
 }
 
 func refute(t *testing.T, a interface{}, b interface{}) {
-	if a == b {
+	if b == nil {
+		mustNotBeNil(t, a)
+	} else if a == b {
 		t.Errorf("Did not expect %v (type %v) - Got %v (type %v)", b, reflect.TypeOf(b), a, reflect.TypeOf(a))
 	}
+}
+
+func mustBeNil(t *testing.T, a interface{}) {
+	tp := reflect.TypeOf(a)
+
+	if tp != nil && (!isNillable(tp.Kind()) || !reflect.ValueOf(a).IsNil()) {
+		t.Errorf("Expected %v (type %v) to be nil", a, tp)
+	}
+}
+
+func mustNotBeNil(t *testing.T, a interface{}) {
+	tp := reflect.TypeOf(a)
+
+	if tp == nil || (isNillable(tp.Kind()) && reflect.ValueOf(a).IsNil()) {
+		t.Errorf("Expected %v (type %v) to not be nil", a, tp)
+	}
+}
+
+func isNillable(k reflect.Kind) (nillable bool) {
+	kinds := []reflect.Kind{
+		reflect.Chan,
+		reflect.Func,
+		reflect.Interface,
+		reflect.Map,
+		reflect.Ptr,
+		reflect.Slice,
+	}
+
+	for i := 0; i < len(kinds); i++ {
+		if kinds[i] == k {
+			nillable = true
+			break
+		}
+	}
+
+	return
 }
 
 func Test_New(t *testing.T) {
