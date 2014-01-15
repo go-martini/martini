@@ -22,7 +22,9 @@ func refute(t *testing.T, a interface{}, b interface{}) {
 
 func Test_New(t *testing.T) {
 	m := New()
-	refute(t, m, nil)
+	if m == nil {
+		t.Error("martini.New() cannot return nil")
+	}
 }
 
 func Test_Martini_Run(t *testing.T) {
