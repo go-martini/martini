@@ -265,6 +265,9 @@ Start by looking in the [martini-contrib](http://github.com/codegangsta/martini-
 * [sessions](https://github.com/codegangsta/martini-contrib/tree/master/sessions) - Handler that provides a Session service.
 * [web](https://github.com/codegangsta/martini-contrib/tree/master/web) - web.go Context compatibility.
 * [strip](https://github.com/codegangsta/martini-contrib/tree/master/strip) - URL Prefix stripping.
+* [method](https://github.com/codegangsta/martini-contrib/tree/master/method) - HTTP method overriding via Header or form fields.
+* [secure](https://github.com/codegangsta/martini-contrib/tree/master/secure) - Implements a few quick security wins.
+* [encoder](https://github.com/codegangsta/martini-contrib/tree/master/encoder) - Encoder service for rendering data in several formats and content negotiation.
 
 ### How do I integrate with existing servers?
 
