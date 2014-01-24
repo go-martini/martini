@@ -74,11 +74,11 @@ func (m *Martini) Run() {
 	if len(port) == 0 {
 		port = "3000"
 	}
-	
+
 	host := os.Getenv("HOST")
-    	if len(host) == 0 {
-	    host = ""
-    	}
+	if len(host) == 0 {
+		host = ""
+	}
 
 	m.logger.Println("listening on host:port " + host + ":" + port)
 	m.logger.Fatalln(http.ListenAndServe(host+":"+port, m))
