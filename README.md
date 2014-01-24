@@ -293,7 +293,7 @@ func init() {
 
 ### How do I change the port/host?
 
-Martini's `Run` function looks for the PORT environment variable and uses that. Otherwise Martini will default to port 3000.
+Martini's `Run` function looks for the PORT and HOST environment variables and uses those. Otherwise Martini will default to localhost:3000.
 To have more flexibility over port and host, use the `http.ListenAndServe` function instead.
 
 ~~~ go
