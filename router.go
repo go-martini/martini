@@ -88,10 +88,7 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 			context.Map(params)
 			r := routes{r}
 			context.MapTo(r, (*Routes)(nil))
-			_, err := context.Invoke(route.Handle)
-			if err != nil {
-				panic(err)
-			}
+			route.Handle(context, res)
 			return
 		}
 	}
