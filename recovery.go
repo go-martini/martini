@@ -9,7 +9,7 @@ import (
 
 const (
 	panicHtml = `<html>
-<head><title>PANIC: %s</title></head>
+<head><title>PANIC: %s</title>
 <style type="text/css">
 html, body {
 	font-family: "Roboto", sans-serif;
@@ -30,7 +30,7 @@ pre {
 	background-color: #ffffff;
 }
 </style>
-<body>
+</head><body>
 <h1>PANIC</h1>
 <pre style="font-weight: bold;">%s</pre>
 <pre>%s</pre>
