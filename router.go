@@ -85,12 +85,9 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 		if ok {
 			params := Params(vals)
 			context.Map(params)
-			r := routes{}
+			r := routes{r}
 			context.MapTo(r, (*Routes)(nil))
-			_, err := context.Invoke(route.Handle)
-			if err != nil {
-				panic(err)
-			}
+			route.Handle(context, res)
 			return
 		}
 	}
@@ -112,10 +109,21 @@ func (r *router) addRoute(method string, pattern string, handlers []Handler) *ro
 	return route
 }
 
+func (r *router) findRoute(name string) *route {
+	for _, route := range r.routes {
+		if route.name == name {
+			return route
+		}
+	}
+
+	return nil
+}
+
 // Route is an interface representing a Route in Martini's routing layer.
 type Route interface {
 	// URLWith returns a rendering of the Route's url with the given string params.
 	URLWith([]string) string
+	Name(string)
 }
 
 type route struct {
@@ -123,10 +131,11 @@ type route struct {
 	regex    *regexp.Regexp
 	handlers []Handler
 	pattern  string
+	name     string
 }
 
 func newRoute(method string, pattern string, handlers []Handler) *route {
-	route := route{method, nil, handlers, pattern}
+	route := route{method, nil, handlers, pattern, ""}
 	r := regexp.MustCompile(`:[^/#?()\.\\]+`)
 	pattern = r.ReplaceAllStringFunc(pattern, func(m string) string {
 		return fmt.Sprintf(`(?P<%s>[^/#?]+)`, m[1:])
@@ -199,16 +208,28 @@ func (r *route) URLWith(args []string) string {
 	return r.pattern
 }
 
+func (r *route) Name(name string) {
+	r.name = name
+}
+
 // Routes is a helper service for Martini's routing layer.
 type Routes interface {
 	// URLFor returns a rendered URL for the given route. Optional params can be passed to fulfill named parameters in the route.
-	URLFor(route Route, params ...interface{}) string
+	URLFor(name string, params ...interface{}) string
 }
 
-type routes struct{}
+type routes struct {
+	router *router
+}
 
 // URLFor returns the url for the given route name.
-func (r routes) URLFor(route Route, params ...interface{}) string {
+func (r routes) URLFor(name string, params ...interface{}) string {
+	route := r.router.findRoute(name)
+
+	if route == nil {
+		panic("route not found")
+	}
+
 	var args []string
 	for _, param := range params {
 		switch v := param.(type) {
@@ -218,7 +239,7 @@ func (r routes) URLFor(route Route, params ...interface{}) string {
 			args = append(args, v)
 		default:
 			if v != nil {
-				panic("Arguments passed to UrlFor must be integers or strings")
+				panic("Arguments passed to URLFor must be integers or strings")
 			}
 		}
 	}

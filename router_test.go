@@ -333,21 +333,20 @@ func Test_Any(t *testing.T) {
 
 func Test_URLFor(t *testing.T) {
 	router := NewRouter()
-	var barIDNameRoute, fooRoute, barRoute Route
 
-	fooRoute = router.Get("/foo", func() {
+	router.Get("/foo", func() {
 		// Nothing
-	})
+	}).Name("foo")
 
-	barRoute = router.Post("/bar/:id", func(params Params) {
+	router.Post("/bar/:id", func(params Params) {
 		// Nothing
-	})
+	}).Name("bar")
 
-	barIDNameRoute = router.Get("/bar/:id/:name", func(params Params, routes Routes) {
-		expect(t, routes.URLFor(fooRoute, nil), "/foo")
-		expect(t, routes.URLFor(barRoute, 5), "/bar/5")
-		expect(t, routes.URLFor(barIDNameRoute, 5, "john"), "/bar/5/john")
-	})
+	router.Get("/bar/:id/:name", func(params Params, routes Routes) {
+		expect(t, routes.URLFor("foo", nil), "/foo")
+		expect(t, routes.URLFor("bar", 5), "/bar/5")
+		expect(t, routes.URLFor("bar_id", 5, "john"), "/bar/5/john")
+	}).Name("bar_id")
 
 	// code should be 200 if none is returned from the handler
 	recorder := httptest.NewRecorder()

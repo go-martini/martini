@@ -75,8 +75,13 @@ func (m *Martini) Run() {
 		port = "3000"
 	}
 
-	m.logger.Println("listening on port " + port)
-	m.logger.Fatalln(http.ListenAndServe(":"+port, m))
+	host := os.Getenv("HOST")
+	if len(host) == 0 {
+		host = ""
+	}
+
+	m.logger.Println("listening on host:port " + host + ":" + port)
+	m.logger.Fatalln(http.ListenAndServe(host+":"+port, m))
 }
 
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
