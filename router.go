@@ -2,7 +2,6 @@ package martini
 
 import (
 	"fmt"
-	"github.com/codegangsta/inject"
 	"net/http"
 	"reflect"
 	"regexp"
@@ -270,10 +269,9 @@ func (r *routeContext) run() {
 
 		// if the handler returned something, write it to the http response
 		if len(vals) > 0 {
-			rv := r.Get(inject.InterfaceOf((*http.ResponseWriter)(nil)))
 			ev := r.Get(reflect.TypeOf(ReturnHandler(nil)))
 			handleReturn := ev.Interface().(ReturnHandler)
-			handleReturn(rv.Interface().(http.ResponseWriter), vals)
+			handleReturn(r, vals)
 		}
 
 		if r.Written() {
