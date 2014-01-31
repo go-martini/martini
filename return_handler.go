@@ -1,6 +1,7 @@
 package martini
 
 import (
+	"github.com/codegangsta/inject"
 	"net/http"
 	"reflect"
 )
@@ -9,10 +10,12 @@ import (
 // when a route handler returns something. The ReturnHandler is
 // responsible for writing to the ResponseWriter based on the values
 // that are passed into this function.
-type ReturnHandler func(http.ResponseWriter, []reflect.Value)
+type ReturnHandler func(Context, []reflect.Value)
 
 func defaultReturnHandler() ReturnHandler {
-	return func(res http.ResponseWriter, vals []reflect.Value) {
+	return func(ctx Context, vals []reflect.Value) {
+		rv := ctx.Get(inject.InterfaceOf((*http.ResponseWriter)(nil)))
+		res := rv.Interface().(http.ResponseWriter)
 		var responseVal reflect.Value
 		if len(vals) > 1 && vals[0].Kind() == reflect.Int {
 			res.WriteHeader(int(vals[0].Int()))
