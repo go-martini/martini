@@ -26,5 +26,6 @@ func Test_Recovery(t *testing.T) {
 	m.ServeHTTP(recorder, (*http.Request)(nil))
 	expect(t, recorder.Code, http.StatusInternalServerError)
 	expect(t, recorder.HeaderMap.Get("Content-Type"), "text/html")
+	refute(t, recorder.Body.Len(), 0)
 	refute(t, len(buff.String()), 0)
 }
