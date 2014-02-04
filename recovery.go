@@ -114,13 +114,19 @@ func Recovery() Handler {
 	return func(res http.ResponseWriter, c Context, log *log.Logger) {
 		defer func() {
 			if err := recover(); err != nil {
-				res.WriteHeader(http.StatusInternalServerError)
 				stack := stack(3)
 				log.Printf("PANIC: %s\n%s", err, stack)
 
 				// respond with panic message while in development mode
+				var body []byte
 				if Env == Dev {
-					res.Write([]byte(fmt.Sprintf(panicHtml, err, err, stack)))
+					res.Header().Set("Content-Type", "text/html")
+					body = []byte(fmt.Sprintf(panicHtml, err, err, stack))
+				}
+
+				res.WriteHeader(http.StatusInternalServerError)
+				if nil != body {
+					res.Write(body)
 				}
 			}
 		}()
