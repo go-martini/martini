@@ -217,6 +217,23 @@ func Test_RouteMatching(t *testing.T) {
 	}
 }
 
+func Test_Methods(t *testing.T) {
+	router := NewRouter()
+
+	router.Post("/foo/bar", func() {
+	})
+
+	router.Get("/foo", func() {
+	})
+
+	router.Put("/foo", func() {
+	})
+	methods := router.Methods("/foo")
+	expect(t, len(methods), 2)
+	expect(t, methods[0], "GET")
+	expect(t, methods[1], "PUT")
+}
+
 func Test_NotFound(t *testing.T) {
 	router := NewRouter()
 	recorder := httptest.NewRecorder()
