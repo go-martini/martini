@@ -80,13 +80,12 @@ func (r *router) Any(pattern string, h ...Handler) Route {
 }
 
 func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Context) {
+	context.MapTo(routes{r}, (*Routes)(nil))
 	for _, route := range r.routes {
 		ok, vals := route.Match(req.Method, req.URL.Path)
 		if ok {
 			params := Params(vals)
 			context.Map(params)
-			r := routes{r}
-			context.MapTo(r, (*Routes)(nil))
 			route.Handle(context, res)
 			return
 		}
@@ -216,6 +215,8 @@ func (r *route) Name(name string) {
 type Routes interface {
 	// URLFor returns a rendered URL for the given route. Optional params can be passed to fulfill named parameters in the route.
 	URLFor(name string, params ...interface{}) string
+	// MethodsFor returns an array of methods available for the path
+	MethodsFor(path string) []string
 }
 
 type routes struct {
@@ -245,6 +246,28 @@ func (r routes) URLFor(name string, params ...interface{}) string {
 	}
 
 	return route.URLWith(args)
+}
+
+func hasMethod(methods []string, method string) bool {
+	for _, v := range methods {
+		if v == method {
+			return true
+		}
+	}
+	return false
+}
+
+// MethodsFor returns all methods available for path
+func (r routes) MethodsFor(path string) []string {
+	methods := []string{}
+	for _, route := range r.router.routes {
+		if route.regex.MatchString(path) {
+			if !hasMethod(methods, route.method) {
+				methods = append(methods, route.method)
+			}
+		}
+	}
+	return methods
 }
 
 type routeContext struct {
