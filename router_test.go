@@ -227,6 +227,9 @@ func Test_MethodsFor(t *testing.T) {
 	router.Post("/foo/bar", func() {
 	})
 
+	router.Post("/fo", func() {
+	})
+
 	router.Get("/foo", func() {
 	})
 
