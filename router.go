@@ -35,6 +35,9 @@ type Router interface {
 
 	// Handle is the entry point for routing. This is used as a martini.Handler
 	Handle(http.ResponseWriter, *http.Request, Context)
+
+	// Methods return methods available for the path
+	Methods(string) []string
 }
 
 type router struct {
@@ -117,6 +120,28 @@ func (r *router) findRoute(name string) *route {
 	}
 
 	return nil
+}
+
+func hasMethod(methods []string, method string) bool {
+	for _, v := range methods {
+		if v == method {
+			return true
+		}
+	}
+	return false
+}
+
+// Methods allows NotFound handlers to provide 405 Allow or CORS Access-Control-Allow-Methods
+func (r *router) Methods(path string) []string {
+	methods := []string{}
+	for _, route := range r.routes {
+		if route.regex.MatchString(path) {
+			if !hasMethod(methods, route.method) {
+				methods = append(methods, route.method)
+			}
+		}
+	}
+	return methods
 }
 
 // Route is an interface representing a Route in Martini's routing layer.
