@@ -49,7 +49,7 @@ Watch the [Demo Video](http://martini.codegangsta.io/#demo)
 * **Fully compatible with the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
 
 ## More Middleware
-For more middleware and functionality, check out the [martini-contrib](http://github.com/codegangsta/martini-contrib) repository.
+For more middleware and functionality, check out the repositories in the  [martini-contrib](https://github.com/martini-contrib) organization.
 
 ## Table of Contents
 * [Classic Martini](#classic-martini)
@@ -255,7 +255,7 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ### Where do I find middleware X?
 
-Start by looking in the [martini-contrib](http://github.com/martini-contrib) project. If it is not there feel free to contact a martini-contrib team member about adding a new package to the project.
+Start by looking in the [martini-contrib](https://github.com/martini-contrib) projects. If it is not there feel free to contact a martini-contrib team member about adding a new repo to the organization.
 
 * [auth](https://github.com/martini-contrib/auth) - Handlers for authentication.
 * [binding](https://github.com/martini-contrib/binding) - Handler for mapping/validating a raw request into a structure.
@@ -302,7 +302,7 @@ To have more flexibility over port and host, use the `http.ListenAndServe` funct
 ~~~
 
 ## Contributing
-Martini is meant to be kept tiny and clean. Most contributions should end up in the [martini-contrib](http://github.com/codegangsta/martini-contrib) repository. If you do have a contribution for the core of Martini feel free to put up a Pull Request.
+Martini is meant to be kept tiny and clean. Most contributions should end up in a repository in the [martini-contrib](https://github.com/martini-contrib) organization. If you do have a contribution for the core of Martini feel free to put up a Pull Request.
 
 ## About
 
