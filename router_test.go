@@ -3,6 +3,7 @@ package martini
 import (
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -217,9 +218,12 @@ func Test_RouteMatching(t *testing.T) {
 	}
 }
 
-func Test_Methods(t *testing.T) {
+func Test_MethodsFor(t *testing.T) {
 	router := NewRouter()
+	recorder := httptest.NewRecorder()
 
+	req, _ := http.NewRequest("POST", "http://localhost:3000/foo", nil)
+	context := New().createContext(recorder, req)
 	router.Post("/foo/bar", func() {
 	})
 
@@ -228,10 +232,17 @@ func Test_Methods(t *testing.T) {
 
 	router.Put("/foo", func() {
 	})
-	methods := router.Methods("/foo")
-	expect(t, len(methods), 2)
-	expect(t, methods[0], "GET")
-	expect(t, methods[1], "PUT")
+
+	router.NotFound(func(routes Routes, w http.ResponseWriter, r *http.Request) {
+		methods := routes.MethodsFor(r.URL.Path)
+		if len(methods) != 0 {
+			w.Header().Set("Allow", strings.Join(methods, ","))
+			w.WriteHeader(http.StatusMethodNotAllowed)
+		}
+	})
+	router.Handle(recorder, req, context)
+	expect(t, recorder.Code, http.StatusMethodNotAllowed)
+	expect(t, recorder.Header().Get("Allow"), "GET,PUT")
 }
 
 func Test_NotFound(t *testing.T) {
