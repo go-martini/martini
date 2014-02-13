@@ -301,6 +301,10 @@ To have more flexibility over port and host, use the `http.ListenAndServe` funct
   http.ListenAndServe(":8080", m)
 ~~~
 
+### Live code reload?
+
+[gin](https://github.com/codegangsta/gin) and [fresh](https://github.com/pilu/fresh) both live reload martini apps.
+
 ## Contributing
 Martini is meant to be kept tiny and clean. Most contributions should end up in a repository in the [martini-contrib](https://github.com/martini-contrib) organization. If you do have a contribution for the core of Martini feel free to put up a Pull Request.
 
