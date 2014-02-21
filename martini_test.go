@@ -125,3 +125,14 @@ func Test_Martini_Written(t *testing.T) {
 	ctx.run()
 	expect(t, ctx.Written(), true)
 }
+
+func Test_Martini_Basic_NoRace(t *testing.T) {
+	m := Classic()
+	req, _ := http.NewRequest("GET", "/", nil)
+	for i := 0; i < 2; i++ {
+		go func() {
+			response := httptest.NewRecorder()
+			m.ServeHTTP(response, req)
+		}()
+	}
+}
