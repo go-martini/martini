@@ -41,7 +41,7 @@ Watch the [Demo Video](http://martini.codegangsta.io/#demo)
 ## Features
 * Extremely simple to use.
 * Non-intrusive design.
-* Play nice with other Golang packages.
+* Plays nice with other Golang packages.
 * Awesome path matching and routing.
 * Modular design - Easy to add functionality, easy to rip stuff out.
 * Lots of good handlers/middlewares to use.
