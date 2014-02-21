@@ -127,7 +127,10 @@ func Test_Martini_Written(t *testing.T) {
 }
 
 func Test_Martini_Basic_NoRace(t *testing.T) {
-	m := Classic()
+	m := New()
+	handlers := []Handler{func() {}, func() {}}
+	// Ensure append will not realloc to trigger the race condition
+	m.handlers = handlers[:1]
 	req, _ := http.NewRequest("GET", "/", nil)
 	for i := 0; i < 2; i++ {
 		go func() {
