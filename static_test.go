@@ -89,7 +89,7 @@ func Test_Static_Options_Logging(t *testing.T) {
 	response := httptest.NewRecorder()
 
 	var buffer bytes.Buffer
-	m := &Martini{inject.New(), []Handler{}, func() {}, log.New(&buffer, "[martini] ", 0)}
+	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(&buffer, "[martini] ", 0)}
 	m.Map(m.logger)
 	m.Map(defaultReturnHandler())
 
@@ -122,7 +122,7 @@ func Test_Static_Options_ServeIndex(t *testing.T) {
 	response := httptest.NewRecorder()
 
 	var buffer bytes.Buffer
-	m := &Martini{inject.New(), []Handler{}, func() {}, log.New(&buffer, "[martini] ", 0)}
+	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(&buffer, "[martini] ", 0)}
 	m.Map(m.logger)
 	m.Map(defaultReturnHandler())
 
@@ -143,7 +143,7 @@ func Test_Static_Options_Prefix(t *testing.T) {
 	response := httptest.NewRecorder()
 
 	var buffer bytes.Buffer
-	m := &Martini{inject.New(), []Handler{}, func() {}, log.New(&buffer, "[martini] ", 0)}
+	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(&buffer, "[martini] ", 0)}
 	m.Map(m.logger)
 	m.Map(defaultReturnHandler())
 
