@@ -29,3 +29,21 @@ func Test_Recovery(t *testing.T) {
 	refute(t, recorder.Body.Len(), 0)
 	refute(t, len(buff.String()), 0)
 }
+
+func Test_Recovery_ResponseWriter(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	recorder2 := httptest.NewRecorder()
+
+	setENV(Dev)
+	m := New()
+	m.Use(Recovery())
+	m.Use(func(c Context) {
+		c.MapTo(recorder2, (*http.ResponseWriter)(nil))
+		panic("here is a panic!")
+	})
+	m.ServeHTTP(recorder, (*http.Request)(nil))
+
+	expect(t, recorder2.Code, http.StatusInternalServerError)
+	expect(t, recorder2.HeaderMap.Get("Content-Type"), "text/html")
+	refute(t, recorder2.Body.Len(), 0)
+}
