@@ -18,11 +18,12 @@
 package martini
 
 import (
-	"github.com/codegangsta/inject"
 	"log"
 	"net/http"
 	"os"
 	"reflect"
+
+	"github.com/codegangsta/inject"
 )
 
 // Martini represents the top level web application. inject.Injector methods can be invoked to map services on a global level.
@@ -35,7 +36,7 @@ type Martini struct {
 
 // New creates a bare bones Martini instance. Use this method if you want to have full control over the middleware that is used.
 func New() *Martini {
-	m := &Martini{inject.New(), []Handler{}, func() {}, log.New(os.Stdout, "[martini] ", 0)}
+	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(os.Stdout, "[martini] ", 0)}
 	m.Map(m.logger)
 	m.Map(defaultReturnHandler())
 	return m
@@ -85,7 +86,7 @@ func (m *Martini) Run() {
 }
 
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
-	c := &context{inject.New(), append(m.handlers, m.action), NewResponseWriter(res), 0}
+	c := &context{inject.New(), m.handlers, m.action, NewResponseWriter(res), 0}
 	c.SetParent(m)
 	c.MapTo(c, (*Context)(nil))
 	c.MapTo(c.rw, (*http.ResponseWriter)(nil))
@@ -134,8 +135,19 @@ type Context interface {
 type context struct {
 	inject.Injector
 	handlers []Handler
+	action   Handler
 	rw       ResponseWriter
 	index    int
+}
+
+func (c *context) handler() Handler {
+	if c.index < len(c.handlers) {
+		return c.handlers[c.index]
+	}
+	if c.index == len(c.handlers) {
+		return c.action
+	}
+	panic("invalid index for context handler")
 }
 
 func (c *context) Next() {
@@ -148,8 +160,8 @@ func (c *context) Written() bool {
 }
 
 func (c *context) run() {
-	for c.index < len(c.handlers) {
-		_, err := c.Invoke(c.handlers[c.index])
+	for c.index <= len(c.handlers) {
+		_, err := c.Invoke(c.handler())
 		if err != nil {
 			panic(err)
 		}
