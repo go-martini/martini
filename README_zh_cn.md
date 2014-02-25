@@ -38,15 +38,15 @@ go run server.go
 
 或者可以查看在线演示地址: [演示视频](http://martini.codegangsta.io/#demo)
 
-## Features
-* Extremely simple to use.
-* Non-intrusive design.
-* Play nice with other Golang packages.
-* Awesome path matching and routing.
-* Modular design - Easy to add functionality, easy to rip stuff out.
-* Lots of good handlers/middlewares to use.
-* Great 'out of the box' feature set.
-* **Fully compatible with the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
+## 功能列表
+* 使用极其简单.
+* 无侵入式的设计.
+* 很好的与其他的Go语言包协同使用.
+* 超赞的路径匹配和路由分发.
+* 模块化的设计 - 容易插入功能件，也容易将其拔出来.
+* 已有很多的中间件可以直接使用.
+* 框架内已拥有很好的开箱即用的功能支持.
+* **完全兼容[http.HandlerFunc](http://godoc.org/net/http#HandlerFunc)接口.**
 
 ## More Middleware
 For more middleware and functionality, check out the repositories in the  [martini-contrib](https://github.com/martini-contrib) organization.
