@@ -300,7 +300,7 @@ To have more flexibility over port and host, use the `http.ListenAndServe` funct
 ~~~ go
   m := martini.Classic()
   // ...
-  http.ListenAndServe(":8080", m)
+  log.Fatal(http.ListenAndServe(":8080", m))
 ~~~
 
 ### Live code reload?
