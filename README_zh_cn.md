@@ -1,6 +1,5 @@
 # Martini  [![wercker status](https://app.wercker.com/status/174bef7e3c999e103cacfe2770102266 "wercker status")](https://app.wercker.com/project/bykey/174bef7e3c999e103cacfe2770102266) [![GoDoc](https://godoc.org/github.com/codegangsta/martini?status.png)](http://godoc.org/github.com/codegangsta/martini)
 
-Martini is a powerful package for quickly writing modular web applications/services in Golang.
 Martini是一个强大为了编写模块化Web应用而生的GO语言框架.
 
 ## 第一个应用
