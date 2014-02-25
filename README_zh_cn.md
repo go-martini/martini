@@ -48,18 +48,18 @@ go run server.go
 * 框架内已拥有很好的开箱即用的功能支持.
 * **完全兼容[http.HandlerFunc](http://godoc.org/net/http#HandlerFunc)接口.**
 
-## More Middleware
-For more middleware and functionality, check out the repositories in the  [martini-contrib](https://github.com/martini-contrib) organization.
+## 更多中间件
+更多的中间件和功能组件, 请查看代码仓库: [martini-contrib](https://github.com/martini-contrib).
 
-## Table of Contents
-* [Classic Martini](#classic-martini)
-  * [Handlers](#handlers)
-  * [Routing](#routing)
-  * [Services](#services)
-  * [Serving Static Files](#serving-static-files)
-* [Middleware Handlers](#middleware-handlers)
+## 目录
+* [核心 Martini](#classic-martini)
+  * [处理器](#handlers)
+  * [路由分发](#routing)
+  * [服务](#services)
+  * [服务静态文件](#serving-static-files)
+* [中间件处理器](#middleware-handlers)
   * [Next()](#next)
-* [FAQ](#faq)
+* [常见问答](#faq)
 
 ## Classic Martini
 To get up and running quickly, [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic) provides some reasonable defaults that work well for most web applications:
