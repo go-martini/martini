@@ -72,16 +72,16 @@ func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 // Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
 func (m *Martini) Run() {
 	port := os.Getenv("PORT")
-	if len(port) == 0 {
+	if port == "" {
 		port = "3000"
 	}
 
 	host := os.Getenv("HOST")
-	if len(host) == 0 {
-		host = ""
+	if host == "" {
+		host = "127.0.0.1"
 	}
 
-	m.logger.Println("listening on host:port " + host + ":" + port)
+	m.logger.Println("listening on " + host + ":" + port)
 	m.logger.Fatalln(http.ListenAndServe(host+":"+port, m))
 }
 
