@@ -77,9 +77,6 @@ func (m *Martini) Run() {
 	}
 
 	host := os.Getenv("HOST")
-	if host == "" {
-		host = "127.0.0.1"
-	}
 
 	m.logger.Println("listening on " + host + ":" + port)
 	m.logger.Fatalln(http.ListenAndServe(host+":"+port, m))
