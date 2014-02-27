@@ -83,38 +83,38 @@ m.Get("/", func() {
 })
 ~~~
 
-#### Return Values
-If a handler returns something, Martini will write the result to the current [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) as a string:
+#### 返回值
+当一个处理器返回结果的时候, Martini将会把返回值作为字符串写入到当前的[http.ResponseWriter](http://godoc.org/net/http#ResponseWriter)里面:
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
 })
 ~~~
 
-You can also optionally return a status code:
+另外你也可以选择性的返回多一个状态码:
 ~~~ go
 m.Get("/", func() (int, string) {
   return 418, "i'm a teapot" // HTTP 418 : "i'm a teapot"
 })
 ~~~
 
-#### Service Injection
-Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.** 
+#### 服务的注入
+处理器是通过反射来调用的. Martini 通过*Dependency Injection* *（依赖注入）* 来为处理器注入参数列表. **这样使得Martini与Go语言的`http.HandlerFunc`接口完全兼容.** 
 
-If you add an argument to your Handler, Martini will search its list of services and attempt to resolve the dependency via type assertion:
+如果你加入一个参数到你的处理器, Martini将会搜索它参数列表中的服务，并且通过类型判断来解决依赖关系:
 ~~~ go
-m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are injected by Martini
+m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res 和 req 是通过Martini注入的
   res.WriteHeader(200) // HTTP 200
 })
 ~~~
 
-The following services are included with [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic):
-  * [*log.Logger](http://godoc.org/log#Logger) - Global logger for Martini.
-  * [martini.Context](http://godoc.org/github.com/codegangsta/martini#Context) - http request context.
-  * [martini.Params](http://godoc.org/github.com/codegangsta/martini#Params) - `map[string]string` of named params found by route matching.
-  * [martini.Routes](http://godoc.org/github.com/codegangsta/martini#Routes) - Route helper service.
-  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface.
-  * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
+下面的这些服务已经被包含在核心Martini中: [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic):
+  * [*log.Logger](http://godoc.org/log#Logger) - Martini的全局日志.
+  * [martini.Context](http://godoc.org/github.com/codegangsta/martini#Context) - http request context （请求上下文）.
+  * [martini.Params](http://godoc.org/github.com/codegangsta/martini#Params) - `map[string]string` of named params found by route matching. （名字和参数键值对的参数列表）
+  * [martini.Routes](http://godoc.org/github.com/codegangsta/martini#Routes) - Route helper service. （路由协助处理）
+  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface. (响应结果的流借口)
+  * [*http.Request](http://godoc.org/net/http/#Request) - http Request. （http请求)
 
 ### Routing
 In Martini, a route is an HTTP method paired with a URL-matching pattern.
