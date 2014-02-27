@@ -98,7 +98,7 @@ m.Get("/", func() (int, string) {
 })
 ~~~
 
-#### 服务的注入
+#### 服务的注入 （译者注：如果你还不知道什么是Martini的服务，可以先看下面的“服务”章节，然后再看服务是如何被注入的）
 处理器是通过反射来调用的. Martini 通过*Dependency Injection* *（依赖注入）* 来为处理器注入参数列表. **这样使得Martini与Go语言的`http.HandlerFunc`接口完全兼容.** 
 
 如果你加入一个参数到你的处理器, Martini将会搜索它参数列表中的服务，并且通过类型判断来解决依赖关系:
@@ -116,8 +116,8 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res 和 req 是
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface. (响应结果的流借口)
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request. （http请求)
 
-### Routing
-In Martini, a route is an HTTP method paired with a URL-matching pattern.
+### 路由请求
+在Martini中, 路由是一个HTTP方法配对一个URL匹配模型. 每一个路由可以对应一个或多个处理器方法:
 Each route can take one or more handler methods:
 ~~~ go
 m.Get("/", func() {
@@ -149,27 +149,26 @@ m.NotFound(func() {
 })
 ~~~
 
-Routes are matched in the order they are defined. The first route that
-matches the request is invoked.
+路由匹配的顺序是按照他们被定义的顺序执行的. 最先被定义的路由将会首先被用户请求匹配并调用.
 
-Route patterns may include named parameters, accessible via the [martini.Params](http://godoc.org/github.com/codegangsta/martini#Params) service:
+路由模型可能包含参数列表, 可以通过[martini.Params](http://godoc.org/github.com/codegangsta/martini#Params)服务来获取:
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
   return "Hello " + params["name"]
 })
 ~~~
 
-Routes can be matched with regular expressions and globs as well:
+路由匹配可以通过正则表达式或者glob的形式:
 ~~~ go
 m.Get("/hello/**", func(params martini.Params) string {
   return "Hello " + params["_1"]
 })
 ~~~
 
-Route handlers can be stacked on top of each other, which is useful for things like authentication and authorization:
+路由处理器可以被相互叠加使用, 例如很有用的地方可以是在验证和授权的时候:
 ~~~ go
 m.Get("/secret", authorize, func() {
-  // this will execute as long as authorize doesn't write a response
+  // 该方法将会在authorize方法没有输出结果的时候执行.
 })
 ~~~
 
