@@ -121,31 +121,31 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res 和 req 是
 Each route can take one or more handler methods:
 ~~~ go
 m.Get("/", func() {
-  // show something
+  // 显示
 })
 
 m.Patch("/", func() {
-  // update something
+  // 更新
 })
 
 m.Post("/", func() {
-  // create something
+  // 创建
 })
 
 m.Put("/", func() {
-  // replace something
+  // 替换
 })
 
 m.Delete("/", func() {
-  // destroy something
+  // 删除
 })
 
 m.Options("/", func() {
-  // http options
+  // http 选项
 })
 
 m.NotFound(func() {
-  // handle 404
+  // 处理 404
 })
 ~~~
 
@@ -173,7 +173,7 @@ m.Get("/secret", authorize, func() {
 ~~~
 
 ### 服务
-服务即是被注入到处理器中的参数. 你可以映射一个服务到*全局*或者*请求*的级别.
+服务即是被注入到处理器中的参数. 你可以映射一个服务到 *全局* 或者 *请求* 的级别.
 
 
 #### 全局映射
@@ -186,8 +186,8 @@ m.Map(db) // *MyDatabase 这个服务将可以在所有的处理器中被使用�
 m.Run()
 ~~~
 
-#### 请求级别的影射
-映射成为请求级别的服务可以用[martini.Context](http://godoc.org/github.com/codegangsta/martini#Context)来完成:
+#### 请求级别的映射
+映射在请求级别的服务可以用[martini.Context](http://godoc.org/github.com/codegangsta/martini#Context)来完成:
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
   logger := &MyCustomLogger{req}
