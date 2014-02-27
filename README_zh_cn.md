@@ -42,7 +42,7 @@ go run server.go
 * 使用极其简单.
 * 无侵入式的设计.
 * 很好的与其他的Go语言包协同使用.
-* 超赞的路径匹配和路由分发.
+* 超赞的路径匹配和路由请求.
 * 模块化的设计 - 容易插入功能件，也容易将其拔出来.
 * 已有很多的中间件可以直接使用.
 * 框架内已拥有很好的开箱即用的功能支持.
@@ -54,29 +54,29 @@ go run server.go
 ## 目录
 * [核心 Martini](#classic-martini)
   * [处理器](#handlers)
-  * [路由分发](#routing)
+  * [路由请求](#routing)
   * [服务](#services)
   * [服务静态文件](#serving-static-files)
 * [中间件处理器](#middleware-handlers)
   * [Next()](#next)
 * [常见问答](#faq)
 
-## Classic Martini
-To get up and running quickly, [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic) provides some reasonable defaults that work well for most web applications:
+## 核心 Martini
+为了更快速的启用Martini, [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic) 提供了一些默认的方便Web开发的工具:
 ~~~ go
   m := martini.Classic()
   // ... middleware and routing goes here
   m.Run()
 ~~~
 
-Below is some of the functionality [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic) pulls in automatically:
-  * Request/Response Logging - [martini.Logger](http://godoc.org/github.com/codegangsta/martini#Logger)
-  * Panic Recovery - [martini.Recovery](http://godoc.org/github.com/codegangsta/martini#Recovery)
-  * Static File serving - [martini.Static](http://godoc.org/github.com/codegangsta/martini#Static)
-  * Routing - [martini.Router](http://godoc.org/github.com/codegangsta/martini#Router)
+下面是Martini核心已经包含的功能 [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic):
+  * Request/Response Logging （请求/相应日志） - [martini.Logger](http://godoc.org/github.com/codegangsta/martini#Logger)
+  * Panic Recovery （容错） - [martini.Recovery](http://godoc.org/github.com/codegangsta/martini#Recovery)
+  * Static File serving （静态文件服务） - [martini.Static](http://godoc.org/github.com/codegangsta/martini#Static)
+  * Routing （路由请求） - [martini.Router](http://godoc.org/github.com/codegangsta/martini#Router)
 
-### Handlers
-Handlers are the heart and soul of Martini. A handler is basically any kind of callable function:
+### 处理器
+处理器是Martini的灵魂和核心所在. 一个处理器基本上可以是任何的函数:
 ~~~ go
 m.Get("/", func() {
   println("hello world")
