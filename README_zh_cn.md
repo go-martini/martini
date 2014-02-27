@@ -308,4 +308,5 @@ Martini项目想要保持简单且干净的代码. 大部分的代码应该贡�
 
 灵感来自于 [express](https://github.com/visionmedia/express) 和 [sinatra](https://github.com/sinatra/sinatra)
 
-Martini is obsessively designed by none other than the [Code Gangsta](http://codegangsta.io/)
+Martini作者 [Code Gangsta](http://codegangsta.io/)
+译者: [Leon](http://github.com/leonli)
