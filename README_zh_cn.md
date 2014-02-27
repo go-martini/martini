@@ -98,7 +98,7 @@ m.Get("/", func() (int, string) {
 })
 ~~~
 
-#### 服务的注入 （译者注：如果你还不知道什么是Martini的服务，可以先看下面的“服务”章节，然后再看服务是如何被注入的）
+#### 服务的注入 
 处理器是通过反射来调用的. Martini 通过*Dependency Injection* *（依赖注入）* 来为处理器注入参数列表. **这样使得Martini与Go语言的`http.HandlerFunc`接口完全兼容.** 
 
 如果你加入一个参数到你的处理器, Martini将会搜索它参数列表中的服务，并且通过类型判断来解决依赖关系:
@@ -172,30 +172,31 @@ m.Get("/secret", authorize, func() {
 })
 ~~~
 
-### Services
-Services are objects that are available to be injected into a Handler's argument list. You can map a service on a *Global* or *Request* level.
+### 服务
+服务即是被注入到处理器中的参数. 你可以映射一个服务到*全局*或者*请求*的级别.
 
-#### Global Mapping
-A Martini instance implements the inject.Injector interface, so mapping a service is easy:
+
+#### 全局映射
+如果一个Martini实现了inject.Injector的接口, 那么映射成为一个服务就非常简单:
 ~~~ go
 db := &MyDatabase{}
 m := martini.Classic()
-m.Map(db) // the service will be available to all handlers as *MyDatabase
+m.Map(db) // *MyDatabase 这个服务将可以在所有的处理器中被使用到.
 // ...
 m.Run()
 ~~~
 
-#### Request-Level Mapping
-Mapping on the request level can be done in a handler via [martini.Context](http://godoc.org/github.com/codegangsta/martini#Context):
+#### 请求级别的影射
+映射成为请求级别的服务可以用[martini.Context](http://godoc.org/github.com/codegangsta/martini#Context)来完成:
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
   logger := &MyCustomLogger{req}
-  c.Map(logger) // mapped as *MyCustomLogger
+  c.Map(logger) // 映射成为了 *MyCustomLogger
 }
 ~~~
 
-#### Mapping values to Interfaces
-One of the most powerful parts about services is the ability to map a service to an interface. For instance, if you wanted to override the [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) with an object that wrapped it and performed extra operations, you can write the following handler:
+#### 映射值到接口
+关于服务最强悍的地方之一就是它能够映射服务到接口. 例如说, 假设你想要覆盖[http.ResponseWriter](http://godoc.org/net/http#ResponseWriter)成为一个对象, 那么你可以封装它并包含你自己的额外操作, 你可以如下这样来编写你的处理器:
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
