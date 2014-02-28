@@ -113,12 +113,11 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res 和 req 是
   * [martini.Context](http://godoc.org/github.com/codegangsta/martini#Context) - http request context （请求上下文）.
   * [martini.Params](http://godoc.org/github.com/codegangsta/martini#Params) - `map[string]string` of named params found by route matching. （名字和参数键值对的参数列表）
   * [martini.Routes](http://godoc.org/github.com/codegangsta/martini#Routes) - Route helper service. （路由协助处理）
-  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface. (响应结果的流借口)
+  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface. (响应结果的流接口)
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request. （http请求)
 
 ### 路由
 在Martini中, 路由是一个HTTP方法配对一个URL匹配模型. 每一个路由可以对应一个或多个处理器方法:
-Each route can take one or more handler methods:
 ~~~ go
 m.Get("/", func() {
   // 显示
@@ -228,8 +227,8 @@ m.Handlers(
 )
 ~~~
 
-Middleware Handlers work really well for things like logging, authorization, authentication, sessions, gzipping, error pages and any other operations that must happen before or after an http request:
 中间件处理器可以非常好处理一些功能，像logging(日志), authorization(授权), authentication(认证), sessions(会话), error pages(错误页面), 以及任何其他的操作需要在http请求发生之前或者之后的:
+
 ~~~ go
 // 验证api密匙
 m.Use(func(res http.ResponseWriter, req *http.Request) {
