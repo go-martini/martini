@@ -4,7 +4,7 @@ Martini是一个强大为了编写模块化Web应用而生的GO语言框架.
 
 ## 第一个应用
 
-在你安装了GO语言和设置了你的[GOPATH](http://golang.org/doc/code.html#GOPATH)之后, 创建你的自己的'.go'文件, 这里我们假设它的名字叫做 'server.go'.
+在你安装了GO语言和设置了你的[GOPATH](http://golang.org/doc/code.html#GOPATH)之后, 创建你的自己的`.go`文件, 这里我们假设它的名字叫做 `server.go`.
 
 ~~~ go
 package main
