@@ -270,7 +270,7 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ### 我如何整合到我现有的服务器中?
 
-由于Martini实现了 `http.Handler`, 所以它可以很简单的现有Go服务器的子集中. 例如说这是一段在Google App Engine中的示例:
+由于Martini实现了 `http.Handler`, 所以它可以很简单的应用到现有Go服务器的子集中. 例如说这是一段在Google App Engine中的示例:
 
 ~~~ go
 package hello
