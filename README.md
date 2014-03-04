@@ -62,6 +62,7 @@ For more middleware and functionality, check out the repositories in the  [marti
   * [Serving Static Files](#serving-static-files)
 * [Middleware Handlers](#middleware-handlers)
   * [Next()](#next)
+* [Martini Env](#martini-env)
 * [FAQ](#faq)
 
 ## Classic Martini
@@ -253,6 +254,10 @@ m.Use(func(c martini.Context, log *log.Logger){
   log.Println("after a request")
 })
 ~~~
+
+## Martini Env
+
+Some Martini handlers make use of the `martini.Env` global variable to provide special functionality for development environments vs production environments. It is reccomended that the `MARTINI_ENV=production` environment variable to be set when deploying a Martini server into a production environment.
 
 ## FAQ
 
