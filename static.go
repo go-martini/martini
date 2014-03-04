@@ -11,7 +11,7 @@ import (
 type StaticOptions struct {
 	// Prefix is the optional prefix used to serve the static directory content
 	Prefix string
-	// SkipLogging can be used to switch log messages to *log.logger off.
+	// SkipLogging will disable [Static] log messages when a static file is served.
 	SkipLogging bool
 	// IndexFile defines which file to serve as index if it exists.
 	IndexFile string
