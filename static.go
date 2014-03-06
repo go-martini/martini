@@ -15,6 +15,9 @@ type StaticOptions struct {
 	SkipLogging bool
 	// IndexFile defines which file to serve as index if it exists.
 	IndexFile string
+	// Expires defines a HTTP Expires Header
+	// https://developers.google.com/speed/docs/insights/LeverageBrowserCaching
+	Expires string
 }
 
 func prepareStaticOptions(options []StaticOptions) StaticOptions {
@@ -35,6 +38,9 @@ func prepareStaticOptions(options []StaticOptions) StaticOptions {
 		}
 		// Remove any trailing '/'
 		opt.Prefix = strings.TrimRight(opt.Prefix, "/")
+	}
+	if len(opt.Expires) == 0 {
+		opt.Expires = "-1"
 	}
 	return opt
 }
@@ -95,6 +101,10 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 		if !opt.SkipLogging {
 			log.Println("[Static] Serving " + file)
 		}
+		
+		// Add an Expires header to the static content
+		res.Header().Set("Expires", opt.Expires)
+
 		http.ServeContent(res, req, file, fi.ModTime(), f)
 	}
 }
