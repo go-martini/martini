@@ -26,6 +26,7 @@ func Test_Static(t *testing.T) {
 	}
 	m.ServeHTTP(response, req)
 	expect(t, response.Code, http.StatusOK)
+	expect(t, response.Header().Get("Expires"), "")
 	if response.Body.Len() == 0 {
 		t.Errorf("Got empty body for GET request")
 	}
@@ -159,6 +160,27 @@ func Test_Static_Options_Prefix(t *testing.T) {
 	m.ServeHTTP(response, req)
 	expect(t, response.Code, http.StatusOK)
 	expect(t, buffer.String(), "[martini] [Static] Serving /martini.go\n")
+}
+
+func Test_Static_Options_Expires(t *testing.T) {
+	response := httptest.NewRecorder()
+
+	var buffer bytes.Buffer
+	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(&buffer, "[martini] ", 0)}
+	m.Map(m.logger)
+	m.Map(defaultReturnHandler())
+
+	// Serve current directory under /public
+	m.Use(Static(".", StaticOptions{Expires: "46"}))
+
+	// Check file content behaviour
+	req, err := http.NewRequest("GET", "http://localhost:3000/martini.go", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Header().Get("Expires"), "46")
 }
 
 func Test_Static_Redirect(t *testing.T) {

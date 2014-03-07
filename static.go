@@ -39,9 +39,6 @@ func prepareStaticOptions(options []StaticOptions) StaticOptions {
 		// Remove any trailing '/'
 		opt.Prefix = strings.TrimRight(opt.Prefix, "/")
 	}
-	if len(opt.Expires) == 0 {
-		opt.Expires = "-1"
-	}
 	return opt
 }
 
@@ -101,9 +98,11 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 		if !opt.SkipLogging {
 			log.Println("[Static] Serving " + file)
 		}
-		
+
 		// Add an Expires header to the static content
-		res.Header().Set("Expires", opt.Expires)
+		if opt.Expires != "" {
+			res.Header().Set("Expires", opt.Expires)
+		}
 
 		http.ServeContent(res, req, file, fi.ModTime(), f)
 	}
