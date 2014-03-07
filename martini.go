@@ -97,7 +97,8 @@ type ClassicMartini struct {
 	Router
 }
 
-// Classic creates a classic Martini with some basic default middleware - martini.Logger, martini.Recovery, martini.Static and martini.Routes.
+// Classic creates a classic Martini with some basic default middleware - martini.Logger, martini.Recovery and martini.Static.
+// Classic also maps martini.Routes as a service.
 func Classic() *ClassicMartini {
 	r := NewRouter()
 	m := New()

@@ -45,7 +45,8 @@ type router struct {
 }
 
 // NewRouter creates a new Router instance.
-// If you aren't using ClassicMartini, then you can add Routes middleware with:
+// If you aren't using ClassicMartini, then you can add Routes as a
+// service with:
 //
 //	m := martini.New()
 //	r := martini.NewRouter()
