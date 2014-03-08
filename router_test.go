@@ -224,6 +224,7 @@ func Test_MethodsFor(t *testing.T) {
 
 	req, _ := http.NewRequest("POST", "http://localhost:3000/foo", nil)
 	context := New().createContext(recorder, req)
+	context.MapTo(router, (*Routes)(nil))
 	router.Post("/foo/bar", func() {
 	})
 
@@ -383,5 +384,6 @@ func Test_URLFor(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "http://localhost:3000/bar/foo/bar", nil)
 	context := New().createContext(recorder, req)
+	context.MapTo(router, (*Routes)(nil))
 	router.Handle(recorder, req, context)
 }
