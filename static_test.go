@@ -171,7 +171,7 @@ func Test_Static_Options_Expires(t *testing.T) {
 	m.Map(defaultReturnHandler())
 
 	// Serve current directory under /public
-	m.Use(Static(".", StaticOptions{Expires: "46"}))
+	m.Use(Static(".", StaticOptions{Expires: func() string { return "46" }}))
 
 	// Check file content behaviour
 	req, err := http.NewRequest("GET", "http://localhost:3000/martini.go", nil)
