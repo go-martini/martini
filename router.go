@@ -13,6 +13,8 @@ type Params map[string]string
 
 // Router is Martini's de-facto routing interface. Supports HTTP verbs, stacked handlers, and dependency injection.
 type Router interface {
+	Routes
+
 	// Get adds a route for a HTTP GET request to the specified matching pattern.
 	Get(string, ...Handler) Route
 	// Patch adds a route for a HTTP PATCH request to the specified matching pattern.
@@ -43,6 +45,14 @@ type router struct {
 }
 
 // NewRouter creates a new Router instance.
+// If you aren't using ClassicMartini, then you can add Routes as a
+// service with:
+//
+//	m := martini.New()
+//	r := martini.NewRouter()
+//	m.MapTo(r, (*martini.Routes)(nil))
+//
+// If you are using ClassicMartini, then this is done for you.
 func NewRouter() Router {
 	return &router{notFounds: []Handler{http.NotFound}}
 }
@@ -80,7 +90,6 @@ func (r *router) Any(pattern string, h ...Handler) Route {
 }
 
 func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Context) {
-	context.MapTo(routes{r}, (*Routes)(nil))
 	for _, route := range r.routes {
 		ok, vals := route.Match(req.Method, req.URL.Path)
 		if ok {
@@ -219,13 +228,9 @@ type Routes interface {
 	MethodsFor(path string) []string
 }
 
-type routes struct {
-	router *router
-}
-
 // URLFor returns the url for the given route name.
-func (r routes) URLFor(name string, params ...interface{}) string {
-	route := r.router.findRoute(name)
+func (r *router) URLFor(name string, params ...interface{}) string {
+	route := r.findRoute(name)
 
 	if route == nil {
 		panic("route not found")
@@ -258,9 +263,9 @@ func hasMethod(methods []string, method string) bool {
 }
 
 // MethodsFor returns all methods available for path
-func (r routes) MethodsFor(path string) []string {
+func (r *router) MethodsFor(path string) []string {
 	methods := []string{}
-	for _, route := range r.router.routes {
+	for _, route := range r.routes {
 		matches := route.regex.FindStringSubmatch(path)
 		if len(matches) > 0 && matches[0] == path && !hasMethod(methods, route.method) {
 			methods = append(methods, route.method)
