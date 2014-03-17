@@ -15,6 +15,8 @@ type Params map[string]string
 type Router interface {
 	Routes
 
+	// Group adds a group where related routes can be added.
+	Group(string, func(Router), ...Handler)
 	// Get adds a route for a HTTP GET request to the specified matching pattern.
 	Get(string, ...Handler) Route
 	// Patch adds a route for a HTTP PATCH request to the specified matching pattern.
@@ -42,6 +44,12 @@ type Router interface {
 type router struct {
 	routes    []*route
 	notFounds []Handler
+	groups    []group
+}
+
+type group struct {
+	pattern  string
+	handlers []Handler
 }
 
 // NewRouter creates a new Router instance.
@@ -54,7 +62,13 @@ type router struct {
 //
 // If you are using ClassicMartini, then this is done for you.
 func NewRouter() Router {
-	return &router{notFounds: []Handler{http.NotFound}}
+	return &router{notFounds: []Handler{http.NotFound}, groups: make([]group, 0)}
+}
+
+func (r *router) Group(pattern string, fn func(Router), h ...Handler) {
+	r.groups = append(r.groups, group{pattern, h})
+	fn(r)
+	r.groups = r.groups[:len(r.groups)-1]
 }
 
 func (r *router) Get(pattern string, h ...Handler) Route {
@@ -111,6 +125,15 @@ func (r *router) NotFound(handler ...Handler) {
 }
 
 func (r *router) addRoute(method string, pattern string, handlers []Handler) *route {
+	if len(r.groups) > 0 {
+		group := r.groups[len(r.groups)-1]
+		pattern = group.pattern + pattern
+		h := make([]Handler, len(group.handlers)+len(handlers))
+		copy(h, group.handlers)
+		copy(h[len(group.handlers):], handlers)
+		handlers = h
+	}
+
 	route := newRoute(method, pattern, handlers)
 	route.Validate()
 	r.routes = append(r.routes, route)
