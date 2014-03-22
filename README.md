@@ -177,6 +177,26 @@ m.Get("/secret", authorize, func() {
 })
 ~~~
 
+Route groups can be added too using the Group method.
+~~~ go
+m.Group("/books", func(r Router) {
+    r.Get("/:id", GetBooks)
+    r.Post("/new", NewBook)
+    r.Put("/update/:id", UpdateBook)
+    r.Delete("/delete/:id", DeleteBook)
+})
+~~~
+
+Just like you can pass middlewares to a handler you can pass middlewares to groups.
+~~~ go
+m.Group("/books", func(r Router) {
+    r.Get("/:id", GetBooks)
+    r.Post("/new", NewBook)
+    r.Put("/update/:id", UpdateBook)
+    r.Delete("/delete/:id", DeleteBook)
+}, MyMiddleware1, MyMiddleware2)
+~~~
+
 ### Services
 Services are objects that are available to be injected into a Handler's argument list. You can map a service on a *Global* or *Request* level.
 
