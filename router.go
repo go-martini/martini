@@ -126,11 +126,15 @@ func (r *router) NotFound(handler ...Handler) {
 
 func (r *router) addRoute(method string, pattern string, handlers []Handler) *route {
 	if len(r.groups) > 0 {
-		group := r.groups[len(r.groups)-1]
-		pattern = group.pattern + pattern
-		h := make([]Handler, len(group.handlers)+len(handlers))
-		copy(h, group.handlers)
-		copy(h[len(group.handlers):], handlers)
+		groupPattern := ""
+		h := make([]Handler, 0)
+		for _, g := range r.groups {
+			groupPattern += g.pattern
+			h = append(h, g.handlers...)
+		}
+
+		pattern = groupPattern + pattern
+		h = append(h, handlers...)
 		handlers = h
 	}
 
