@@ -1,4 +1,4 @@
-# Martini  [![wercker status](https://app.wercker.com/status/174bef7e3c999e103cacfe2770102266 "wercker status")](https://app.wercker.com/project/bykey/174bef7e3c999e103cacfe2770102266) [![GoDoc](https://godoc.org/github.com/codegangsta/martini?status.png)](http://godoc.org/github.com/codegangsta/martini)
+# Martini  [![wercker status](https://app.wercker.com/status/174bef7e3c999e103cacfe2770102266 "wercker status")](https://app.wercker.com/project/bykey/174bef7e3c999e103cacfe2770102266) [![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
 Martini是一个强大为了编写模块化Web应用而生的GO语言框架.
 
@@ -9,7 +9,7 @@ Martini是一个强大为了编写模块化Web应用而生的GO语言框架.
 ~~~ go
 package main
 
-import "github.com/codegangsta/martini"
+import "github.com/go-martini/martini"
 
 func main() {
   m := martini.Classic()
@@ -22,7 +22,7 @@ func main() {
 
 然后安装Martini的包. (注意Martini需要Go语言1.1或者以上的版本支持):
 ~~~
-go get github.com/codegangsta/martini
+go get github.com/go-martini/martini
 ~~~
 
 最后运行你的服务:
@@ -62,18 +62,18 @@ go run server.go
 * [常见问答](#faq)
 
 ## 核心 Martini
-为了更快速的启用Martini, [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic) 提供了一些默认的方便Web开发的工具:
+为了更快速的启用Martini, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) 提供了一些默认的方便Web开发的工具:
 ~~~ go
   m := martini.Classic()
   // ... middleware and routing goes here
   m.Run()
 ~~~
 
-下面是Martini核心已经包含的功能 [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic):
-  * Request/Response Logging （请求/相应日志） - [martini.Logger](http://godoc.org/github.com/codegangsta/martini#Logger)
-  * Panic Recovery （容错） - [martini.Recovery](http://godoc.org/github.com/codegangsta/martini#Recovery)
-  * Static File serving （静态文件服务） - [martini.Static](http://godoc.org/github.com/codegangsta/martini#Static)
-  * Routing （路由） - [martini.Router](http://godoc.org/github.com/codegangsta/martini#Router)
+下面是Martini核心已经包含的功能 [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
+  * Request/Response Logging （请求/相应日志） - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
+  * Panic Recovery （容错） - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
+  * Static File serving （静态文件服务） - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
+  * Routing （路由） - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
 
 ### 处理器
 处理器是Martini的灵魂和核心所在. 一个处理器基本上可以是任何的函数:
@@ -108,11 +108,11 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res 和 req 是
 })
 ~~~
 
-下面的这些服务已经被包含在核心Martini中: [martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic):
+下面的这些服务已经被包含在核心Martini中: [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
   * [*log.Logger](http://godoc.org/log#Logger) - Martini的全局日志.
-  * [martini.Context](http://godoc.org/github.com/codegangsta/martini#Context) - http request context （请求上下文）.
-  * [martini.Params](http://godoc.org/github.com/codegangsta/martini#Params) - `map[string]string` of named params found by route matching. （名字和参数键值对的参数列表）
-  * [martini.Routes](http://godoc.org/github.com/codegangsta/martini#Routes) - Route helper service. （路由协助处理）
+  * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request context （请求上下文）.
+  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` of named params found by route matching. （名字和参数键值对的参数列表）
+  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Route helper service. （路由协助处理）
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface. (响应结果的流接口)
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request. （http请求)
 
@@ -150,7 +150,7 @@ m.NotFound(func() {
 
 路由匹配的顺序是按照他们被定义的顺序执行的. 最先被定义的路由将会首先被用户请求匹配并调用.
 
-路由模型可能包含参数列表, 可以通过[martini.Params](http://godoc.org/github.com/codegangsta/martini#Params)服务来获取:
+路由模型可能包含参数列表, 可以通过[martini.Params](http://godoc.org/github.com/go-martini/martini#Params)服务来获取:
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
   return "Hello " + params["name"]
@@ -186,7 +186,7 @@ m.Run()
 ~~~
 
 #### 请求级别的映射
-映射在请求级别的服务可以用[martini.Context](http://godoc.org/github.com/codegangsta/martini#Context)来完成:
+映射在请求级别的服务可以用[martini.Context](http://godoc.org/github.com/go-martini/martini#Context)来完成:
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
   logger := &MyCustomLogger{req}
@@ -204,8 +204,8 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 ~~~
 
 ### 服务静态文件
-[martini.Classic()](http://godoc.org/github.com/codegangsta/martini#Classic) 默认会服务位于你服务器环境根目录下的"public"文件夹.
-你可以通过加入[martini.Static](http://godoc.org/github.com/codegangsta/martini#Static)的处理器来加入更多的静态文件服务的文件夹.
+[martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) 默认会服务位于你服务器环境根目录下的"public"文件夹.
+你可以通过加入[martini.Static](http://godoc.org/github.com/go-martini/martini#Static)的处理器来加入更多的静态文件服务的文件夹.
 ~~~ go
 m.Use(martini.Static("assets")) // 也会服务静态文件于"assets"的文件夹
 ~~~
@@ -239,7 +239,7 @@ m.Use(func(res http.ResponseWriter, req *http.Request) {
 ~~~
 
 ### Next()
-[Context.Next()](http://godoc.org/github.com/codegangsta/martini#Context)是一个可选的函数用于中间件处理器暂时放弃执行直到其他的处理器都执行完毕. 这样就可以很好的处理在http请求完成后需要做的操作.
+[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context)是一个可选的函数用于中间件处理器暂时放弃执行直到其他的处理器都执行完毕. 这样就可以很好的处理在http请求完成后需要做的操作.
 ~~~ go
 // log 记录请求完成前后  (*译者注: 很巧妙，掌声鼓励.)
 m.Use(func(c martini.Context, log *log.Logger){
@@ -277,7 +277,7 @@ package hello
 
 import (
   "net/http"
-  "github.com/codegangsta/martini"
+  "github.com/go-martini/martini"
 )
 
 func init() {
