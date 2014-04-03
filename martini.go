@@ -78,8 +78,10 @@ func (m *Martini) Run() {
 
 	host := os.Getenv("HOST")
 
-	m.logger.Println("listening on " + host + ":" + port)
-	m.logger.Fatalln(http.ListenAndServe(host+":"+port, m))
+	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
+
+	logger.Println("listening on " + host + ":" + port)
+	logger.Fatalln(http.ListenAndServe(host+":"+port, m))
 }
 
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
