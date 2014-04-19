@@ -15,6 +15,6 @@ func Logger() Handler {
     rw := res.(ResponseWriter)
     c.Next()
 
-    log.Printf("Completed %v %s in %v for %s\n", rw.Status(), http.StatusText(rw.Status()), time.Since(start), req.RemoteAddr)
+    log.Printf("Completed %v %s in %v\n", rw.Status(), http.StatusText(rw.Status()), time.Since(start))
   }
 }
