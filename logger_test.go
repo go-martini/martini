@@ -14,8 +14,8 @@ func Test_Logger(t *testing.T) {
 
 	m := New()
 	// replace log for testing
-	m.Map(log.New(buff, "[martini] ", 0))
-	m.Use(Logger())
+	m.MapTo(log.New(buff, "[martini] ", 0), (*Logger)(nil))
+	m.Use(LoggerMiddleware())
 	m.Use(func(res http.ResponseWriter) {
 		res.WriteHeader(http.StatusNotFound)
 	})
