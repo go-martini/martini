@@ -253,6 +253,8 @@ type Routes interface {
 	URLFor(name string, params ...interface{}) string
 	// MethodsFor returns an array of methods available for the path
 	MethodsFor(path string) []string
+	// GetAllRoutes returns an array with all the routes in the router.
+	GetAllRoutes() []RouteInfo
 }
 
 // URLFor returns the url for the given route name.
@@ -278,6 +280,22 @@ func (r *router) URLFor(name string, params ...interface{}) string {
 	}
 
 	return route.URLWith(args)
+}
+
+// RouteInfo contains information about a route
+type RouteInfo struct {
+	Pattern string
+	Method  string
+}
+
+func (r *router) GetAllRoutes() []RouteInfo {
+	var ri = make([]RouteInfo, len(r.routes))
+
+	for i, route := range r.routes {
+		ri[i] = RouteInfo{route.pattern, route.method}
+	}
+
+	return ri
 }
 
 func hasMethod(methods []string, method string) bool {
