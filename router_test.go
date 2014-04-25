@@ -418,3 +418,21 @@ func Test_URLFor(t *testing.T) {
 	context.MapTo(router, (*Routes)(nil))
 	router.Handle(recorder, req, context)
 }
+
+func Test_AllRoutes(t *testing.T) {
+	router := NewRouter()
+
+	patterns := []string{"/foo", "/fee", "/fii"}
+	methods := []string{"GET", "POST", "DELETE"}
+	names := []string{"foo", "fee", "fii"}
+
+	router.Get("/foo", func() {}).Name("foo")
+	router.Post("/fee", func() {}).Name("fee")
+	router.Delete("/fii", func() {}).Name("fii")
+
+	for i, r := range router.All() {
+		expect(t, r.Pattern(), patterns[i])
+		expect(t, r.Method(), methods[i])
+		expect(t, r.GetName(), names[i])
+	}
+}
