@@ -110,11 +110,7 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 			params := Params(vals)
 			context.Map(params)
 			route.Handle(context, res)
-			if context.Written() {
-				return
-			} else {
-				break
-			}
+			return
 		}
 	}
 
