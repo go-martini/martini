@@ -125,6 +125,8 @@ func Test_Routing(t *testing.T) {
 	router.Handle(recorder, req12, context12)
 	router.Handle(recorder, req13, context13)
 	expect(t, result, "foobarbatbarfoofezpopbapwappowwappowoptsfoobazzingagetbazzingapostbazzingagroupception")
+	expect(t, recorder.Code, http.StatusNotFound)
+	expect(t, recorder.Body.String(), "404 page not found\n")
 }
 
 func Test_RouterHandlerStatusCode(t *testing.T) {
