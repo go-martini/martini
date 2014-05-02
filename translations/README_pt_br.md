@@ -264,15 +264,15 @@ m.Use(func(res http.ResponseWriter, req *http.Request) {
 ~~~
 
 ### Próximo()
-[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) is an optional function that Middleware Handlers can call to yield the until after the other Handlers have been executed. This works really well for any operations that must happen after an http request:
+[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) é uma função opcional que Middleware Handlers pode ser chamado ao bloco até depois que outros Handlers tenham sido executados. Isso funciona muito bem para todas as operações que devem acontecer depois de um request HTTP:
 ~~~ go
-// log before and after a request
+// log antes e depois do request
 m.Use(func(c martini.Context, log *log.Logger){
-  log.Println("before a request")
+  log.Println("antes do request")
 
   c.Next()
 
-  log.Println("after a request")
+  log.Println("depois do request")
 })
 ~~~
 
