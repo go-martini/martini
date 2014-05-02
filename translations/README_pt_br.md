@@ -220,31 +220,31 @@ func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
 }
 ~~~
 
-#### Mapping values to Interfaces
-One of the most powerful parts about services is the ability to map a service to an interface. For instance, if you wanted to override the [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) with an object that wrapped it and performed extra operations, you can write the following handler:
+#### Valores de Mapeamento para Interfaces
+Uma das partes mais poderosas sobre os serviços é a capacidade para mapear um serviço de uma interface. Por exemplo, se você quiser substituir o [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) com um objeto que envolveu-o e realizou operações extras, você pode escrever o seguinte handler:
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
-  c.MapTo(rw, (*http.ResponseWriter)(nil)) // override ResponseWriter with our wrapper ResponseWriter
+  c.MapTo(rw, (*http.ResponseWriter)(nil)) // substituir ResponseWriter com nosso ResponseWriter invólucro
 }
 ~~~
 
-### Serving Static Files
-A [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) instance automatically serves static files from the "public" directory in the root of your server.
-You can serve from more directories by adding more [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) handlers.
+### Servindo Arquivos Estáticos
+Uma instância de [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) serve automaticamente arquivos estáticos do diretório "public" na raiz do seu servidor.
+Você pode servir de mais diretórios, adicionando mais [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) handlers.
 ~~~ go
-m.Use(martini.Static("assets")) // serve from the "assets" directory as well
+m.Use(martini.Static("assets")) // servindo os arquivos do diretório "assets"
 ~~~
 
 ## Middleware Handlers
-Middleware Handlers sit between the incoming http request and the router. In essence they are no different than any other Handler in Martini. You can add a middleware handler to the stack like so:
+Middleware Handlers ficam entre a solicitação HTTP request e o roteador. Em essência, eles não são diferentes de qualquer outro Handler no Martini. Você pode adicionar um handler de middleware para a pilha assim:
 ~~~ go
 m.Use(func() {
-  // do some middleware stuff
+  // faz algo com middleware
 })
 ~~~
 
-You can have full control over the middleware stack with the `Handlers` function. This will replace any handlers that have been previously set:
+Você pode ter o controle total sobre a pilha de middleware com a função `Handlers`. Isso irá substituir quaisquer manipuladores que foram previamente definidos:
 ~~~ go
 m.Handlers(
   Middleware1,
@@ -253,9 +253,9 @@ m.Handlers(
 )
 ~~~
 
-Middleware Handlers work really well for things like logging, authorization, authentication, sessions, gzipping, error pages and any other operations that must happen before or after an http request:
+Middleware Handlers trabalham muito bem com princípios com logging, autorização, autenticação, sessão, gzipping, páginas de erros e uma série de outras operações que devem acontecer antes ou depois de uma solicitação HTTP:
 ~~~ go
-// validate an api key
+// Valida uma chave de API
 m.Use(func(res http.ResponseWriter, req *http.Request) {
   if req.Header.Get("X-API-KEY") != "secret123" {
     res.WriteHeader(http.StatusUnauthorized)
@@ -263,7 +263,7 @@ m.Use(func(res http.ResponseWriter, req *http.Request) {
 })
 ~~~
 
-### Next()
+### Próximo()
 [Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) is an optional function that Middleware Handlers can call to yield the until after the other Handlers have been executed. This works really well for any operations that must happen after an http request:
 ~~~ go
 // log before and after a request
