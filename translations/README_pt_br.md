@@ -1,15 +1,11 @@
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
-Martini is a powerful package for quickly writing modular web applications/services in Golang.
-
-Language Translations: [Simplified Chinese (zh_CN)](translations/README_zh_cn.md)
-
-Language Translations: [Simplified Portuguese (PT_br)](translations/README_pt_br.md)
+Martini é um poderoso pacote para escrever aplicações/serviços modulares em Golang..
 
 
-## Getting Started
+## Vamos Começar
 
-After installing Go and setting up your [GOPATH](http://golang.org/doc/code.html#GOPATH), create your first `.go` file. We'll call it `server.go`.
+Após a instalação do Go e de configurar o [GOPATH](http://golang.org/doc/code.html#GOPATH), crie seu primeiro arquivo `.go`. Vamos chamá-lo de `server.go`.
 
 ~~~ go
 package main
@@ -25,42 +21,42 @@ func main() {
 }
 ~~~
 
-Then install the Martini package (**go 1.1** and greater is required):
+Então instale o pacote do Martini (É necessário **go 1.1** ou superior):
 ~~~
 go get github.com/go-martini/martini
 ~~~
 
-Then run your server:
+Então rode o servidor:
 ~~~
 go run server.go
 ~~~
 
-You will now have a Martini webserver running on `localhost:3000`.
+Agora você tem um webserver Martini rodando na porta `localhost:3000`.
 
-## Getting Help
+## Pegue uma Ajuda
 
-Join the [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
+Assine a [Lista de email](https://groups.google.com/forum/#!forum/martini-go)
 
-Watch the [Demo Video](http://martini.codegangsta.io/#demo)
+Veja o [Vídeo demonstrativo](http://martini.codegangsta.io/#demo)
 
-Ask questions on Stackoverflow using the [martini tag](http://stackoverflow.com/questions/tagged/martini)
+Use a tag [martini tag](http://stackoverflow.com/questions/tagged/martini) para perguntas no Stackoverflow
 
 
 
-## Features
-* Extremely simple to use.
-* Non-intrusive design.
-* Plays nice with other Golang packages.
-* Awesome path matching and routing.
-* Modular design - Easy to add functionality, easy to rip stuff out.
-* Lots of good handlers/middlewares to use.
-* Great 'out of the box' feature set.
-* **Fully compatible with the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
+## Caracteríticas
+* Extrema simplicidade no uso.
+* Não intrusivo ao desenho da app.
+* Funciona bem com outros pacotes Golang.
+* Impressionante caminho de correspondência e rotas.
+* Design modular - Fácil para adicionar e remover funcionalidades.
+* Muito bom no uso handlers/middlewares.
+* Grandes caracteríticas inovadoras.
+* **Completa compatibilidade com a interface [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc).**
 
-## More Middleware
-For more middleware and functionality, check out the repositories in the  [martini-contrib](https://github.com/martini-contrib) organization.
+## Mais Middleware
+Para mais middleware e funcionalidades, veja os repositórios em [martini-contrib](https://github.com/martini-contrib).
 
-## Table of Contents
+## Tabela de Conteudos
 * [Classic Martini](#classic-martini)
   * [Handlers](#handlers)
   * [Routing](#routing)
