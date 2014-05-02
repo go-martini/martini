@@ -155,31 +155,30 @@ m.NotFound(func() {
 })
 ~~~
 
-Routes are matched in the order they are defined. The first route that
-matches the request is invoked.
+As rotas são combinadas na ordem em que são definidas. A primeira rota que corresponde a solicitação é chamada.
 
-Route patterns may include named parameters, accessible via the [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) service:
+O padrão de rotas pode incluir parâmetros que podem ser acessados via [martini.Params](http://godoc.org/github.com/go-martini/martini#Params):
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
   return "Hello " + params["name"]
 })
 ~~~
 
-Routes can be matched with regular expressions and globs as well:
+As rotas podem ser combinados com expressões regulares e globs:
 ~~~ go
 m.Get("/hello/**", func(params martini.Params) string {
   return "Hello " + params["_1"]
 })
 ~~~
 
-Route handlers can be stacked on top of each other, which is useful for things like authentication and authorization:
+Handlers de rota podem ser empilhados em cima uns dos outros, o que é útil para coisas como autenticação e autorização:
 ~~~ go
 m.Get("/secret", authorize, func() {
-  // this will execute as long as authorize doesn't write a response
+  // Será executado quando authorize não escrever uma resposta
 })
 ~~~
 
-Route groups can be added too using the Group method.
+Grupos de rota podem ser adicionados usando o método Group.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -189,7 +188,7 @@ m.Group("/books", func(r martini.Router) {
 })
 ~~~
 
-Just like you can pass middlewares to a handler you can pass middlewares to groups.
+Assim como você pode passar middlewares para um manipulador você pode passar middlewares para grupos.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -199,25 +198,25 @@ m.Group("/books", func(r martini.Router) {
 }, MyMiddleware1, MyMiddleware2)
 ~~~
 
-### Services
-Services are objects that are available to be injected into a Handler's argument list. You can map a service on a *Global* or *Request* level.
+### Serviços
+Serviços são objetos que estão disponíveis para ser injetado em uma lista de argumentos de Handler. Você pode mapear um serviço num nível *Global* ou *Request*.
 
-#### Global Mapping
-A Martini instance implements the inject.Injector interface, so mapping a service is easy:
+#### Mapeamento Global
+Um exemplo onde o Martini implementa a interface inject.Injector, então o mapeamento de um serviço é fácil:
 ~~~ go
 db := &MyDatabase{}
 m := martini.Classic()
-m.Map(db) // the service will be available to all handlers as *MyDatabase
+m.Map(db) // o serviço estará disponível para todos os handlers *MyDatabase.
 // ...
 m.Run()
 ~~~
 
-#### Request-Level Mapping
-Mapping on the request level can be done in a handler via [martini.Context](http://godoc.org/github.com/go-martini/martini#Context):
+#### Mapeamento Request
+Mapeamento do nível de request pode ser feito via handler através [martini.Context](http://godoc.org/github.com/go-martini/martini#Context):
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
   logger := &MyCustomLogger{req}
-  c.Map(logger) // mapped as *MyCustomLogger
+  c.Map(logger) // mapeamento é *MyCustomLogger
 }
 ~~~
 
