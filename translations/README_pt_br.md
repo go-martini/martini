@@ -68,90 +68,90 @@ Para mais middleware e funcionalidades, veja os repositórios em [martini-contri
 * [FAQ](#faq)
 
 ## Classic Martini
-To get up and running quickly, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) provides some reasonable defaults that work well for most web applications:
+Para iniciar e rodar facilmente, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) prove algumas ferramentas rasoáveis para maioria das aplicações web:
 ~~~ go
   m := martini.Classic()
-  // ... middleware and routing goes here
+  // ... middleware e rota aqui
   m.Run()
 ~~~
 
-Below is some of the functionality [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) pulls in automatically:
+Algumas das funcionalidade que o [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) oferece automaticamente são:
   * Request/Response Logging - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
   * Panic Recovery - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
-  * Static File serving - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
-  * Routing - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
+  * Servidor de arquivos státicos - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
+  * Rotas - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
 
 ### Handlers
-Handlers are the heart and soul of Martini. A handler is basically any kind of callable function:
+Handlers são o coração e a alma do Martini. Um handler é basicamente qualquer função que pode ser chamada:
 ~~~ go
 m.Get("/", func() {
   println("hello world")
 })
 ~~~
 
-#### Return Values
-If a handler returns something, Martini will write the result to the current [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) as a string:
+#### Retorno de Valores
+Se um handler retornar alguma coisa, Martini ira escrever o resultado atual [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) que é uma string:
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
 })
 ~~~
 
-You can also optionally return a status code:
+Você também pode retornar o código de status:
 ~~~ go
 m.Get("/", func() (int, string) {
-  return 418, "i'm a teapot" // HTTP 418 : "i'm a teapot"
+  return 418, "Eu sou um bule" // HTTP 418 : "Eu sou um bule"
 })
 ~~~
 
-#### Service Injection
-Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.**
+#### Injeção de Serviços
+Handlers são chamados via reflexão. Martini utiliza *Injeção de Dependencia* para resolver as dependencias nas listas de argumentos dos Handlers . **Isso faz Martini ser completamente compatível com a interface `http.HandlerFunc` do golang.**
 
-If you add an argument to your Handler, Martini will search its list of services and attempt to resolve the dependency via type assertion:
+Se você adicionar um argumento ao seu Handler, Martini ira procurar na sua lista de serviço e tentar resolver sua dependencia via tipo de afirmação:
 ~~~ go
-m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are injected by Martini
+m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res e req são injetados pelo Martini
   res.WriteHeader(200) // HTTP 200
 })
 ~~~
 
-The following services are included with [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
-  * [*log.Logger](http://godoc.org/log#Logger) - Global logger for Martini.
+Os seguintes serviços são incluídos com [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
+  * [*log.Logger](http://godoc.org/log#Logger) - Log Global para Martini.
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request context.
-  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` of named params found by route matching.
-  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Route helper service.
-  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface.
+  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` de nomes dos parâmetros buscados pela rota.
+  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Serviço de auxílio as rotas.
+  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response escreve a interface.
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
 
-### Routing
-In Martini, a route is an HTTP method paired with a URL-matching pattern.
-Each route can take one or more handler methods:
+### Rotas
+No Martini, uma rota é um método HTTP emparelhado com um padrão de URL de correspondência.
+Cada rota pode ter um ou mais métodos handler:
 ~~~ go
 m.Get("/", func() {
-  // show something
+  // mostra alguma coisa
 })
 
 m.Patch("/", func() {
-  // update something
+  // altera alguma coisa
 })
 
 m.Post("/", func() {
-  // create something
+  // cria alguma coisa
 })
 
 m.Put("/", func() {
-  // replace something
+  // sobrescreve alguma coisa
 })
 
 m.Delete("/", func() {
-  // destroy something
+  // destrói alguma coisa
 })
 
 m.Options("/", func() {
-  // http options
+  // opções do HTTP
 })
 
 m.NotFound(func() {
-  // handle 404
+  // manipula 404
 })
 ~~~
 
