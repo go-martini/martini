@@ -43,6 +43,7 @@ Watch the [Demo Video](http://martini.codegangsta.io/#demo)
 
 Ask questions on Stackoverflow using the [martini tag](http://stackoverflow.com/questions/tagged/martini)
 
+GoDoc [documentation](http://godoc.org/github.com/go-martini/martini)
 
 
 ## Features
