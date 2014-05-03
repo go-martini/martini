@@ -278,26 +278,26 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ## Martini Env
 
-Some Martini handlers make use of the `martini.Env` global variable to provide special functionality for development environments vs production environments. It is reccomended that the `MARTINI_ENV=production` environment variable to be set when deploying a Martini server into a production environment.
+Martini handlers fazem uso do `martini.Env`, uma variável global para fornecer funcionalidade especial para ambientes de desenvolvimento vs ambientes de produção. É recomendado que a variável `MARTINI_ENV=production` seja definida quando a implementação estiver em um ambiente de produção.
 
 ## FAQ
 
-### Where do I find middleware X?
+### Onde posso encontrar o middleware X?
 
-Start by looking in the [martini-contrib](https://github.com/martini-contrib) projects. If it is not there feel free to contact a martini-contrib team member about adding a new repo to the organization.
+Inicie sua busca nos projetos [martini-contrib](https://github.com/martini-contrib). Se ele não estiver lá não hesite em contactar um membro da equipe martini-contrib sobre como adicionar um novo repo para a organização.
 
-* [auth](https://github.com/martini-contrib/auth) - Handlers for authentication.
-* [binding](https://github.com/martini-contrib/binding) - Handler for mapping/validating a raw request into a structure.
-* [gzip](https://github.com/martini-contrib/gzip) - Handler for adding gzip compress to requests
-* [render](https://github.com/martini-contrib/render) - Handler that provides a service for easily rendering JSON and HTML templates.
-* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler for parsing the `Accept-Language` HTTP header.
-* [sessions](https://github.com/martini-contrib/sessions) - Handler that provides a Session service.
+* [auth](https://github.com/martini-contrib/auth) - Handlers para autenticação.
+* [binding](https://github.com/martini-contrib/binding) - Handler para mapeamento/validação de um request a estrutura.
+* [gzip](https://github.com/martini-contrib/gzip) - Handler para adicionar compreção gzip para o requests
+* [render](https://github.com/martini-contrib/render) - Handler que providencia uma rederização simples para JSON e templates HTML.
+* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler para parsing do `Accept-Language` no header HTTP.
+* [sessions](https://github.com/martini-contrib/sessions) - Handler que prove o serviço de sessão.
 * [strip](https://github.com/martini-contrib/strip) - URL Prefix stripping.
-* [method](https://github.com/martini-contrib/method) - HTTP method overriding via Header or form fields.
-* [secure](https://github.com/martini-contrib/secure) - Implements a few quick security wins.
-* [encoder](https://github.com/martini-contrib/encoder) - Encoder service for rendering data in several formats and content negotiation.
-* [cors](https://github.com/martini-contrib/cors) - Handler that enables CORS support.
-* [oauth2](https://github.com/martini-contrib/oauth2) - Handler that provides OAuth 2.0 login for Martini apps. Google Sign-in, Facebook Connect and Github login is supported.
+* [method](https://github.com/martini-contrib/method) - HTTP método de substituição via cabeçalho ou campos do formulário.
+* [secure](https://github.com/martini-contrib/secure) - Implementa rapidamente itens de segurança.
+* [encoder](https://github.com/martini-contrib/encoder) - Serviço Encoder para renderização de dados em vários formatos e negociação de conteúdo.
+* [cors](https://github.com/martini-contrib/cors) - Handler que habilita suporte a CORS.
+* [oauth2](https://github.com/martini-contrib/oauth2) - Handler que prove sistema de login OAuth 2.0 para aplicações Martini. Google Sign-in, Facebook Connect e Github login são suportados.
 
 ### How do I integrate with existing servers?
 
