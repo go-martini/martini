@@ -1,16 +1,13 @@
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
 Martini is a powerful package for quickly writing modular web applications/services in Golang.
+마티니(Martini)는 강력하고 손쉬운 웹애플리캐이션 / 웹서비스개발을 위한 Golang 모듈 패키지입니다.
 
-Language Translations:
-- [Simplified Chinese (zh_CN)](translations/README_zh_cn.md)
-- [한국어 번역](translations/README_zh_cn.md)
-
-
-## Getting Started
+## 시작하기
 
 After installing Go and setting up your [GOPATH](http://golang.org/doc/code.html#GOPATH), create your first `.go` file. We'll call it `server.go`.
 
+Go 인스톨 및 [GOPATH](http://golang.org/doc/code.html#GOPATH) 환경변수 설정 이후에, `.go` 파일 하나를 만들어 보죠..흠... 일단 `server.go`라고 부르겠습니다.
 ~~~ go
 package main
 
@@ -19,48 +16,66 @@ import "github.com/go-martini/martini"
 func main() {
   m := martini.Classic()
   m.Get("/", func() string {
-    return "Hello world!"
+    return "Hello, 세계!"
   })
   m.Run()
 }
 ~~~
 
 Then install the Martini package (**go 1.1** and greater is required):
+마티니 패키지를 인스톨 합니다. (**go 1.1** 혹은 그 이상 버젼 필요):
 ~~~
 go get github.com/go-martini/martini
 ~~~
 
 Then run your server:
+이제 서버를 돌려 봅시다:
 ~~~
 go run server.go
 ~~~
 
 You will now have a Martini webserver running on `localhost:3000`.
+마티니 웹서버가 `localhost:3000`에서 돌아가고 있는 것을 확인하실 수 있을 겁니다.
 
-## Getting Help
+## 도움이 필요하다면?
 
 Join the [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
+[메일링 리스트](https://groups.google.com/forum/#!forum/martini-go)에 가입해 주세요
 
 Watch the [Demo Video](http://martini.codegangsta.io/#demo)
+[데모 비디오](http://martini.codegangsta.io/#demo)도 있어요.
 
 Ask questions on Stackoverflow using the [martini tag](http://stackoverflow.com/questions/tagged/martini)
+혹은 Stackoverflow에 [마티니 태크](http://stackoverflow.com/questions/tagged/martini)를 이용해서 물어봐 주세요
 
+문제는 전부다 영어로 되어 있다는 건데요 -_-;;;
+나는 한글 아니면 보기다 싫어! 이런 분들은 아래 링크를 참조하세요
+- [golang-korea](https://code.google.com/p/golang-korea/)
+- 이 문서 번역가([RexK](http://github.com/RexK))의 이메일로 연락주세요.
 
-
-## Features
+## 주요기능
 * Extremely simple to use.
+* 사용의 간편함
 * Non-intrusive design.
+* 비간섭(Non-intrusive) 디자인
 * Plays nice with other Golang packages.
+* 다른 Golang 패키지들과 잘 어울립니다.
 * Awesome path matching and routing.
+* 끝내주는 경로 매칭과 라우팅.
 * Modular design - Easy to add functionality, easy to rip stuff out.
+* 모듈 형 디자인 - 기능추가 쉽고, 코드 꺼내오기도 쉬움.
 * Lots of good handlers/middlewares to use.
+* 쓸모있는 핸들러와 미들웨어가 많음.
 * Great 'out of the box' feature set.
+* 훌률한 패키지화(out of the box) 기능들
 * **Fully compatible with the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
+* **[http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) 인터페이스와 호환율 100%**
 
-## More Middleware
+## 미들웨어(Middleware)
 For more middleware and functionality, check out the repositories in the  [martini-contrib](https://github.com/martini-contrib) organization.
+미들웨어들과 추가기능들은 [martini-contrib](https://github.com/martini-contrib)에서 확인해 주세요.
 
-## Table of Contents
+## 목차
 * [Classic Martini](#classic-martini)
   * [Handlers](#handlers)
   * [Routing](#routing)
@@ -73,96 +88,114 @@ For more middleware and functionality, check out the repositories in the  [marti
 
 ## Classic Martini
 To get up and running quickly, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) provides some reasonable defaults that work well for most web applications:
+마티니를 쉽고 빠르게 이용하시려면, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic)를 이용해 보세요. 보통 웹애플리케이션에서 사용하는 설정들이 이미 포함되어 있습니다.
 ~~~ go
   m := martini.Classic()
-  // ... middleware and routing goes here
+  // ... 미들웨어와 라우팅 설정은 이곳에 오면 작성하면 됩니다.
   m.Run()
 ~~~
 
 Below is some of the functionality [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) pulls in automatically:
+아래는 [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic)의 자동으로 장착하는 기본 기능들입니다.
   * Request/Response Logging - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
+  * Request/Response 로그 기능 - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
   * Panic Recovery - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
+  * 패닉 리커버리 (Panic Recovery) - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
   * Static File serving - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
+  * 정적 파일 서빙
   * Routing - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
 
-### Handlers
+### 핸들러(Handlers)
 Handlers are the heart and soul of Martini. A handler is basically any kind of callable function:
+핸들러(Handlers)는 마티니의 핵심입니다. 핸들러는 기본적으로 실행 가능한 모든형태의 함수들입니다.
 ~~~ go
 m.Get("/", func() {
-  println("hello world")
+  println("hello 세계")
 })
 ~~~
 
-#### Return Values
+#### 반환 값
 If a handler returns something, Martini will write the result to the current [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) as a string:
+핸들러가 반환을 하는 함수라면, 마티니는 반환 값을 [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter)에 입력 할 것입니다.
 ~~~ go
 m.Get("/", func() string {
-  return "hello world" // HTTP 200 : "hello world"
+  return "hello 세계" // HTTP 200 : "hello 세계"
 })
 ~~~
 
 You can also optionally return a status code:
+원하신다면, 상태코드도 함께 반화 할 수 있습니다.
 ~~~ go
 m.Get("/", func() (int, string) {
-  return 418, "i'm a teapot" // HTTP 418 : "i'm a teapot"
+  return 418, "난 주전자야!" // HTTP 418 : "난 주전자야!"
 })
 ~~~
 
-#### Service Injection
-Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.** 
+#### 서비스 주입(Service Injection)
+Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.**
+핸들러들은 리플렉션을 통해 호출됩니다. 마티니는 *의존성 주입*을 이용해서 핸들러의 인수들을 주입합니다. **이것이 마티니를 `http.HandlerFunc` 인터페이스와 100% 호환할 수 있게 해줍니다.**
 
 If you add an argument to your Handler, Martini will search its list of services and attempt to resolve the dependency via type assertion:
+핸들러의 인수를 입력했다면, 마티니가 서비스 리스트를 살펴본 후 타입확인(type assertion)을 통해 의존성을 해결을 시도 할 것입니다.
 ~~~ go
-m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are injected by Martini
+m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res와 req는 마티니에 의해 주입되었다.
   res.WriteHeader(200) // HTTP 200
 })
 ~~~
 
 The following services are included with [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
+아래 서비스들은 [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):에 포함되어 있습니다.
   * [*log.Logger](http://godoc.org/log#Logger) - Global logger for Martini.
+  * [*log.Logger](http://godoc.org/log#Logger) - 마티니의 글러벌(전역) 로그.
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request context.
+  * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http 요청 컨텍스트.
   * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` of named params found by route matching.
-  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Route helper service.
+  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - 루트 매칭으로 찾은 인자를 `map[string]string`으로 변형.
+  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - 루트 도우미 서미스.
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface.
-  * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
+  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer 인터페이스.
+  * [*http.Request](http://godoc.org/net/http/#Request) - http 요구.
 
-### Routing
+### 라우팅(Routing)
 In Martini, a route is an HTTP method paired with a URL-matching pattern.
 Each route can take one or more handler methods:
+마티니에서 루트는 HTTP 메소드와 URL매칭 패턴의 패어이다. 각 루트는 하나 혹은 그 이상의 핸들러 메소드를 가질 수 있다.
 ~~~ go
 m.Get("/", func() {
-  // show something
+  // 뭘 좀 보여줘 봐
 })
 
 m.Patch("/", func() {
-  // update something
+  // 업데이트 좀 해
 })
 
 m.Post("/", func() {
-  // create something
+  // 뭘 좀 만들어봐
 })
 
 m.Put("/", func() {
-  // replace something
+  // 뭘 좀 교환해봐
 })
 
 m.Delete("/", func() {
-  // destroy something
+  // 없애버려!
 })
 
 m.Options("/", func() {
-  // http options
+  // http 옵션 메소드
 })
 
 m.NotFound(func() {
-  // handle 404
+  // 404 해결하기
 })
 ~~~
 
 Routes are matched in the order they are defined. The first route that
 matches the request is invoked.
+루트들은 정의된 순서대로 매칭된다. 들어온 요그에 첫번째 매칭된 루트가 호출된다.
 
 Route patterns may include named parameters, accessible via the [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) service:
+루트 패턴은 [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) service로 액세스 가능한 인자들을 포함하기도 한다:
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
   return "Hello " + params["name"]
