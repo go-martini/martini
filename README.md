@@ -168,12 +168,20 @@ m.Get("/hello/:name", func(params martini.Params) string {
 })
 ~~~
 
-Routes can be matched with regular expressions and globs as well:
-~~~ go
+Routes can be matched with globs:
+~~~ go 
 m.Get("/hello/**", func(params martini.Params) string {
   return "Hello " + params["_1"]
 })
+~~~ 
+
+Regular expressions can be used as well:
+~~~go 
+m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
+  return fmt.Sprintf ("Hello %s", params["name"])
+}) 
 ~~~
+Take a look at the [Go documentation](http://golang.org/pkg/regexp/syntax/) for more info about regular expressions syntax .
 
 Route handlers can be stacked on top of each other, which is useful for things like authentication and authorization:
 ~~~ go
