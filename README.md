@@ -4,6 +4,8 @@ Martini is a powerful package for quickly writing modular web applications/servi
 
 Language Translations: [Simplified Chinese (zh_CN)](translations/README_zh_cn.md)
 
+Language Translations: [Simplified Portuguese (PT_br)](translations/README_pt_br.md)
+
 
 ## Getting Started
 
@@ -108,7 +110,7 @@ m.Get("/", func() (int, string) {
 ~~~
 
 #### Service Injection
-Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.** 
+Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.**
 
 If you add an argument to your Handler, Martini will search its list of services and attempt to resolve the dependency via type assertion:
 ~~~ go
@@ -283,7 +285,7 @@ m.Use(func(c martini.Context, log *log.Logger){
   log.Println("before a request")
 
   c.Next()
-  
+
   log.Println("after a request")
 })
 ~~~
@@ -313,7 +315,7 @@ Start by looking in the [martini-contrib](https://github.com/martini-contrib) pr
 
 ### How do I integrate with existing servers?
 
-A Martini instance implements `http.Handler`, so it can easily be used to serve subtrees 
+A Martini instance implements `http.Handler`, so it can easily be used to serve subtrees
 on existing Go servers. For example this is a working Martini app for Google App Engine:
 
 ~~~ go
