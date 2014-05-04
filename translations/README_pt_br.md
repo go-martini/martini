@@ -299,10 +299,10 @@ Inicie sua busca nos projetos [martini-contrib](https://github.com/martini-contr
 * [cors](https://github.com/martini-contrib/cors) - Handler que habilita suporte a CORS.
 * [oauth2](https://github.com/martini-contrib/oauth2) - Handler que prove sistema de login OAuth 2.0 para aplicações Martini. Google Sign-in, Facebook Connect e Github login são suportados.
 
-### How do I integrate with existing servers?
+### Como faço para integrar com os servidores existentes?
 
-A Martini instance implements `http.Handler`, so it can easily be used to serve subtrees
-on existing Go servers. For example this is a working Martini app for Google App Engine:
+Uma instância do Martini implementando `http.Handler`, de modo que pode ser facilmente utilizado para servir sub-rotas e diretórios
+em servidores Go existentes. Por exemplo, este é um aplicativo Martini trabalhando para Google App Engine:
 
 ~~~ go
 package hello
@@ -321,10 +321,10 @@ func init() {
 }
 ~~~
 
-### How do I change the port/host?
+### Como faço para alterar a porta/host?
 
-Martini's `Run` function looks for the PORT and HOST environment variables and uses those. Otherwise Martini will default to localhost:3000.
-To have more flexibility over port and host, use the `http.ListenAndServe` function instead.
+A função `Run` do Martini olha para as variáveis PORT e HOST para utilizá-las. Caso contrário o Martini assume como padrão localhost:3000.
+Para ter mais flexibilidade sobre a porta e host use a função `http.ListenAndServe`.
 
 ~~~ go
   m := martini.Classic()
@@ -332,15 +332,15 @@ To have more flexibility over port and host, use the `http.ListenAndServe` funct
   log.Fatal(http.ListenAndServe(":8080", m))
 ~~~
 
-### Live code reload?
+### Servidor com autoreload?
 
-[gin](https://github.com/codegangsta/gin) and [fresh](https://github.com/pilu/fresh) both live reload martini apps.
+[gin](https://github.com/codegangsta/gin) e [fresh](https://github.com/pilu/fresh) são aplicativos para autoreload do Martini.
 
-## Contributing
-Martini is meant to be kept tiny and clean. Most contributions should end up in a repository in the [martini-contrib](https://github.com/martini-contrib) organization. If you do have a contribution for the core of Martini feel free to put up a Pull Request.
+## Contribuindo
+Martini é feito para ser mantido pequeno e limpo. A maioria das contribuições devem ser feitas no repositório [martini-contrib](https://github.com/martini-contrib). Se quiser contribuir com o core do Martini fique livre para fazer um Pull Request.
 
-## About
+## Sobre
 
-Inspired by [express](https://github.com/visionmedia/express) and [sinatra](https://github.com/sinatra/sinatra)
+Inspirado por [express](https://github.com/visionmedia/express) e [sinatra](https://github.com/sinatra/sinatra)
 
 Martini is obsessively designed by none other than the [Code Gangsta](http://codegangsta.io/)
