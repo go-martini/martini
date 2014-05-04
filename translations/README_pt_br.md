@@ -171,6 +171,15 @@ m.Get("/hello/**", func(params martini.Params) string {
 })
 ~~~
 
+Expressões regulares podem ser bem usadas:
+~~~go
+m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
+  return fmt.Sprintf ("Hello %s", params["name"])
+})
+~~~
+Dê uma olhada na [Go documentation](http://golang.org/pkg/regexp/syntax/) para mais informações sobre expressões regulares.
+
+
 Handlers de rota podem ser empilhados em cima uns dos outros, o que é útil para coisas como autenticação e autorização:
 ~~~ go
 m.Get("/secret", authorize, func() {
