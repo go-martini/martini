@@ -292,7 +292,7 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ## Martini Env
 
-Some Martini handlers make use of the `martini.Env` global variable to provide special functionality for development environments vs production environments. It is reccomended that the `MARTINI_ENV=production` environment variable to be set when deploying a Martini server into a production environment.
+Some Martini handlers make use of the `martini.Env` global variable to provide special functionality for development environments vs production environments. It is recommended that the `MARTINI_ENV=production` environment variable to be set when deploying a Martini server into a production environment.
 
 ## FAQ
 
