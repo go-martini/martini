@@ -39,6 +39,8 @@ go run server.go
 
 혹은 Stackoverflow에 [마티니 태크](http://stackoverflow.com/questions/tagged/martini)를 이용해서 물어봐 주세요
 
+GoDoc [문서(documentation)](http://godoc.org/github.com/go-martini/martini)
+
 문제는 전부다 영어로 되어 있다는 건데요 -_-;;;
 나는 한글 아니면 보기다 싫어! 이런 분들은 아래 링크를 참조하세요
 - [golang-korea](https://code.google.com/p/golang-korea/)
@@ -167,14 +169,23 @@ m.Get("/hello/:name", func(params martini.Params) string {
 })
 ~~~
 
-루트는 정규식과 별표식(\*)으로 매칭 될 수도 있습니다:
+루트는 별표식(\*)으로 매칭 될 수도 있습니다:
 ~~~ go
 m.Get("/hello/**", func(params martini.Params) string {
   return "Hello " + params["_1"]
 })
 ~~~
 
-루트 핸들러는 쌓아 올릴 수 있습니다. 특히 유저 인증작업이나, 허가작업에 유용히 쓰일 수 있죠.
+Regular expressions can be used as well:
+정규식도 사용가능합니다:
+~~~go
+m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
+  return fmt.Sprintf ("Hello %s", params["name"])
+})
+~~~
+정규식에 관하여 더 자세히 알고 싶다면 [Go documentation](http://golang.org/pkg/regexp/syntax/)을 참조해 주세요.
+
+루트 핸들러는 스택을 쌓아 올릴 수 있습니다. 특히 유저 인증작업이나, 허가작업에 유용히 쓰일 수 있죠.
 ~~~ go
 m.Get("/secret", authorize, func() {
   // 이 함수는 authorize 함수가 resopnse에 결과를 쓰지 않는이상 실행 될 거에요.

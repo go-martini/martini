@@ -438,3 +438,19 @@ func Test_AllRoutes(t *testing.T) {
 		expect(t, r.GetName(), names[i])
 	}
 }
+
+func Test_ActiveRoute(t *testing.T) {
+	router := NewRouter()
+
+	router.Get("/foo", func(r Route) {
+		expect(t, r.Pattern(), "/foo")
+		expect(t, r.GetName(), "foo")
+	}).Name("foo")
+
+	// code should be 200 if none is returned from the handler
+	recorder := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "http://localhost:3000/foo", nil)
+	context := New().createContext(recorder, req)
+	context.MapTo(router, (*Routes)(nil))
+	router.Handle(recorder, req, context)
+}

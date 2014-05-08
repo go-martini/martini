@@ -225,6 +225,7 @@ func (r *route) Validate() {
 func (r *route) Handle(c Context, res http.ResponseWriter) {
 	context := &routeContext{c, 0, r.handlers}
 	c.MapTo(context, (*Context)(nil))
+	c.MapTo(r, (*Route)(nil))
 	context.run()
 }
 
@@ -272,7 +273,7 @@ type Routes interface {
 	URLFor(name string, params ...interface{}) string
 	// MethodsFor returns an array of methods available for the path
 	MethodsFor(path string) []string
-	// GetAllRoutes returns an array with all the routes in the router.
+	// All returns an array with all the routes in the router.
 	All() []Route
 }
 
