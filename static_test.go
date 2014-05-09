@@ -2,6 +2,7 @@ package martini
 
 import (
 	"bytes"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -181,6 +182,34 @@ func Test_Static_Options_Expires(t *testing.T) {
 
 	m.ServeHTTP(response, req)
 	expect(t, response.Header().Get("Expires"), "46")
+}
+
+func Test_Static_Options_BinData(t *testing.T) {
+	response := httptest.NewRecorder()
+
+	var buffer bytes.Buffer
+	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(&buffer, "[martini] ", 0)}
+	m.Map(m.logger)
+	m.Map(defaultReturnHandler())
+
+	// Serve current directory under /public
+	m.Use(Static(".", StaticOptions{BinData: map[string][]byte{"/martini.go": []byte("test")}}))
+
+	// Check file content behaviour
+	req, err := http.NewRequest("GET", "http://localhost:3000/martini.go", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	m.ServeHTTP(response, req)
+
+	body, err := ioutil.ReadAll(response.Body)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	expect(t, string(body), "test")
 }
 
 func Test_Static_Redirect(t *testing.T) {
