@@ -1,10 +1,13 @@
 package martini
 
 import (
+	"bytes"
+	"io"
 	"log"
 	"net/http"
 	"path"
 	"strings"
+	"time"
 )
 
 // StaticOptions is a struct for specifying configuration options for the martini.Static middleware.
@@ -18,6 +21,10 @@ type StaticOptions struct {
 	// Expires defines which user-defined function to use for producing a HTTP Expires Header
 	// https://developers.google.com/speed/docs/insights/LeverageBrowserCaching
 	Expires func() string
+	// BinData is a map of a path and its content (binary data).
+	// If this field is set, Static tries to retrieve data from this field on memory
+	// instead of files on disk.
+	BinData map[string][]byte
 }
 
 func prepareStaticOptions(options []StaticOptions) StaticOptions {
@@ -47,6 +54,12 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 	dir := http.Dir(directory)
 	opt := prepareStaticOptions(staticOpt)
 
+	// set current time to binDataModtime if opt.BinData is set.
+	var binDataModtime time.Time
+	if opt.BinData != nil {
+		binDataModtime = time.Now()
+	}
+
 	return func(res http.ResponseWriter, req *http.Request, log *log.Logger) {
 		if req.Method != "GET" && req.Method != "HEAD" {
 			return
@@ -62,6 +75,13 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 				return
 			}
 		}
+
+		// if binary data of the file exists, serve this data.
+		if opt.BinData != nil && len(opt.BinData[file]) != 0 {
+			serveContent(res, req, file, binDataModtime, bytes.NewReader(opt.BinData[file]), opt, log)
+			return
+		}
+
 		f, err := dir.Open(file)
 		if err != nil {
 			// discard the error?
@@ -95,15 +115,28 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 			}
 		}
 
-		if !opt.SkipLogging {
-			log.Println("[Static] Serving " + file)
-		}
-
-		// Add an Expires header to the static content
-		if opt.Expires != nil {
-			res.Header().Set("Expires", opt.Expires())
-		}
-
-		http.ServeContent(res, req, file, fi.ModTime(), f)
+		serveContent(res, req, file, fi.ModTime(), f, opt, log)
 	}
+}
+
+// serveContent calls http.ServeContent.
+func serveContent(
+	res http.ResponseWriter,
+	req *http.Request,
+	name string,
+	modtime time.Time,
+	content io.ReadSeeker,
+	opt StaticOptions,
+	log *log.Logger,
+) {
+	if !opt.SkipLogging {
+		log.Println("[Static] Serving " + name)
+	}
+
+	// Add an Expires header to the static content
+	if opt.Expires != nil {
+		res.Header().Set("Expires", opt.Expires())
+	}
+
+	http.ServeContent(res, req, name, modtime, content)
 }
