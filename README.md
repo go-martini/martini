@@ -5,7 +5,7 @@ Martini is a powerful package for quickly writing modular web applications/servi
 Language Translations:
 * [Simplified Chinese (zh_CN)](translations/README_zh_cn.md)
 * [Simplified Portuguese (PT_br)](translations/README_pt_br.md)
-
+* [한국어 번역](translations/README_ko_kr.md)
 
 ## Getting Started
 
@@ -171,17 +171,17 @@ m.Get("/hello/:name", func(params martini.Params) string {
 ~~~
 
 Routes can be matched with globs:
-~~~ go 
+~~~ go
 m.Get("/hello/**", func(params martini.Params) string {
   return "Hello " + params["_1"]
 })
-~~~ 
+~~~
 
 Regular expressions can be used as well:
-~~~go 
+~~~go
 m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
   return fmt.Sprintf ("Hello %s", params["name"])
-}) 
+})
 ~~~
 Take a look at the [Go documentation](http://golang.org/pkg/regexp/syntax/) for more info about regular expressions syntax .
 
