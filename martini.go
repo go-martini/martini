@@ -18,12 +18,13 @@
 package martini
 
 import (
+	"fmt"
+	"github.com/codegangsta/inject"
 	"log"
 	"net/http"
 	"os"
 	"reflect"
-
-	"github.com/codegangsta/inject"
+	"strconv"
 )
 
 // Martini represents the top level web application. inject.Injector methods can be invoked to map services on a global level.
@@ -71,17 +72,22 @@ func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 // Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
 func (m *Martini) Run() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3000"
+	port, err := strconv.Atoi(os.Getenv("PORT"))
+	if err != nil {
+		port = 3000
 	}
 
 	host := os.Getenv("HOST")
 
+	m.RunOnHost(host, port)
+}
+
+// RunOnHost starts the http server on the given host and port.
+func (m *Martini) RunOnHost(host string, port int) {
 	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
 
-	logger.Printf("listening on %s:%s (%s)\n", host, port, Env)
-	logger.Fatalln(http.ListenAndServe(host+":"+port, m))
+	logger.Printf("listening on %s:%d (%s)\n", host, port, Env)
+	logger.Fatalln(http.ListenAndServe(fmt.Sprintf("%s:%d", host, port), m))
 }
 
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {

@@ -32,6 +32,11 @@ func Test_Martini_Run(t *testing.T) {
 	go New().Run()
 }
 
+func Test_Matini_RunOnHost(t *testing.T) {
+	// just test that Run doesn't bomb
+	go New().RunOnHost("localhost", 8889)
+}
+
 func Test_Martini_ServeHTTP(t *testing.T) {
 	result := ""
 	response := httptest.NewRecorder()
