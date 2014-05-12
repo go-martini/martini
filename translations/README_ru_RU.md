@@ -90,7 +90,7 @@ m.Get("/", func() {
 })
 ~~~
 
-#### Return Values - возвращаемые значения
+#### Возвращаемые значения
 Если обработчик возвращает что либо, Martini запишет это как результат в текущий [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter), в виде строки: 
 ~~~ go
 m.Get("/", func() string {
@@ -105,7 +105,7 @@ m.Get("/", func() (int, string) {
 })
 ~~~
 
-#### Service Injection - внедрение сервисов
+#### Внедрение сервисов
 Обработчики выбываются посредством рефлексии. Martini использует **Внедрение зависимости** для разрешения зависимостей в списке аргумента обработчика. **Это делает Martini полностью совместимым с интерфейсом `http.HandlerFunc`.**
 
 Если вы добавите аргументы в ваш обработчик, Martini будет пытаться найти этот список сервисов за счет проверки типов(type assertion):
@@ -212,7 +212,7 @@ m.Group("/books", func(r martini.Router) {
 ### Сервисы
 Сервисы - это объеъкты, которые доступны для внедрения в аргументы обработчиков. Вы можете замапить сервисы на уровне всего приложения либо на уровне запроса.
 
-#### Global Mapping - Глобальный маппинг
+#### Глобальный маппинг
 Экземпляр Martini реализует интерфейс inject.Injector, поэтому замаппить сервис легко:
 ~~~ go
 db := &MyDatabase{}
@@ -222,7 +222,7 @@ m.Map(db) // сервис будет доступен для всех обраб
 m.Run()
 ~~~
 
-#### Request-Level Mapping - Маппинг уровня запроса
+#### Маппинг уровня запроса
 Маппинг на уровне запроса можно сделать при помощи [martini.Context](http://godoc.org/github.com/go-martini/martini#Context):
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
@@ -231,7 +231,7 @@ func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
 }
 ~~~
 
-#### Mapping values to Interfaces - Маппинг на определенный интерфейс
+#### Маппинг на определенный интерфейс
 Одна из мощных частей, того что касается сервисов - маппинг сервиса на определенный интерфейс. Например, если вы хотите переопределить [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) объектом, который оборачивает и добавляет новые операции, вы можете написать следующее:
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
