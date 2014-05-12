@@ -25,7 +25,7 @@ func main() {
 go get github.com/go-martini/martini
 ~~~
 
-Потом запустите ваше сервер:
+Потом запустите ваш сервер:
 ~~~
 go run server.go
 ~~~
@@ -49,7 +49,7 @@ GoDoc [документация](http://godoc.org/github.com/go-martini/martini)
 * Хорошо сочитается с другими пакетами.
 * Потрясающий роутинг и маршрутизация.
 * Модульный дизайн - легко добавлять функциональность, легко исключать.
-* Большое количество хороших обработчиков/middlewares, готовых к испольщованию.
+* Большое количество хороших обработчиков/middlewares, готовых к использованию.
 * Отличный набор 'из коробки'.
 * **Полностью совместим с интерфейсом [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc).**
 
@@ -57,14 +57,14 @@ GoDoc [документация](http://godoc.org/github.com/go-martini/martini)
 Смотрите репозитории организации [martini-contrib](https://github.com/martini-contrib), для большей информации о функциональности и middleware.
 
 ## Содержание
-* [Classic Martini](#classic-martini) - джентельменский набор
-  * [Handlers](#handlers) - обработчики
-  * [Routing](#routing) - роутинг
-  * [Services](#services) - сервисы
-  * [Serving Static Files](#serving-static-files) - отдача статики
-* [Middleware Handlers](#middleware-handlers) - общие обработчики
-  * [Next()](#next) - метод контекста
-* [Martini Env](#martini-env)
+* [Classic Martini](#classic-martini)
+  * [Обработчики](#%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA%D0%B8)
+  * [Роутинг](#%D0%A0%D0%BE%D1%83%D1%82%D0%B8%D0%BD%D0%B3)
+  * [Сервисы](#%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B)
+  * [Отдача статических файлов](#%D0%9E%D1%82%D0%B4%D0%B0%D1%87%D0%B0-%D1%81%D1%82%D0%B0%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D1%85-%D1%84%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2)
+* [Middleware обработчики](#middleware-%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA%D0%B8) 
+  * [Next()](#next)
+* [Окружение](#%D0%9E%D0%BA%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5)
 * [FAQ](#faq)
 
 ## Classic Martini
@@ -82,7 +82,7 @@ GoDoc [документация](http://godoc.org/github.com/go-martini/martini)
   * Отдача статики - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
   * Роутинг - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
 
-### Handlers - Обработчики
+### Обработчики
 Обработчики - это сердце и душа Martini. Обработчик обычно любая функция, которая может быть вызвана:
 ~~~ go
 m.Get("/", func() {
@@ -124,7 +124,7 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res и req бу
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer интерфейс.
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
 
-### Routing - Роутинг
+### Роутинг
 В Martini, роут - это объедененные паттерн и HTTP метод.
 Каждый роут может принимать один или несколько обработчиков:
 ~~~ go
@@ -209,7 +209,7 @@ m.Group("/books", func(r martini.Router) {
 }, MyMiddleware1, MyMiddleware2)
 ~~~
 
-### Services - Сервисы
+### Сервисы
 Сервисы - это объеъкты, которые доступны для внедрения в аргументы обработчиков. Вы можете замапить сервисы на уровне всего приложения либо на уровне запроса.
 
 #### Global Mapping - Глобальный маппинг
@@ -240,14 +240,14 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 }
 ~~~
 
-### Serving Static Files - Отдача статических файлов
+### Отдача статических файлов
 Экземпляр [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) автоматически отдает статические файлы из директории "public" в корне, рядом с вашим файлом `server.go`.
 Вы можете добавить еше директорий, добавляя еще [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) обаботчики.  
 ~~~ go
 m.Use(martini.Static("assets")) // отдача файлов из "assets" директории
 ~~~
 
-## Middleware Handlers - Middleware Обработчики
+## Middleware Обработчики
 Middleware обработчики находятся между входящим http запросом и роутом. По сути, они ничем не отличаются от любого другого обработчика Martini. Вы можете добавить middleware обработчик в стек следующим образом:
 ~~~ go
 m.Use(func() {
