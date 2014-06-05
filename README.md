@@ -7,6 +7,7 @@ Language Translations:
 * [Simplified Portuguese (PT_br)](translations/README_pt_br.md)
 * [한국어 번역](translations/README_ko_kr.md)
 * [Русский](translations/README_ru_RU.md)
+* [日本語](translations/README_ja_JP.md)
 
 ## Getting Started
 
