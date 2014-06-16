@@ -374,9 +374,14 @@ func Test_URLFor(t *testing.T) {
 		// Nothing
 	}).Name("bar")
 
+	router.Get("/baz/:id/(?P<name>[a-z]*)", func(params Params, routes Routes) {
+		// Nothing
+	}).Name("baz_id")
+
 	router.Get("/bar/:id/:name", func(params Params, routes Routes) {
 		expect(t, routes.URLFor("foo", nil), "/foo")
 		expect(t, routes.URLFor("bar", 5), "/bar/5")
+		expect(t, routes.URLFor("baz_id", 5, "john"), "/baz/5/john")
 		expect(t, routes.URLFor("bar_id", 5, "john"), "/bar/5/john")
 	}).Name("bar_id")
 
