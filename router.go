@@ -232,7 +232,7 @@ func (r *route) Handle(c Context, res http.ResponseWriter) {
 // URLWith returns the url pattern replacing the parameters for its values
 func (r *route) URLWith(args []string) string {
 	if len(args) > 0 {
-		reg := regexp.MustCompile(`:[^/#?()\.\\]+`)
+		reg := regexp.MustCompile(`:[^/#?()\.\\]+|\(\?P<[a-zA-Z0-9]+>.*\)`)
 		argCount := len(args)
 		i := 0
 		url := reg.ReplaceAllStringFunc(r.pattern, func(m string) string {
