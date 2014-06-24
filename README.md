@@ -4,7 +4,7 @@ Martini is a powerful package for quickly writing modular web applications/servi
 
 Language Translations:
 * [Simplified Chinese (zh_CN)](translations/README_zh_cn.md)
-* [Simplified Portuguese (PT_br)](translations/README_pt_br.md)
+* [Português Brasileiro (PT_br)](translations/README_pt_br.md)
 * [한국어 번역](translations/README_ko_kr.md)
 * [Русский](translations/README_ru_RU.md)
 * [日本語](translations/README_ja_JP.md)
