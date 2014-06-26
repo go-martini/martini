@@ -21,3 +21,6 @@ _testmain.go
 
 *.exe
 *.test
+
+/.godeps
+/.envrc
