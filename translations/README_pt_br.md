@@ -3,7 +3,7 @@
 Martini é um poderoso pacote para escrever aplicações/serviços modulares em Golang..
 
 
-## Vamos Começar
+## Vamos começar
 
 Após a instalação do Go e de configurar o [GOPATH](http://golang.org/doc/code.html#GOPATH), crie seu primeiro arquivo `.go`. Vamos chamá-lo de `server.go`.
 
@@ -33,21 +33,21 @@ go run server.go
 
 Agora você tem um webserver Martini rodando na porta `localhost:3000`.
 
-## Pegue uma Ajuda
+## Obtenha ajuda
 
 Assine a [Lista de email](https://groups.google.com/forum/#!forum/martini-go)
 
 Veja o [Vídeo demonstrativo](http://martini.codegangsta.io/#demo)
 
-Use a tag [martini tag](http://stackoverflow.com/questions/tagged/martini) para perguntas no Stackoverflow
+Use a tag [martini](http://stackoverflow.com/questions/tagged/martini) para perguntas no Stackoverflow
 
 
 
 ## Caracteríticas
-* Extrema simplicidade no uso.
-* Não intrusivo ao desenho da app.
-* Funciona bem com outros pacotes Golang.
-* Impressionante caminho de correspondência e rotas.
+* Extrema simplicidade de uso.
+* Design não intrusivo.
+* Boa integração com outros pacotes Golang.
+* Router impressionante.
 * Design modular - Fácil para adicionar e remover funcionalidades.
 * Muito bom no uso handlers/middlewares.
 * Grandes caracteríticas inovadoras.
@@ -68,7 +68,7 @@ Para mais middleware e funcionalidades, veja os repositórios em [martini-contri
 * [FAQ](#faq)
 
 ## Classic Martini
-Para iniciar e rodar facilmente, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) prove algumas ferramentas rasoáveis para maioria das aplicações web:
+Para iniciar rapidamente, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) provê algumas ferramentas razoáveis para maioria das aplicações web:
 ~~~ go
   m := martini.Classic()
   // ... middleware e rota aqui
@@ -90,7 +90,7 @@ m.Get("/", func() {
 ~~~
 
 #### Retorno de Valores
-Se um handler retornar alguma coisa, Martini ira escrever o resultado atual [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) que é uma string:
+Se um handler retornar alguma coisa, Martini irá escrever o valor retornado como uma string ao [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter):
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
@@ -107,7 +107,7 @@ m.Get("/", func() (int, string) {
 #### Injeção de Serviços
 Handlers são chamados via reflexão. Martini utiliza *Injeção de Dependencia* para resolver as dependencias nas listas de argumentos dos Handlers . **Isso faz Martini ser completamente compatível com a interface `http.HandlerFunc` do golang.**
 
-Se você adicionar um argumento ao seu Handler, Martini ira procurar na sua lista de serviço e tentar resolver sua dependencia via tipo de afirmação:
+Se você adicionar um argumento ao seu Handler, Martini ira procurar na sua lista de serviços e tentar resolver sua dependencia pelo seu tipo:
 ~~~ go
 m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res e req são injetados pelo Martini
   res.WriteHeader(200) // HTTP 200
@@ -177,7 +177,7 @@ m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
   return fmt.Sprintf ("Hello %s", params["name"])
 })
 ~~~
-Dê uma olhada na [Go documentation](http://golang.org/pkg/regexp/syntax/) para mais informações sobre expressões regulares.
+Dê uma olhada na [documentação](http://golang.org/pkg/regexp/syntax/) para mais informações sobre expressões regulares.
 
 
 Handlers de rota podem ser empilhados em cima uns dos outros, o que é útil para coisas como autenticação e autorização:
@@ -220,7 +220,7 @@ m.Map(db) // o serviço estará disponível para todos os handlers *MyDatabase.
 m.Run()
 ~~~
 
-#### Mapeamento Request
+#### Mapeamento por requisição
 Mapeamento do nível de request pode ser feito via handler através [martini.Context](http://godoc.org/github.com/go-martini/martini#Context):
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
@@ -246,7 +246,7 @@ m.Use(martini.Static("assets")) // servindo os arquivos do diretório "assets"
 ~~~
 
 ## Middleware Handlers
-Middleware Handlers ficam entre a solicitação HTTP request e o roteador. Em essência, eles não são diferentes de qualquer outro Handler no Martini. Você pode adicionar um handler de middleware para a pilha assim:
+Middleware Handlers ficam entre a solicitação HTTP e o roteador. Em essência, eles não são diferentes de qualquer outro Handler no Martini. Você pode adicionar um handler de middleware para a pilha assim:
 ~~~ go
 m.Use(func() {
   // faz algo com middleware
@@ -272,8 +272,8 @@ m.Use(func(res http.ResponseWriter, req *http.Request) {
 })
 ~~~
 
-### Próximo()
-[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) é uma função opcional que Middleware Handlers pode ser chamado ao bloco até depois que outros Handlers tenham sido executados. Isso funciona muito bem para todas as operações que devem acontecer depois de um request HTTP:
+### Next()
+[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) é uma função opcional que Middleware Handlers podem chamar para aguardar a execução de outros Handlers. Isso funciona muito bem para operações que devem acontecer após uma requisição:
 ~~~ go
 // log antes e depois do request
 m.Use(func(c martini.Context, log *log.Logger){
@@ -287,7 +287,7 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ## Martini Env
 
-Martini handlers fazem uso do `martini.Env`, uma variável global para fornecer funcionalidade especial para ambientes de desenvolvimento vs ambientes de produção. É recomendado que a variável `MARTINI_ENV=production` seja definida quando a implementação estiver em um ambiente de produção.
+Martini handlers fazem uso do `martini.Env`, uma variável global para fornecer funcionalidade especial para ambientes de desenvolvimento e ambientes de produção. É recomendado que a variável `MARTINI_ENV=production` seja definida quando a implementação estiver em um ambiente de produção.
 
 ## FAQ
 
@@ -310,7 +310,7 @@ Inicie sua busca nos projetos [martini-contrib](https://github.com/martini-contr
 
 ### Como faço para integrar com os servidores existentes?
 
-Uma instância do Martini implementando `http.Handler`, de modo que pode ser facilmente utilizado para servir sub-rotas e diretórios
+Uma instância do Martini implementa `http.Handler`, de modo que pode ser facilmente utilizado para servir sub-rotas e diretórios
 em servidores Go existentes. Por exemplo, este é um aplicativo Martini trabalhando para Google App Engine:
 
 ~~~ go
