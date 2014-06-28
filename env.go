@@ -3,6 +3,7 @@ package martini
 import (
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // Envs
@@ -24,9 +25,20 @@ func setENV(e string) {
 
 func init() {
 	setENV(os.Getenv("MARTINI_ENV"))
+
 	path, err := filepath.Abs(os.Args[0])
 	if err != nil {
 		panic(err)
 	}
-	Root = filepath.Dir(path)
+	// In the dev mode when used commands `go test`, `go run` determining Root
+	// by a first argument is incorrect, because binary is putted into a temp directory.
+	// In these cases used a current directory as martini.Root
+	if strings.Contains(path, "go-build") && (strings.Contains(path, "command-line-arguments") || strings.Contains(path, "_test")) {
+		Root, err = os.Getwd()
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		Root = filepath.Dir(path)
+	}
 }

@@ -81,6 +81,7 @@ func (m *Martini) Run() {
 	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
 
 	logger.Printf("listening on %s:%s (%s)\n", host, port, Env)
+	logger.Printf("[Root] set to `%v`", Root)
 	logger.Fatalln(http.ListenAndServe(host+":"+port, m))
 }
 

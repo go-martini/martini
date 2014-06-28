@@ -7,8 +7,6 @@ import (
 	"net/http/httptest"
 	"testing"
 	"os"
-	"io/ioutil"
-	"path"
 
 	"github.com/codegangsta/inject"
 )
@@ -43,24 +41,16 @@ func Test_Static_Local_Path(t *testing.T) {
 
 	m := New()
 	r := NewRouter()
-
-	m.Use(Static("."))
-	f, err := ioutil.TempFile(Root, "static_content")
-	if err != nil {
-		t.Error(err)
-	}
-	f.WriteString("Expected Content")
-	f.Close()
+	m.Use(Static("translations"))
 	m.Action(r.Handle)
 
-	req, err := http.NewRequest("GET", "http://localhost:3000/" + path.Base(f.Name()), nil)
+	req, err := http.NewRequest("GET", "http://localhost:3000/README_ko_kr.md", nil)
 	if err != nil {
 		t.Error(err)
 	}
 	m.ServeHTTP(response, req)
 	expect(t, response.Code, http.StatusOK)
 	expect(t, response.Header().Get("Expires"), "")
-	expect(t, response.Body.String(), "Expected Content")
 }
 
 func Test_Static_Head(t *testing.T) {
