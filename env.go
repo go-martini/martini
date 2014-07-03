@@ -24,7 +24,7 @@ func setENV(e string) {
 
 func init() {
 	setENV(os.Getenv("MARTINI_ENV"))
-	if Env == "development" || Env == "test" {
+	if Env == Dev || Env == Test {
 		var err error
 		Root, err = os.Getwd()
 		if err != nil {
