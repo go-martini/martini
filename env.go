@@ -2,7 +2,6 @@ package martini
 
 import (
 	"os"
-	"path/filepath"
 )
 
 // Envs
@@ -24,9 +23,9 @@ func setENV(e string) {
 
 func init() {
 	setENV(os.Getenv("MARTINI_ENV"))
-	path, err := filepath.Abs(os.Args[0])
+	var err error
+	Root, err = os.Getwd()
 	if err != nil {
 		panic(err)
 	}
-	Root = filepath.Dir(path)
 }
