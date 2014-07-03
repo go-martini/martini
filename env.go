@@ -24,9 +24,17 @@ func setENV(e string) {
 
 func init() {
 	setENV(os.Getenv("MARTINI_ENV"))
-	path, err := filepath.Abs(os.Args[0])
-	if err != nil {
-		panic(err)
+	if Env == Dev || Env == Test {
+		var err error
+		Root, err = os.Getwd()
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		path, err := filepath.Abs(os.Args[0])
+		if err != nil {
+			panic(err)
+		}
+		Root = filepath.Dir(path)
 	}
-	Root = filepath.Dir(path)
 }
