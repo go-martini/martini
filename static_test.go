@@ -2,13 +2,13 @@ package martini
 
 import (
 	"bytes"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httptest"
-	"testing"
 	"os"
-	"io/ioutil"
 	"path"
+	"testing"
 
 	"github.com/codegangsta/inject"
 )
@@ -38,6 +38,7 @@ func Test_Static(t *testing.T) {
 }
 
 func Test_Static_Local_Path(t *testing.T) {
+	Root = os.TempDir()
 	response := httptest.NewRecorder()
 	response.Body = new(bytes.Buffer)
 
@@ -53,7 +54,7 @@ func Test_Static_Local_Path(t *testing.T) {
 	f.Close()
 	m.Action(r.Handle)
 
-	req, err := http.NewRequest("GET", "http://localhost:3000/" + path.Base(f.Name()), nil)
+	req, err := http.NewRequest("GET", "http://localhost:3000/"+path.Base(f.Name()), nil)
 	if err != nil {
 		t.Error(err)
 	}
