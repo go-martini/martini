@@ -3,7 +3,7 @@ package martini
 import (
 	"log"
 	"net/http"
-	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -44,8 +44,8 @@ func prepareStaticOptions(options []StaticOptions) StaticOptions {
 
 // Static returns a middleware handler that serves static files in the given directory.
 func Static(directory string, staticOpt ...StaticOptions) Handler {
-	if !path.IsAbs(directory) {
-		directory = path.Join(Root, directory)
+	if !filepath.IsAbs(directory) {
+		directory = filepath.Join(Root, directory)
 	}
 	dir := http.Dir(directory)
 	opt := prepareStaticOptions(staticOpt)
@@ -85,7 +85,7 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 				return
 			}
 
-			file = path.Join(file, opt.IndexFile)
+			file = filepath.Join(file, opt.IndexFile)
 			f, err = dir.Open(file)
 			if err != nil {
 				return
