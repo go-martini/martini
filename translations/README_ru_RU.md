@@ -44,11 +44,11 @@ GoDoc [документация](http://godoc.org/github.com/go-martini/martini)
 
 
 ## Возможности
-* Экстримально простой в использовании.
+* Очень прост в использовании.
 * Ненавязчивый дизайн.
 * Хорошо сочитается с другими пакетами.
 * Потрясающий роутинг и маршрутизация.
-* Модульный дизайн - легко добавлять функциональность, легко исключать.
+* Модульный дизайн - легко добавлять и исключать функциональность.
 * Большое количество хороших обработчиков/middlewares, готовых к использованию.
 * Отличный набор 'из коробки'.
 * **Полностью совместим с интерфейсом [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc).**
@@ -68,7 +68,7 @@ GoDoc [документация](http://godoc.org/github.com/go-martini/martini)
 * [FAQ](#faq)
 
 ## Classic Martini
-Для быстрого старта [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) предлагает несколько обоснованных предустановок, это работает для большинства веб приложений:
+Для быстрого старта [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) предлагает несколько предустановок, это используется для большинства веб приложений:
 ~~~ go
   m := martini.Classic()
   // ... middleware и роутинг здесь
@@ -83,7 +83,7 @@ GoDoc [документация](http://godoc.org/github.com/go-martini/martini)
   * Роутинг - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
 
 ### Обработчики
-Обработчики - это сердце и душа Martini. Обработчик обычно любая функция, которая может быть вызвана:
+Обработчики - это сердце и душа Martini. Обработчик - любая функция, которая может быть вызвана:
 ~~~ go
 m.Get("/", func() {
   println("hello world")
@@ -179,7 +179,7 @@ m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
   return fmt.Sprintf ("Hello %s", params["name"])
 })
 ~~~
-Для большей информации о синтаксисе регулярных выражений смотрите [Go documentation](http://golang.org/pkg/regexp/syntax/).
+Синтаксис регулярных выражений смотрите [Go documentation](http://golang.org/pkg/regexp/syntax/).
 
 Обработчики роутов так же могут быть выстроены в стек, друг перед другом. Это очень удобно для таких задач как авторизация и аутентификация:
 ~~~ go
@@ -188,7 +188,7 @@ m.Get("/secret", authorize, func() {
 })
 ~~~
 
-Роуты так же могут быть добавлены группой, посредством метода Group:
+Роуты так же могут быть объединены в группы, посредством метода Group:
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
