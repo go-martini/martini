@@ -129,23 +129,23 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res и req бу
 Каждый роут может принимать один или несколько обработчиков:
 ~~~ go
 m.Get("/", func() {
-  // показать что то
+  // показать что-то
 })
 
 m.Patch("/", func() {
-  // обновить что то
+  // обновить что-то
 })
 
 m.Post("/", func() {
-  // создать что то
+  // создать что-то
 })
 
 m.Put("/", func() {
-  // изменить что то
+  // изменить что-то
 })
 
 m.Delete("/", func() {
-  // удулить что то
+  // удалить что-то
 })
 
 m.Options("/", func() {
@@ -241,7 +241,7 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 
 ### Отдача статических файлов
 Экземпляр [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) автоматически отдает статические файлы из директории "public" в корне, рядом с вашим файлом `server.go`.
-Вы можете добавить еше директорий, добавляя еще [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) обаботчики.  
+Вы можете добавить еще директорий, добавляя [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) обаботчики.  
 ~~~ go
 m.Use(martini.Static("assets")) // отдача файлов из "assets" директории
 ~~~
@@ -274,7 +274,7 @@ m.Use(func(res http.ResponseWriter, req *http.Request) {
 ~~~
 
 ### Next()
-[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) опциональная функция, которая может быть вызвана в Middleware обработчике, для выброса из контекста, и возврата в него, после вызова всего стека обработчиков. Это работает очень хорошо для некоторых операций, которые должны быть выполнены после http запроса:
+[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) опциональная функция, которая может быть вызвана в Middleware обработчике, для выхода из контекста, и возврата в него, после вызова всего стека обработчиков. Это можно использовать для операций, которые должны быть выполнены после http запроса:
 ~~~ go
 // логгирование до и после http запроса
 m.Use(func(c martini.Context, log *log.Logger){
@@ -287,11 +287,11 @@ m.Use(func(c martini.Context, log *log.Logger){
 ~~~
 
 ## Окружение
-Некоторые Martini обработчики используют глобальную переменную `martini.Env` для того чтоб предоставить специальную функциональность для девелопмент и продакшн окружения. Рекомендуется устанавливать `MARTINI_ENV=production`, когда вы деплоите приложение на продакшн.
+Некоторые Martini обработчики используют глобальную переменную `martini.Env` для того, чтоб предоставить специальную функциональность для девелопмент и продакшн окружения. Рекомендуется устанавливать `MARTINI_ENV=production`, когда вы деплоите приложение на продакшн.
 
 ## FAQ
 
-### Где найти middleware N?
+### Где найти готовые middleware?
 
 Начите поиск с [martini-contrib](https://github.com/martini-contrib) проектов. Если нет ничего подходящего, без колебаний пишите члену команды martini-contrib о добавлении нового репозитория в организацию.
 
@@ -302,7 +302,7 @@ m.Use(func(c martini.Context, log *log.Logger){
 * [acceptlang](https://github.com/martini-contrib/acceptlang) - Обработчик для парсинга `Accept-Language` HTTP заголовка.
 * [sessions](https://github.com/martini-contrib/sessions) - Сервис сессий.
 * [strip](https://github.com/martini-contrib/strip) - Удаление префиксов из URL.
-* [method](https://github.com/martini-contrib/method) - подмена HTTP метода через заголовок.
+* [method](https://github.com/martini-contrib/method) - Подмена HTTP метода через заголовок.
 * [secure](https://github.com/martini-contrib/secure) - Набор для безопасности.
 * [encoder](https://github.com/martini-contrib/encoder) - Сервис для представления данных в нескольких форматах и взаимодействия с контентом.
 * [cors](https://github.com/martini-contrib/cors) - Поддержка CORS.
@@ -310,7 +310,7 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ### Как интегрироваться с существуюшими серверами?
 
-Экземпляр Martini реализует интерфейс `http.Handler`, потому это очень просто использовать подпроект существующего Go сервера. Например, это работает для платформы Google App Engine:
+Экземпляр Martini реализует интерфейс `http.Handler`, потому - это очень просто использовать вместе с существующим Go проектом. Например, это работает для платформы Google App Engine:
 ~~~ go
 package hello
 
@@ -329,7 +329,7 @@ func init() {
 ~~~
 
 ### Как изменить порт и/или хост?
-Функция `Run` смотрит переменные окружиения PORT и HOST, и использует их по назначению.
+Функция `Run` смотрит переменные окружиения PORT и HOST, и использует их.
 В противном случае Martini по умолчанию будет использовать `localhost:3000`.
 Для большей гибкости используйте вместо этого функцию `http.ListenAndServe`.
 
@@ -341,7 +341,7 @@ func init() {
 
 ### Живая перезагрузка кода?
 
-[gin](https://github.com/codegangsta/gin) и [fresh](https://github.com/pilu/fresh) оба перезагружают приложения Martini налету.
+[gin](https://github.com/codegangsta/gin) и [fresh](https://github.com/pilu/fresh) могут работать вместе с Martini.
 
 ## Вклад в обшее дело
 
@@ -351,4 +351,4 @@ func init() {
 
 Вдохновлен [express](https://github.com/visionmedia/express) и [sinatra](https://github.com/sinatra/sinatra)
 
-Martini создан одержимым [Code Gangsta](http://codegangsta.io/)
+Martini создан [Code Gangsta](http://codegangsta.io/)
