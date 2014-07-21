@@ -30,7 +30,7 @@ go get github.com/go-martini/martini
 go run server.go
 ~~~
 
-И вы получите запущеный Martini сервер на `localhost:3000`.
+И вы получите запущенный Martini сервер на `localhost:3000`.
 
 ## Помощь
 
@@ -46,7 +46,7 @@ GoDoc [документация](http://godoc.org/github.com/go-martini/martini)
 ## Возможности
 * Очень прост в использовании.
 * Ненавязчивый дизайн.
-* Хорошо сочитается с другими пакетами.
+* Хорошо сочетается с другими пакетами.
 * Потрясающий роутинг и маршрутизация.
 * Модульный дизайн - легко добавлять и исключать функциональность.
 * Большое количество хороших обработчиков/middlewares, готовых к использованию.
@@ -115,7 +115,7 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res и req бу
 })
 ~~~
 
-Следуюшие сервисы включены в [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic): 
+Следующие сервисы включены в [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic): 
 
   * [*log.Logger](http://godoc.org/log#Logger) - Глобальный логгер для Martini.
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request контекст.
@@ -125,7 +125,7 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res и req бу
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
 
 ### Роутинг
-В Martini, роут - это объедененные паттерн и HTTP метод.
+В Martini, роут - это объединенные паттерн и HTTP метод.
 Каждый роут может принимать один или несколько обработчиков:
 ~~~ go
 m.Get("/", func() {
@@ -209,7 +209,7 @@ m.Group("/books", func(r martini.Router) {
 ~~~
 
 ### Сервисы
-Сервисы - это объеъкты, которые доступны для внедрения в аргументы обработчиков. Вы можете замапить сервисы на уровне всего приложения либо на уровне запроса.
+Сервисы - это объекты, которые доступны для внедрения в аргументы обработчиков. Вы можете замапить сервисы на уровне всего приложения либо на уровне запроса.
 
 #### Глобальный маппинг
 Экземпляр Martini реализует интерфейс inject.Injector, поэтому замаппить сервис легко:
@@ -241,7 +241,7 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 
 ### Отдача статических файлов
 Экземпляр [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) автоматически отдает статические файлы из директории "public" в корне, рядом с вашим файлом `server.go`.
-Вы можете добавить еще директорий, добавляя [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) обаботчики.  
+Вы можете добавить еще директорий, добавляя [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) обработчики.  
 ~~~ go
 m.Use(martini.Static("assets")) // отдача файлов из "assets" директории
 ~~~
@@ -293,11 +293,11 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ### Где найти готовые middleware?
 
-Начите поиск с [martini-contrib](https://github.com/martini-contrib) проектов. Если нет ничего подходящего, без колебаний пишите члену команды martini-contrib о добавлении нового репозитория в организацию.
+Начните поиск с [martini-contrib](https://github.com/martini-contrib) проектов. Если нет ничего подходящего, без колебаний пишите члену команды martini-contrib о добавлении нового репозитория в организацию.
 
 * [auth](https://github.com/martini-contrib/auth) - Обработчики для аутентификации.
 * [binding](https://github.com/martini-contrib/binding) - Обработчик для маппинга/валидации сырого запроса в определенную структуру(struct).
-* [gzip](https://github.com/martini-contrib/gzip) - Обработчик, добовляюший gzip сжатие для запросов.
+* [gzip](https://github.com/martini-contrib/gzip) - Обработчик, добавляющий gzip сжатие для запросов.
 * [render](https://github.com/martini-contrib/render) - Обработчик, которые предоставляет сервис для легкого рендеринга JSON и HTML шаблонов.
 * [acceptlang](https://github.com/martini-contrib/acceptlang) - Обработчик для парсинга `Accept-Language` HTTP заголовка.
 * [sessions](https://github.com/martini-contrib/sessions) - Сервис сессий.
