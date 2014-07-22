@@ -3,6 +3,7 @@ package martini
 import (
 	"log"
 	"net/http"
+	"net/url"
 	"path/filepath"
 	"strings"
 )
@@ -81,7 +82,12 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 		if fi.IsDir() {
 			// redirect if missing trailing slash
 			if !strings.HasSuffix(req.URL.Path, "/") {
-				http.Redirect(res, req, req.URL.Path+"/", http.StatusFound)
+				dest := url.URL{
+					Path:     req.URL.Path + "/",
+					RawQuery: req.URL.RawQuery,
+					Fragment: req.URL.Fragment,
+				}
+				http.Redirect(res, req, dest.String(), http.StatusFound)
 				return
 			}
 
