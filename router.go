@@ -71,6 +71,10 @@ func (r *router) Group(pattern string, fn func(Router), h ...Handler) {
 	r.groups = r.groups[:len(r.groups)-1]
 }
 
+func (r *router) AddRoute(method string, pattern string, h ...Handler) Route {
+	return r.addRoute(method, pattern, h)
+}
+
 func (r *router) Get(pattern string, h ...Handler) Route {
 	return r.addRoute("GET", pattern, h)
 }
