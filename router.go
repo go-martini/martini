@@ -17,6 +17,8 @@ type Router interface {
 
 	// Group adds a group where related routes can be added.
 	Group(string, func(Router), ...Handler)
+	// AddRoute adds a possibility to define routes dynamically
+ 	AddRoute(string, string, ...Handler)
 	// Get adds a route for a HTTP GET request to the specified matching pattern.
 	Get(string, ...Handler) Route
 	// Patch adds a route for a HTTP PATCH request to the specified matching pattern.
