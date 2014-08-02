@@ -221,12 +221,12 @@ func Test_Static_Redirect(t *testing.T) {
 	m := New()
 	m.Use(Static(currentRoot, StaticOptions{Prefix: "/public"}))
 
-	req, err := http.NewRequest("GET", "http://localhost:3000/public", nil)
+	req, err := http.NewRequest("GET", "http://localhost:3000/public?param=foo#bar", nil)
 	if err != nil {
 		t.Error(err)
 	}
 
 	m.ServeHTTP(response, req)
 	expect(t, response.Code, http.StatusFound)
-	expect(t, response.Header().Get("Location"), "/public/")
+	expect(t, response.Header().Get("Location"), "/public/?param=foo#bar")
 }
