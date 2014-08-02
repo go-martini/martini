@@ -15,7 +15,7 @@ func Test_Recovery(t *testing.T) {
 	setENV(Dev)
 	m := New()
 	// replace log for testing
-	m.Map(log.New(buff, "[martini] ", 0))
+	m.MapTo(log.New(buff, "[martini] ", 0), (*Logger)(nil))
 	m.Use(func(res http.ResponseWriter, req *http.Request) {
 		res.Header().Set("Content-Type", "unpredictable")
 	})

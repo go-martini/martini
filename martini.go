@@ -18,12 +18,11 @@
 package martini
 
 import (
+	"github.com/codegangsta/inject"
 	"log"
 	"net/http"
 	"os"
 	"reflect"
-
-	"github.com/codegangsta/inject"
 )
 
 // Martini represents the top level web application. inject.Injector methods can be invoked to map services on a global level.
@@ -38,6 +37,7 @@ type Martini struct {
 func New() *Martini {
 	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(os.Stdout, "[martini] ", 0)}
 	m.Map(m.logger)
+	m.MapTo(m.logger, (*Logger)(nil))
 	m.Map(defaultReturnHandler())
 	return m
 }
@@ -78,7 +78,7 @@ func (m *Martini) Run() {
 
 	host := os.Getenv("HOST")
 
-	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
+	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(Logger)
 
 	logger.Printf("listening on %s:%s (%s)\n", host, port, Env)
 	logger.Fatalln(http.ListenAndServe(host+":"+port, m))
@@ -104,7 +104,7 @@ type ClassicMartini struct {
 func Classic() *ClassicMartini {
 	r := NewRouter()
 	m := New()
-	m.Use(Logger())
+	m.Use(LoggerMiddleware())
 	m.Use(Recovery())
 	m.Use(Static("public"))
 	m.MapTo(r, (*Routes)(nil))

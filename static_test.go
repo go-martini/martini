@@ -123,7 +123,7 @@ func Test_Static_Options_Logging(t *testing.T) {
 
 	var buffer bytes.Buffer
 	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(&buffer, "[martini] ", 0)}
-	m.Map(m.logger)
+	m.MapTo(m.logger, (*Logger)(nil))
 	m.Map(defaultReturnHandler())
 
 	opt := StaticOptions{}
@@ -156,7 +156,7 @@ func Test_Static_Options_ServeIndex(t *testing.T) {
 
 	var buffer bytes.Buffer
 	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(&buffer, "[martini] ", 0)}
-	m.Map(m.logger)
+	m.MapTo(m.logger, (*Logger)(nil))
 	m.Map(defaultReturnHandler())
 
 	opt := StaticOptions{IndexFile: "martini.go"} // Define martini.go as index file
@@ -177,7 +177,7 @@ func Test_Static_Options_Prefix(t *testing.T) {
 
 	var buffer bytes.Buffer
 	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(&buffer, "[martini] ", 0)}
-	m.Map(m.logger)
+	m.MapTo(m.logger, (*Logger)(nil))
 	m.Map(defaultReturnHandler())
 
 	// Serve current directory under /public
@@ -199,7 +199,7 @@ func Test_Static_Options_Expires(t *testing.T) {
 
 	var buffer bytes.Buffer
 	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(&buffer, "[martini] ", 0)}
-	m.Map(m.logger)
+	m.MapTo(m.logger, (*Logger)(nil))
 	m.Map(defaultReturnHandler())
 
 	// Serve current directory under /public
