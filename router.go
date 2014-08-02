@@ -178,9 +178,16 @@ type route struct {
 
 func newRoute(method string, pattern string, handlers []Handler) *route {
 	route := route{method, nil, handlers, pattern, ""}
-	r := regexp.MustCompile(`:[^/#?()\.\\]+`)
+	// Prefect Regex would be `(?<!\[):[^\/#?()\.\\\]]+` but Regexp nor re2 support Negative Lookbehind.
+	r := regexp.MustCompile(`:[^/#?()\.\\\]]+`)
+	// Workaround for lack of Negative Lookbehind.
+	e := regexp.MustCompile(`:(alnum|alpha|ascii|blank|cntrl|digit|graph|lower|print|graph|punct|space|upper|word|xdigit)`)
 	pattern = r.ReplaceAllStringFunc(pattern, func(m string) string {
+		if e.MatchString(m){
+		  return m
+		} else {
 		return fmt.Sprintf(`(?P<%s>[^/#?]+)`, m[1:])
+		}
 	})
 	r2 := regexp.MustCompile(`\*\*`)
 	var index int
