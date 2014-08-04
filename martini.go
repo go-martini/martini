@@ -69,19 +69,27 @@ func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	m.createContext(res, req).run()
 }
 
+// Run the http server on a given host and port.
+func (m *Martini) RunOnAddr(addr string) {
+	// TODO: Should probably be implemented using a new instance of http.Server in place of
+	// calling http.ListenAndServer directly, so that it could be stored in the martini struct for later use.
+	// This would also allow to improve testing when a custom host and port are passed.
+
+	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
+	logger.Printf("listening on %s (%s)\n", addr, Env)
+	logger.Fatalln(http.ListenAndServe(addr, m))
+}
+
 // Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
 func (m *Martini) Run() {
 	port := os.Getenv("PORT")
-	if port == "" {
+	if len(port) == 0 {
 		port = "3000"
 	}
 
 	host := os.Getenv("HOST")
 
-	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
-
-	logger.Printf("listening on %s:%s (%s)\n", host, port, Env)
-	logger.Fatalln(http.ListenAndServe(host+":"+port, m))
+	m.RunOnAddr(host + ":" + port)
 }
 
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
