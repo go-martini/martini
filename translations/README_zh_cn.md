@@ -259,7 +259,7 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 * [auth](https://github.com/martini-contrib/auth) - 认证处理器.
 * [binding](https://github.com/martini-contrib/binding) - 映射/验证raw请求到结构体(structure)里的处理器
-* [gzip](https://github.com/martini-contrib/gzip) - 加入giz支持的处理器
+* [gzip](https://github.com/martini-contrib/gzip) - 加入gzip支持的处理器
 * [render](https://github.com/martini-contrib/render) - 渲染JSON和HTML模板的处理器.
 * [acceptlang](https://github.com/martini-contrib/acceptlang) - 解析`Accept-Language` HTTP报头的处理器.
 * [sessions](https://github.com/martini-contrib/sessions) - 提供会话服务支持的处理器.
