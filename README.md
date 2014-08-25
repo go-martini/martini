@@ -315,6 +315,7 @@ Start by looking in the [martini-contrib](https://github.com/martini-contrib) pr
 * [encoder](https://github.com/martini-contrib/encoder) - Encoder service for rendering data in several formats and content negotiation.
 * [cors](https://github.com/martini-contrib/cors) - Handler that enables CORS support.
 * [oauth2](https://github.com/martini-contrib/oauth2) - Handler that provides OAuth 2.0 login for Martini apps. Google Sign-in, Facebook Connect and Github login is supported.
+* [vauth](https://github.com/rafecolton/vauth) - Handlers for vender webhook authentication (currently GitHub and TravisCI)
 
 ### How do I integrate with existing servers?
 
