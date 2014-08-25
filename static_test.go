@@ -215,6 +215,28 @@ func Test_Static_Options_Expires(t *testing.T) {
 	expect(t, response.Header().Get("Expires"), "46")
 }
 
+func Test_Static_Options_Fallback(t *testing.T) {
+	response := httptest.NewRecorder()
+
+	var buffer bytes.Buffer
+	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(&buffer, "[martini] ", 0)}
+	m.Map(m.logger)
+	m.Map(defaultReturnHandler())
+
+	// Serve current directory under /public
+	m.Use(Static(currentRoot, StaticOptions{Fallback: "/martini.go"}))
+
+	// Check file content behaviour
+	req, err := http.NewRequest("GET", "http://localhost:3000/initram.go", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusOK)
+	expect(t, buffer.String(), "[martini] [Static] Serving /martini.go\n")
+}
+
 func Test_Static_Redirect(t *testing.T) {
 	response := httptest.NewRecorder()
 
