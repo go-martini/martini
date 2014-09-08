@@ -3,7 +3,7 @@
 Martini is a powerful package for quickly writing modular web applications/services in Golang.
 
 Language Translations:
-* [Simplified Chinese (zh_CN)](translations/README_zh_cn.md)
+* [简体中文](translations/README_zh_cn.md)
 * [Português Brasileiro (PT_br)](translations/README_pt_br.md)
 * [Español](translations/README_es_ES.md)
 * [한국어 번역](translations/README_ko_kr.md)
