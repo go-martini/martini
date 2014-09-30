@@ -61,6 +61,7 @@ GoDoc [documentation](http://godoc.org/github.com/go-martini/martini)
 * Lots of good handlers/middlewares to use.
 * Great 'out of the box' feature set.
 * **Fully compatible with the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
+* Default document serving (e.g., for serving AngularJS apps in HTML5 mode).
 
 ## More Middleware
 For more middleware and functionality, check out the repositories in the  [martini-contrib](https://github.com/martini-contrib) organization.
@@ -252,6 +253,20 @@ A [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) in
 You can serve from more directories by adding more [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) handlers.
 ~~~ go
 m.Use(martini.Static("assets")) // serve from the "assets" directory as well
+~~~
+
+#### Serving a Default Document
+You can specify the URL of a local file to serve when the requested URL is not
+found. You can also specify an exclusion prefix so that certain URLs are ignored.
+This is useful for servers that serve both static files and have additional
+handlers defined (e.g., REST API). When doing so, it's useful to define the
+static handler as a part of the NotFound chain.
+
+The following example serves the `/index.html` file whenever any URL is
+requested that does not match any local file and does not start with `/api/v`:
+~~~ go
+static := martini.Static("assets", martini.StaticOptions{Fallback: "/index.html", Exclude: "/api/v"})
+r.NotFound(static, http.NotFound)
 ~~~
 
 ## Middleware Handlers
