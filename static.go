@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -107,7 +108,7 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 				return
 			}
 
-			file = filepath.Join(file, opt.IndexFile)
+			file = path.Join(file, opt.IndexFile)
 			f, err = dir.Open(file)
 			if err != nil {
 				return
