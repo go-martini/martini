@@ -343,7 +343,7 @@ func init() {
 
 [gin](https://github.com/codegangsta/gin) и [fresh](https://github.com/pilu/fresh) могут работать вместе с Martini.
 
-## Вклад в обшее дело
+## Вклад в общее дело
 
 Подразумевается что Martini чистый и маленький. Большинство улучшений должны быть в организации [martini-contrib](https://github.com/martini-contrib). Но если вы хотите улучшить ядро Martini, отправляйте пулл реквесты.
 
