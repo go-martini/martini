@@ -1,10 +1,14 @@
 package martini
 
 import (
+	"bytes"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
+	"strings"
 	"testing"
+	"time"
 )
 
 /* Test Helpers */
@@ -30,6 +34,20 @@ func Test_New(t *testing.T) {
 func Test_Martini_RunOnAddr(t *testing.T) {
 	// just test that Run doesn't bomb
 	go New().RunOnAddr("127.0.0.1:8080")
+}
+
+func Test_Martini_CanStop(t *testing.T) {
+	buff := bytes.NewBufferString("") // set up our log buffer
+	m := New()
+	m.Map(log.New(buff, "[martini] ", 0)) // map logger to use buffer
+	go m.RunOnAddr("127.0.0.1:9999")
+	time.Sleep(time.Second) // wait a sec before trying to sotp
+	m.Stop()
+	time.Sleep(time.Second) // give the server a second to stop
+
+	if !strings.Contains(buff.String(), "Server stopped") {
+		t.Error("Expected log entry indicating that the server stopped.")
+	}
 }
 
 func Test_Martini_Run(t *testing.T) {
