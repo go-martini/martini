@@ -128,6 +128,8 @@ func Recovery() Handler {
 				if Env == Dev {
 					res.Header().Set("Content-Type", "text/html")
 					body = []byte(fmt.Sprintf(panicHtml, err, err, stack))
+				} else {
+					body = []byte("500 Internal Server Error")
 				}
 
 				res.WriteHeader(http.StatusInternalServerError)
