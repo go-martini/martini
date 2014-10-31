@@ -291,34 +291,6 @@ func Test_RouteSlashMatching(t *testing.T) {
 	}
 }
 
-var newSlashTests = [...][]struct {
-	url      string
-	code     int
-	location string
-}{
-	{
-		{"http://localhost/foo/", http.StatusMovedPermanently, "http://localhost/foo"},
-		{"http://localhost/foo", http.StatusOK, ""},
-	},
-	{
-		{"http://localhost/foo/", http.StatusOK, ""},
-		{"http://localhost/foo", http.StatusMovedPermanently, "http://localhost/foo/"},
-	},
-}
-
-func Test_NewSlash(t *testing.T) {
-	for i, v := range newSlashTests {
-		for _, tt := range v {
-			handler := NewSlash(i == 1).(func(http.ResponseWriter, *http.Request))
-			recorder := httptest.NewRecorder()
-			req, _ := http.NewRequest("GET", tt.url, nil)
-			handler(recorder, req)
-			expect(t, recorder.Code, tt.code)
-			expect(t, recorder.Header().Get("Location"), tt.location)
-		}
-	}
-}
-
 func Test_MethodsFor(t *testing.T) {
 	router := NewRouter()
 	recorder := httptest.NewRecorder()
