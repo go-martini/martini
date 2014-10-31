@@ -2,6 +2,7 @@ package martini
 
 import "net/http"
 
+// NewSlash return a middleware to take care of lash slash.
 // When x is true always add last slash, false remove.
 func NewSlash(x bool) Handler {
 	return func(w http.ResponseWriter, r *http.Request) {

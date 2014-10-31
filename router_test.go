@@ -251,6 +251,74 @@ func Test_RouteMatching(t *testing.T) {
 	}
 }
 
+var routeSlashTests = [...][]struct {
+	// in
+	method string
+	path   string
+
+	// out
+	ok bool
+}{
+	{
+		{"GET", "/foo", true},
+		{"GET", "/foo/", true},
+		{"GET", "/foo//", false},
+	},
+	{
+		{"POST", "/bar", true},
+		{"POST", "/bar/", true},
+		{"POST", "/bar//", false},
+	},
+}
+
+func Test_RouteSlashMatching(t *testing.T) {
+	router := NewRouter()
+	router.Get("/foo", func() {
+	})
+	router.Group("/bar", func(r Router) {
+		r.Post("/", func() {
+		})
+	})
+
+	for i, v := range router.All() {
+		r := v.(*route)
+		for _, tt := range routeSlashTests[i] {
+			ok, _ := r.Match(tt.method, tt.path)
+			if ok != tt.ok {
+				t.Errorf("%s %s: expected (%v) got (%v)", tt.method, tt.path, tt.ok, ok)
+			}
+		}
+	}
+}
+
+var newSlashTests = [...][]struct {
+	url      string
+	code     int
+	location string
+}{
+	{
+		{"http://localhost/foo/", http.StatusMovedPermanently, "http://localhost/foo"},
+		{"http://localhost/foo", http.StatusOK, ""},
+	},
+	{
+		{"http://localhost/foo/", http.StatusOK, ""},
+		{"http://localhost/foo", http.StatusMovedPermanently, "http://localhost/foo/"},
+	},
+}
+
+func Test_NewSlash(t *testing.T) {
+	for i, v := range newSlashTests {
+		for _, tt := range v {
+			handler := NewSlash(i == 1).(func(http.ResponseWriter, *http.Request))
+			recorder := httptest.NewRecorder()
+			req, _ := http.NewRequest("GET", tt.url, nil)
+			handler(recorder, req)
+			expect(t, recorder.Code, tt.code)
+			expect(t, recorder.Header().Get("Location"), tt.location)
+		}
+	}
+}
+
 func Test_MethodsFor(t *testing.T) {
 	router := NewRouter()
 	recorder := httptest.NewRecorder()
