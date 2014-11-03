@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"regexp"
 	"strconv"
+	"sync"
 )
 
 // Params is a map of name/value pairs for named routes. An instance of martini.Params is available to be injected into any route handler.
@@ -33,6 +34,8 @@ type Router interface {
 	Head(string, ...Handler) Route
 	// Any adds a route for any HTTP method request to the specified matching pattern.
 	Any(string, ...Handler) Route
+	// AddRoute adds a route for a given HTTP method request to the specified matching pattern.
+	AddRoute(string, string, ...Handler) Route
 
 	// NotFound sets the handlers that are called when a no route matches a request. Throws a basic 404 by default.
 	NotFound(...Handler)
@@ -42,9 +45,10 @@ type Router interface {
 }
 
 type router struct {
-	routes    []*route
-	notFounds []Handler
-	groups    []group
+	routes     []*route
+	notFounds  []Handler
+	groups     []group
+	routesLock sync.RWMutex
 }
 
 type group struct {
@@ -103,8 +107,12 @@ func (r *router) Any(pattern string, h ...Handler) Route {
 	return r.addRoute("*", pattern, h)
 }
 
+func (r *router) AddRoute(method, pattern string, h ...Handler) Route {
+	return r.addRoute(method, pattern, h)
+}
+
 func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Context) {
-	for _, route := range r.routes {
+	for _, route := range r.getRoutes() {
 		ok, vals := route.Match(req.Method, req.URL.Path)
 		if ok {
 			params := Params(vals)
@@ -140,12 +148,24 @@ func (r *router) addRoute(method string, pattern string, handlers []Handler) *ro
 
 	route := newRoute(method, pattern, handlers)
 	route.Validate()
-	r.routes = append(r.routes, route)
+	r.appendRoute(route)
 	return route
 }
 
+func (r *router) appendRoute(rt *route) {
+	r.routesLock.Lock()
+	defer r.routesLock.Unlock()
+	r.routes = append(r.routes, rt)
+}
+
+func (r *router) getRoutes() []*route {
+	r.routesLock.RLock()
+	defer r.routesLock.RUnlock()
+	return r.routes[:]
+}
+
 func (r *router) findRoute(name string) *route {
-	for _, route := range r.routes {
+	for _, route := range r.getRoutes() {
 		if route.name == name {
 			return route
 		}
@@ -303,9 +323,10 @@ func (r *router) URLFor(name string, params ...interface{}) string {
 }
 
 func (r *router) All() []Route {
-	var ri = make([]Route, len(r.routes))
+	routes := r.getRoutes()
+	var ri = make([]Route, len(routes))
 
-	for i, route := range r.routes {
+	for i, route := range routes {
 		ri[i] = Route(route)
 	}
 
@@ -324,7 +345,7 @@ func hasMethod(methods []string, method string) bool {
 // MethodsFor returns all methods available for path
 func (r *router) MethodsFor(path string) []string {
 	methods := []string{}
-	for _, route := range r.routes {
+	for _, route := range r.getRoutes() {
 		matches := route.regex.FindStringSubmatch(path)
 		if len(matches) > 0 && matches[0] == path && !hasMethod(methods, route.method) {
 			methods = append(methods, route.method)
