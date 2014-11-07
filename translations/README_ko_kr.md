@@ -53,7 +53,7 @@ GoDoc [문서(documentation)](http://godoc.org/github.com/go-martini/martini)
 * 끝내주는 경로 매칭과 라우팅.
 * 모듈 형 디자인 - 기능추가 쉽고, 코드 꺼내오기도 쉬움.
 * 쓸모있는 핸들러와 미들웨어가 많음.
-* 훌률한 패키지화(out of the box) 기능들
+* 훌륭한 패키지화(out of the box) 기능들
 * **[http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) 인터페이스와 호환율 100%**
 
 ## 미들웨어(Middleware)
