@@ -160,7 +160,7 @@ m.NotFound(func() {
 })
 ~~~
 
-루트들은 정의된 순서대로 매칭된다. 들어온 요그에 첫번째 매칭된 루트가 호출된다.
+루트들은 정의된 순서대로 매칭된다. 들어온 요청에 첫번째 매칭된 루트가 호출된다.
 
 루트 패턴은 [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) service로 액세스 가능한 인자들을 포함하기도 한다:
 ~~~ go
