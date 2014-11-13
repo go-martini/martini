@@ -37,7 +37,7 @@ go run server.go
 
 [데모 비디오](http://martini.codegangsta.io/#demo)도 있어요.
 
-혹은 Stackoverflow에 [마티니 태크](http://stackoverflow.com/questions/tagged/martini)를 이용해서 물어봐 주세요
+혹은 Stackoverflow에 [마티니 태그](http://stackoverflow.com/questions/tagged/martini)를 이용해서 물어봐 주세요
 
 GoDoc [문서(documentation)](http://godoc.org/github.com/go-martini/martini)
 
@@ -292,13 +292,13 @@ m.Use(func(c martini.Context, log *log.Logger){
 ~~~
 
 ## Martini Env
-마티니 핸들러들은 `martini.Env` 글로벌 변수를 사용하여 개발환경에서는 프로덕션 환경과는 다르게 작동하기도 합니다. 따라서, 프로덕션 서버로 마티니 서보를 배포하시게 된다면 꼭 환경변수 `MARTINI_ENV=production`를 세팅해주시기 바랍니다.
+마티니 핸들러들은 `martini.Env` 글로벌 변수를 사용하여 개발환경에서는 프로덕션 환경과는 다르게 작동하기도 합니다. 따라서, 프로덕션 서버로 마티니 서버를 배포하시게 된다면 꼭 환경변수 `MARTINI_ENV=production`를 세팅해주시기 바랍니다.
 
 ## FAQ
 
 ### 미들웨어들을 어디서 찾아야 하나요?
 
-깃헙에서 [martini-contrib](https://github.com/martini-contrib) 프로젝트들을 탖아보세요. 만약에 못 찾으시겠으면, martini-contrib 팀원들에게 연락해서 하나 만들어 달라고 해보세요.
+깃헙에서 [martini-contrib](https://github.com/martini-contrib) 프로젝트들을 찾아보세요. 만약에 못 찾으시겠으면, martini-contrib 팀원들에게 연락해서 하나 만들어 달라고 해보세요.
 * [auth](https:	//github.com/martini-contrib/auth) - 인증작업을 도와주는 핸들러.
 * [binding](https://github.com/martini-contrib/binding) - request를 맵핑하고 검사하는 핸들러.
 * [gzip](https://github.com/martini-contrib/gzip) - gzip 핸들러.
