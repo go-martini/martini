@@ -4,7 +4,7 @@
 
 ## 시작하기
 
-Go 인스톨 및 [GOPATH](http://golang.org/doc/code.html#GOPATH) 환경변수 설정 이후에, `.go` 파일 하나를 만들어 보죠..흠... 일단 `server.go`라고 부르겠습니다.
+Go 설치 및 [GOPATH](http://golang.org/doc/code.html#GOPATH) 환경변수 설정 이후에, `.go` 파일 하나를 만들어 보죠..흠... 일단 `server.go`라고 부르겠습니다.
 ~~~go
 package main
 
@@ -19,12 +19,12 @@ func main() {
 }
 ~~~
 
-마티니 패키지를 인스톨 합니다. (**go 1.1** 혹은 그 이상 버젼 필요):
+마티니 패키지를 설치 합니다. (**go 1.1** 혹은 그 이상 버젼 필요):
 ~~~
 go get github.com/go-martini/martini
 ~~~
 
-이제 서버를 돌려 봅시다:
+이제 서버를 실행해 봅시다:
 ~~~
 go run server.go
 ~~~
@@ -80,7 +80,7 @@ GoDoc [문서(documentation)](http://godoc.org/github.com/go-martini/martini)
 
 아래는 [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic)의 자동으로 장착하는 기본 기능들입니다.
 
-  * Request/Response 로그 기능 - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
+  * 요청/응답 로그 기능 - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
   * 패닉 리커버리 (Panic Recovery) - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
   * 정적 파일 서빙 - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
   * 라우팅(Routing) - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
@@ -120,7 +120,7 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res와 req는 �
 ~~~
 
 아래 서비스들은 [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):에 포함되어 있습니다.
-  * [*log.Logger](http://godoc.org/log#Logger) - 마티니의 글러벌(전역) 로그.
+  * [*log.Logger](http://godoc.org/log#Logger) - 마티니의 전역 로그.
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http 요청 컨텍스트.
   * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - 루트 매칭으로 찾은 인자를 `map[string]string`으로 변형.
   * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - 루트 도우미 서미스.
@@ -240,7 +240,7 @@ func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
-  c.MapTo(rw, (*http.ResponseWriter)(nil)) // ResponseWriter를 NewResponseWriter로 치환(override)
+  c.MapTo(rw, (*http.ResponseWriter)(nil)) // ResponseWriter를 NewResponseWriter로 오버라이드
 }
 ~~~
 
