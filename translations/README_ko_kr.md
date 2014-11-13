@@ -4,7 +4,7 @@
 
 ## 시작하기
 
-Go 인스톨 및 [GOPATH](http://golang.org/doc/code.html#GOPATH) 환경변수 설정 이후에, `.go` 파일 하나를 만들어 보죠..흠... 일단 `server.go`라고 부르겠습니다.
+Go 설치 및 [GOPATH](http://golang.org/doc/code.html#GOPATH) 환경변수 설정 이후에, `.go` 파일 하나를 만들어 보죠..흠... 일단 `server.go`라고 부르겠습니다.
 ~~~go
 package main
 
@@ -19,12 +19,12 @@ func main() {
 }
 ~~~
 
-마티니 패키지를 인스톨 합니다. (**go 1.1** 혹은 그 이상 버젼 필요):
+마티니 패키지를 설치 합니다. (**go 1.1** 혹은 그 이상 버젼 필요):
 ~~~
 go get github.com/go-martini/martini
 ~~~
 
-이제 서버를 돌려 봅시다:
+이제 서버를 실행해 봅시다:
 ~~~
 go run server.go
 ~~~
@@ -37,7 +37,7 @@ go run server.go
 
 [데모 비디오](http://martini.codegangsta.io/#demo)도 있어요.
 
-혹은 Stackoverflow에 [마티니 태크](http://stackoverflow.com/questions/tagged/martini)를 이용해서 물어봐 주세요
+혹은 Stackoverflow에 [마티니 태그](http://stackoverflow.com/questions/tagged/martini)를 이용해서 물어봐 주세요
 
 GoDoc [문서(documentation)](http://godoc.org/github.com/go-martini/martini)
 
@@ -80,7 +80,7 @@ GoDoc [문서(documentation)](http://godoc.org/github.com/go-martini/martini)
 
 아래는 [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic)의 자동으로 장착하는 기본 기능들입니다.
 
-  * Request/Response 로그 기능 - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
+  * 요청/응답 로그 기능 - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
   * 패닉 리커버리 (Panic Recovery) - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
   * 정적 파일 서빙 - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
   * 라우팅(Routing) - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
@@ -120,7 +120,7 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res와 req는 �
 ~~~
 
 아래 서비스들은 [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):에 포함되어 있습니다.
-  * [*log.Logger](http://godoc.org/log#Logger) - 마티니의 글러벌(전역) 로그.
+  * [*log.Logger](http://godoc.org/log#Logger) - 마티니의 전역 로그.
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http 요청 컨텍스트.
   * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - 루트 매칭으로 찾은 인자를 `map[string]string`으로 변형.
   * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - 루트 도우미 서미스.
@@ -160,7 +160,7 @@ m.NotFound(func() {
 })
 ~~~
 
-루트들은 정의된 순서대로 매칭된다. 들어온 요그에 첫번째 매칭된 루트가 호출된다.
+루트들은 정의된 순서대로 매칭된다. 들어온 요청에 첫번째 매칭된 루트가 호출된다.
 
 루트 패턴은 [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) service로 액세스 가능한 인자들을 포함하기도 한다:
 ~~~ go
@@ -240,7 +240,7 @@ func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
-  c.MapTo(rw, (*http.ResponseWriter)(nil)) // ResponseWriter를 NewResponseWriter로 치환(override)
+  c.MapTo(rw, (*http.ResponseWriter)(nil)) // ResponseWriter를 NewResponseWriter로 오버라이드
 }
 ~~~
 
@@ -292,13 +292,13 @@ m.Use(func(c martini.Context, log *log.Logger){
 ~~~
 
 ## Martini Env
-마티니 핸들러들은 `martini.Env` 글로벌 변수를 사용하여 개발환경에서는 프로덕션 환경과는 다르게 작동하기도 합니다. 따라서, 프로덕션 서버로 마티니 서보를 배포하시게 된다면 꼭 환경변수 `MARTINI_ENV=production`를 세팅해주시기 바랍니다.
+마티니 핸들러들은 `martini.Env` 글로벌 변수를 사용하여 개발환경에서는 프로덕션 환경과는 다르게 작동하기도 합니다. 따라서, 프로덕션 서버로 마티니 서버를 배포하시게 된다면 꼭 환경변수 `MARTINI_ENV=production`를 세팅해주시기 바랍니다.
 
 ## FAQ
 
 ### 미들웨어들을 어디서 찾아야 하나요?
 
-깃헙에서 [martini-contrib](https://github.com/martini-contrib) 프로젝트들을 탖아보세요. 만약에 못 찾으시겠으면, martini-contrib 팀원들에게 연락해서 하나 만들어 달라고 해보세요.
+깃헙에서 [martini-contrib](https://github.com/martini-contrib) 프로젝트들을 찾아보세요. 만약에 못 찾으시겠으면, martini-contrib 팀원들에게 연락해서 하나 만들어 달라고 해보세요.
 * [auth](https:	//github.com/martini-contrib/auth) - 인증작업을 도와주는 핸들러.
 * [binding](https://github.com/martini-contrib/binding) - request를 맵핑하고 검사하는 핸들러.
 * [gzip](https://github.com/martini-contrib/gzip) - gzip 핸들러.
