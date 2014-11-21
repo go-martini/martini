@@ -345,6 +345,5 @@ Martini est destiné à rester petit et épuré. Toutes les contributions doiven
 
 ## A propos
 
-Inspiré par [express](https://github.com/visionmedia/express) et [sinatra](https://github.com/sinatra/sinatra)
-Martini est obsessionnellement désigné par personne autre que le [Code Gangsta](http://codegangsta.io/)
+Inspiré par [express](https://github.com/visionmedia/express) et [Sinatra](https://github.com/sinatra/sinatra), Martini est obsessionnellement désigné par personne autre que le [Code Gangsta](http://codegangsta.io/)
 
