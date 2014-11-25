@@ -1,6 +1,6 @@
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
-Martini - мощный пакет для быстрой разработки веб приложений и сервисов на Golang.
+Martini - мощный пакет для быстрой разработки веб-приложений и сервисов на Golang.
 
 ## Начало работы
 
@@ -91,14 +91,14 @@ m.Get("/", func() {
 ~~~
 
 #### Возвращаемые значения
-Если обработчик возвращает что либо, Martini запишет это как результат в текущий [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter), в виде строки: 
+Если обработчик возвращает что-либо, Martini запишет это как результат в текущий [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter), в виде строки: 
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
 })
 ~~~
 
-Так же вы можете возвращать код статуса, опционально:
+Также вы можете возвращать код статуса, опционально:
 ~~~ go
 m.Get("/", func() (int, string) {
   return 418, "i'm a teapot" // HTTP 418 : "i'm a teapot"
@@ -173,7 +173,7 @@ m.Get("/hello/**", func(params martini.Params) string {
 })
 ~~~
 
-Так же могут использоваться регулярные выражения:
+Также могут использоваться регулярные выражения:
 ~~~go
 m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
   return fmt.Sprintf ("Hello %s", params["name"])
@@ -181,14 +181,14 @@ m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
 ~~~
 Синтаксис регулярных выражений смотрите [Go documentation](http://golang.org/pkg/regexp/syntax/).
 
-Обработчики роутов так же могут быть выстроены в стек, друг перед другом. Это очень удобно для таких задач как авторизация и аутентификация:
+Обработчики роутов также могут быть выстроены в стек, друг перед другом. Это очень удобно для таких задач как авторизация и аутентификация:
 ~~~ go
 m.Get("/secret", authorize, func() {
   // будет вызываться, в случае если authorize ничего не записал в ответ
 })
 ~~~
 
-Роуты так же могут быть объединены в группы, посредством метода Group:
+Роуты также могут быть объединены в группы, посредством метода Group:
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -287,7 +287,7 @@ m.Use(func(c martini.Context, log *log.Logger){
 ~~~
 
 ## Окружение
-Некоторые Martini обработчики используют глобальную переменную `martini.Env` для того, чтоб предоставить специальную функциональность для девелопмент и продакшн окружения. Рекомендуется устанавливать `MARTINI_ENV=production`, когда вы деплоите приложение на продакшн.
+Некоторые Martini обработчики используют глобальную переменную `martini.Env` для того, чтобы предоставить специальную функциональность для девелопмент и продакшн окружения. Рекомендуется устанавливать `MARTINI_ENV=production`, когда вы деплоите приложение на продакшн.
 
 ## FAQ
 
