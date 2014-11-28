@@ -1,6 +1,6 @@
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
-마티니(Martini)는 강력하고 손쉬운 웹애플리캐이션 / 웹서비스개발을 위한 Golang 패키지입니다.
+마티니(Martini)는 강력하고 손쉬운 웹애플리케이션 / 웹서비스개발을 위한 Golang 패키지입니다.
 
 ## 시작하기
 
@@ -42,7 +42,7 @@ go run server.go
 GoDoc [문서(documentation)](http://godoc.org/github.com/go-martini/martini)
 
 문제는 전부다 영어로 되어 있다는 건데요 -_-;;;
-나는 한글 아니면 보기다 싫어! 이런 분들은 아래 링크를 참조하세요
+나는 한글 아니면 보기 싫다! 하는 분들은 아래 링크를 참조하세요
 - [golang-korea](https://code.google.com/p/golang-korea/)
 - 혹은 ([RexK](http://github.com/RexK))의 이메일로 연락주세요.
 
