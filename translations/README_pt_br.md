@@ -333,12 +333,12 @@ func init() {
 ### Como faço para alterar a porta/host?
 
 A função `Run` do Martini olha para as variáveis PORT e HOST para utilizá-las. Caso contrário o Martini assume como padrão localhost:3000.
-Para ter mais flexibilidade sobre a porta e host use a função `http.ListenAndServe`.
+Para ter mais flexibilidade sobre a porta e host use a função `martini.RunOnAddr`.
 
 ~~~ go
   m := martini.Classic()
   // ...
-  log.Fatal(http.ListenAndServe(":8080", m))
+  log.Fatal(m.RunOnAddr(":8080"))
 ~~~
 
 ### Servidor com autoreload?

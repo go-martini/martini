@@ -334,12 +334,12 @@ func init() {
 
 ### どうやってポート/ホストをかえるの?
 
-Martiniの`Run`関数はPORTとHOSTという環境変数を探し、その値を使用します。見つからない場合はlocalhost:3000がデフォルトで使用されます。もっと柔軟性をもとめるなら、`http.ListenAndServe`関数が役に立ちます:
+Martiniの`Run`関数はPORTとHOSTという環境変数を探し、その値を使用します。見つからない場合はlocalhost:3000がデフォルトで使用されます。もっと柔軟性をもとめるなら、`martini.RunOnAddr`関数が役に立ちます:
 
 ~~~ go
   m := martini.Classic()
   // ...
-  log.Fatal(http.ListenAndServe(":8080", m))
+  log.Fatal(m.RunOnAddr(":8080"))
 ~~~
 
 ### Live code reload?

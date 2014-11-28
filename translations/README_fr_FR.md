@@ -324,12 +324,12 @@ func init() {
 ### Comment changer le port/adresse ?
 
 La fonction ```Run``` de Martini utilise le port et l'adresse spécifiés dans les variables d'environnement. Si elles ne peuvent y être trouvées, Martini utilisera *localhost:3000* par default.
-Pour avoir plus de flexibilité sur le port et l'adresse, utilisez la fonction `http.ListenAndServe` à la place.
+Pour avoir plus de flexibilité sur le port et l'adresse, utilisez la fonction `martini.RunOnAddr` à la place.
 
 ~~~ go
   m := martini.Classic()
   // ...
-  log.Fatal(http.ListenAndServe(":8080", m))
+  log.Fatal(m.RunOnAddr(":8080"))
 ~~~
 
 ### Rechargement du code en direct ?
