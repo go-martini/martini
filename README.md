@@ -266,7 +266,7 @@ The following example serves the `/index.html` file whenever any URL is
 requested that does not match any local file and does not start with `/api/v`:
 ~~~ go
 static := martini.Static("assets", martini.StaticOptions{Fallback: "/index.html", Exclude: "/api/v"})
-r.NotFound(static, http.NotFound)
+m.NotFound(static, http.NotFound)
 ~~~
 
 ## Middleware Handlers
