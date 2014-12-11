@@ -2,17 +2,8 @@
 
 Martini Go dilinde hızlı ve modüler web uygulamaları ve servisleri için güçlü bir pakettir.
 
-Diğer dil çevirileri:
-* [简体中文](translations/README_zh_cn.md)
-* [Português Brasileiro (pt_BR)](translations/README_pt_br.md)
-* [Español](translations/README_es_ES.md)
-* [한국어 번역](translations/README_ko_kr.md)
-* [Русский](translations/README_ru_RU.md)
-* [日本語](translations/README_ja_JP.md)
-* [French](translations/README_fr_FR.md)
-* [Turkish](translations/README_tr_TR.md)
 
-## Başlangı.
+## Başlangıç
 
 Go kurulumu ve [GOPATH](http://golang.org/doc/code.html#GOPATH) ayarını yaptıktan sonra, ilk `.go` uzantılı dosyamızı oluşturuyoruz. Bu oluşturduğumuz dosyayı `server.go` olarak adlandıracağız.
 
