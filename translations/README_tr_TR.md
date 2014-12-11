@@ -1,8 +1,8 @@
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
-Martini is a powerful package for quickly writing modular web applications/services in Golang.
+Martini Go dilinde hızlı ve modüler web uygulamaları ve servisleri için güçlü bir pakettir.
 
-Language Translations:
+Diğer dil çevirileri:
 * [简体中文](translations/README_zh_cn.md)
 * [Português Brasileiro (pt_BR)](translations/README_pt_br.md)
 * [Español](translations/README_es_ES.md)
@@ -10,10 +10,11 @@ Language Translations:
 * [Русский](translations/README_ru_RU.md)
 * [日本語](translations/README_ja_JP.md)
 * [French](translations/README_fr_FR.md)
+* [Turkish](translations/README_tr_TR.md)
 
-## Getting Started
+## Başlangı.
 
-After installing Go and setting up your [GOPATH](http://golang.org/doc/code.html#GOPATH), create your first `.go` file. We'll call it `server.go`.
+Go kurulumu ve [GOPATH](http://golang.org/doc/code.html#GOPATH) ayarını yaptıktan sonra, ilk `.go` uzantılı dosyamızı oluşturuyoruz. Bu oluşturduğumuz dosyayı `server.go` olarak adlandıracağız.
 
 ~~~ go
 package main
@@ -29,85 +30,94 @@ func main() {
 }
 ~~~
 
-Then install the Martini package (**go 1.1** and greater is required):
+Martini paketini kurduktan sonra (**go 1.1** ve daha üst go sürümü gerekmektedir.):
+
 ~~~
 go get github.com/go-martini/martini
 ~~~
 
-Then run your server:
+Daha sonra server'ımızı çalıştırıyoruz:
+
 ~~~
 go run server.go
 ~~~
 
-You will now have a Martini webserver running on `localhost:3000`.
-
-## Getting Help
-
-Join the [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
-
-Watch the [Demo Video](http://martini.codegangsta.io/#demo)
-
-Ask questions on Stackoverflow using the [martini tag](http://stackoverflow.com/questions/tagged/martini)
-
-GoDoc [documentation](http://godoc.org/github.com/go-martini/martini)
+Şimdi elimizde çalışan bir adet Martini webserver `localhost:3000`  adresinde bulunmaktadır.
 
 
-## Features
-* Extremely simple to use.
-* Non-intrusive design.
-* Plays nice with other Golang packages.
-* Awesome path matching and routing.
-* Modular design - Easy to add functionality, easy to rip stuff out.
-* Lots of good handlers/middlewares to use.
-* Great 'out of the box' feature set.
-* **Fully compatible with the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
-* Default document serving (e.g., for serving AngularJS apps in HTML5 mode).
+## Yardım Almak İçin 
 
-## More Middleware
-For more middleware and functionality, check out the repositories in the  [martini-contrib](https://github.com/martini-contrib) organization.
+[Mail Listesi](https://groups.google.com/forum/#!forum/martini-go)
 
-## Table of Contents
+[Örnek Video](http://martini.codegangsta.io/#demo)
+
+Stackoverflow üzerinde [martini etiketine](http://stackoverflow.com/questions/tagged/martini) sahip sorular
+
+[GO Diline ait Dökümantasyonlar](http://godoc.org/github.com/go-martini/martini)
+
+
+## Özellikler 
+* Oldukça basit bir kullanıma sahip.
+* Kısıtlama yok.
+* Golang paketleri ile rahat bir şekilde kullanılıyor.
+* Müthiş bir şekilde path eşleştirme ve yönlendirme.
+* Modüler dizayn - Kolay eklenen fonksiyonellik.
+* handlers/middlewares kullanımı çok iyi.
+* Büyük 'kutu dışarı' özellik seti.
+* **[http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) arayüzü ile tam uyumludur.**
+* Varsayılan belgelendirme işlemleri (örnek olarak, AngularJS uygulamalarının HTML5 modunda servis edilmesi).
+
+## Daha Fazla Middleware(Katman)
+
+Daha fazla katman ve fonksiyonellik için, şu repoları inceleyin [martini-contrib](https://github.com/martini-contrib).
+
+## Tablo İçerikleri
 * [Classic Martini](#classic-martini)
-  * [Handlers](#handlers)
-  * [Routing](#routing)
-  * [Services](#services)
-  * [Serving Static Files](#serving-static-files)
-* [Middleware Handlers](#middleware-handlers)
+  * [İşleyiciler / Handlers](#handlers)
+  * [Yönlendirmeler / Routing](#routing)
+  * [Servisler](#services)
+  * [Statik Dosyaların Sunumu](#serving-static-files)
+* [Katman İleyiciler / Middleware Handlers](#middleware-handlers)
   * [Next()](#next)
 * [Martini Env](#martini-env)
 * [FAQ](#faq)
 
 ## Classic Martini
-To get up and running quickly, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) provides some reasonable defaults that work well for most web applications:
+[martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) hızlıca projeyi çalıştırır ve çoğu web uygulaması için iyi çalışan bazı makul varsayılanlar sağlar:
+
 ~~~ go
   m := martini.Classic()
   // ... middleware and routing goes here
   m.Run()
 ~~~
 
-Below is some of the functionality [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) pulls in automatically:
-  * Request/Response Logging - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
-  * Panic Recovery - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
-  * Static File serving - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
-  * Routing - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
+[martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) aşağıdaki bazı fonsiyonelleri  otomatik olarak çeker:
 
-### Handlers
-Handlers are the heart and soul of Martini. A handler is basically any kind of callable function:
+  * İstek/Yanıt Kayıtları (Request/Response Logging) - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
+  * Hataların Düzeltilmesi (Panic Recovery) - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
+  * Statik Dosyaların Sunumu (Static File serving) - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
+  * Yönlendirmeler (Routing) - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
+
+### İşleyiciler (Handlers)
+İşleyiciler Martini'nin ruhu ve kalbidir. Bir işleyici temel olarak her türlü fonksiyonu çağırabilir:
+
 ~~~ go
 m.Get("/", func() {
   println("hello world")
 })
 ~~~
 
-#### Return Values
-If a handler returns something, Martini will write the result to the current [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) as a string:
+#### Geriye Dönen Değerler
+
+Eğer bir işleyici geriye bir şey dönderiyorsa, Martini string olarak sonucu [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) ile yazacaktır:
+
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
 })
 ~~~
 
-You can also optionally return a status code:
+Ayrıca isteğe bağlı bir durum kodu dönderebilir:
 ~~~ go
 m.Get("/", func() (int, string) {
   return 418, "i'm a teapot" // HTTP 418 : "i'm a teapot"
