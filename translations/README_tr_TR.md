@@ -116,26 +116,29 @@ m.Get("/", func() (int, string) {
 ~~~
 
 #### Service Injection
-Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.**
+İşlemciler yansıma yoluyla çağrılır. Martini *Dependency Injection* kullanarak arguman listesindeki bağımlıkları giderir.**Bu sayede Martini go programlama dilinin `http.HandlerFunc` arayüzü ile tamamen uyumlu hale getirilir.**
 
-If you add an argument to your Handler, Martini will search its list of services and attempt to resolve the dependency via type assertion:
+Eğer işleyiciye bir arguman eklersek, Martini "type assertion" ile servis listesinde arayacak ve bağımlılıkları çözmek için girişimde bulunacaktır:
+
 ~~~ go
 m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are injected by Martini
   res.WriteHeader(200) // HTTP 200
 })
 ~~~
 
-The following services are included with [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
-  * [*log.Logger](http://godoc.org/log#Logger) - Global logger for Martini.
-  * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request context.
-  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` of named params found by route matching.
-  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Route helper service.
-  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface.
-  * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
+Aşağıdaki servislerin içerikleri
 
-### Routing
-In Martini, a route is an HTTP method paired with a URL-matching pattern.
-Each route can take one or more handler methods:
+[martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
+  * [*log.Logger](http://godoc.org/log#Logger) - Martini için Global loglayıcı.
+  * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request içereği.
+  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` ile yol eşleme tarafından params olarak isimlendirilen yapılar bulundu.
+  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Yönledirilme için yardımcı olan yapıdır.
+  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http yanıtlarını yazacak olan yapıdır.
+  * [*http.Request](http://godoc.org/net/http/#Request) - http Request(http isteği yapar).
+
+### Yönlendirme - Routing
+Martini'de bir yol HTTP metodu URL-matching pattern'i ile eşleştirilir.
+Her bir yol bir veya daha fazla işleyici metod alabilir:
 ~~~ go
 m.Get("/", func() {
   // show something
@@ -166,39 +169,38 @@ m.NotFound(func() {
 })
 ~~~
 
-Routes are matched in the order they are defined. The first route that
-matches the request is invoked.
+Yollar sırayla tanımlandıkları şekilde eşleştirilir.Request ile eşleşen ilk rota çağrılır.
 
-Route patterns may include named parameters, accessible via the [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) service:
+Yol patternleri [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) servisi tarafından adlandırılan parametreleri içerebilir:
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
   return "Hello " + params["name"]
 })
 ~~~
 
-Routes can be matched with globs:
+Yollar globaller ile eşleşebilir:
 ~~~ go
 m.Get("/hello/**", func(params martini.Params) string {
   return "Hello " + params["_1"]
 })
 ~~~
 
-Regular expressions can be used as well:
+Düzenli ifadeler kullanılabilir:
 ~~~go
 m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
   return fmt.Sprintf ("Hello %s", params["name"])
 })
 ~~~
-Take a look at the [Go documentation](http://golang.org/pkg/regexp/syntax/) for more info about regular expressions syntax .
+Düzenli ifadeler hakkında daha fazla bilgiyi [Go dökümanlarından](http://golang.org/pkg/regexp/syntax/) elde edebilirsiniz.
 
-Route handlers can be stacked on top of each other, which is useful for things like authentication and authorization:
+Yol işleyicileri birbirlerinin üstüne istiflenebilir. Bu durum doğrulama ve yetkilendirme(authentication and authorization) işlemleri için iyi bir yöntemdir: 
 ~~~ go
 m.Get("/secret", authorize, func() {
   // this will execute as long as authorize doesn't write a response
 })
 ~~~
 
-Route groups can be added too using the Group method.
+Yol grupları Grup metodlar kullanılarak eklenebilir.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -208,7 +210,7 @@ m.Group("/books", func(r martini.Router) {
 })
 ~~~
 
-Just like you can pass middlewares to a handler you can pass middlewares to groups.
+Tıpkı katmanların işleyiciler için bazı katman işlemlerini atlayabileceği gibi gruplar içinde atlayabilir.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -312,32 +314,31 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ## Martini Env
 
-Some Martini handlers make use of the `martini.Env` global variable to provide special functionality for development environments vs production environments. It is recommended that the `MARTINI_ENV=production` environment variable to be set when deploying a Martini server into a production environment.
+Bazı Martini işleyicileri `martini.Env` yapısının özel fonksiyonlarını kullanmak için geliştirici ortamları, üretici ortamları vs. kullanır.Bu üretim ortamına Martini sunucu kurulurken `MARTINI_ENV=production` şeklinde ortam değişkeninin ayarlanması gerekir.
 
 ## FAQ
 
-### Where do I find middleware X?
+### Katman X'i Nerede Bulurum?
 
-Start by looking in the [martini-contrib](https://github.com/martini-contrib) projects. If it is not there feel free to contact a martini-contrib team member about adding a new repo to the organization.
+[martini-contrib](https://github.com/martini-contrib) projelerine bakarak başlayın. Eğer aradığınız şey orada mevcut değil ise yeni bir repo eklemek için martini-contrib takım üyeleri ile iletişime geçin.
 
-* [auth](https://github.com/martini-contrib/auth) - Handlers for authentication.
-* [binding](https://github.com/martini-contrib/binding) - Handler for mapping/validating a raw request into a structure.
-* [gzip](https://github.com/martini-contrib/gzip) - Handler for adding gzip compress to requests
-* [render](https://github.com/martini-contrib/render) - Handler that provides a service for easily rendering JSON and HTML templates.
-* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler for parsing the `Accept-Language` HTTP header.
-* [sessions](https://github.com/martini-contrib/sessions) - Handler that provides a Session service.
-* [strip](https://github.com/martini-contrib/strip) - URL Prefix stripping.
-* [method](https://github.com/martini-contrib/method) - HTTP method overriding via Header or form fields.
-* [secure](https://github.com/martini-contrib/secure) - Implements a few quick security wins.
-* [encoder](https://github.com/martini-contrib/encoder) - Encoder service for rendering data in several formats and content negotiation.
-* [cors](https://github.com/martini-contrib/cors) - Handler that enables CORS support.
-* [oauth2](https://github.com/martini-contrib/oauth2) - Handler that provides OAuth 2.0 login for Martini apps. Google Sign-in, Facebook Connect and Github login is supported.
-* [vauth](https://github.com/rafecolton/vauth) - Handlers for vender webhook authentication (currently GitHub and TravisCI)
+* [auth](https://github.com/martini-contrib/auth) - Kimlik doğrulama için işleyiciler.
+* [binding](https://github.com/martini-contrib/binding) - Mapping/Validating yapısı içinde ham request'i doğrulamak için kullanılan işleyici(handler)
+* [gzip](https://github.com/martini-contrib/gzip) - İstekleri gzip sıkışıtırıp eklemek için kullanılan işleyici
+* [render](https://github.com/martini-contrib/render) - Kolay bir şekilde JSON ve HTML şablonları oluşturmak için kullanılan işleyici.
+* [acceptlang](https://github.com/martini-contrib/acceptlang) - `Kabul edilen dile` göre HTTP başlığını oluşturmak için kullanılan işleyici.
+* [sessions](https://github.com/martini-contrib/sessions) - Oturum hizmeti vermek için kullanılır.
+* [strip](https://github.com/martini-contrib/strip) - İşleyicilere gitmeden önce URL'ye ait ön şeriti değiştirme işlemini yapar.
+* [method](https://github.com/martini-contrib/method) - Formlar ve başlık için http metodunu override eder.
+* [secure](https://github.com/martini-contrib/secure) - Birkaç hızlı güvenlik uygulaması ile kazanımda bulundurur.
+* [encoder](https://github.com/martini-contrib/encoder) - Encoder servis veri işlemleri için çeşitli format ve içerik sağlar.
+* [cors](https://github.com/martini-contrib/cors) - İşleyicilerin CORS desteği bulunur.
+* [oauth2](https://github.com/martini-contrib/oauth2) - İşleyiciler OAuth 2.0 için Martini uygulamalarına giriş sağlar. Google , Facebook ve Github için desteği mevcuttur.
+* [vauth](https://github.com/rafecolton/vauth) - Webhook için giriş izni sağlar. (şimdilik sadece GitHub ve TravisCI ile)
 
-### How do I integrate with existing servers?
+### Mevcut Sunucular ile Nasıl Entegre Edilir?
 
-A Martini instance implements `http.Handler`, so it can easily be used to serve subtrees
-on existing Go servers. For example this is a working Martini app for Google App Engine:
+Bir martini örneği `http.Handler`'ı projeye dahil eder, bu sayde kolay bir şekilde mevcut olan Go sunucularında  bulunan alt ağaçlarda kullanabilir. Örnek olarak, bu olay Google App Engine için hazırlanmış Martini uygulamalarında kullanılmaktadır:
 
 ~~~ go
 package hello
@@ -356,10 +357,11 @@ func init() {
 }
 ~~~
 
-### How do I change the port/host?
+### port/hostu nasıl değiştiririm?
 
-Martini's `Run` function looks for the PORT and HOST environment variables and uses those. Otherwise Martini will default to localhost:3000.
-To have more flexibility over port and host, use the `martini.RunOnAddr` function instead.
+Martini'ye ait `Run` fonksiyounu PORT ve HOST'a ait ortam değişkenlerini arar ve bunları kullanır. Aksi taktirde standart olarak localhost:3000 adresini port ve host olarak kullanacaktır.
+
+Port ve host için daha fazla esneklik isteniyorsa `martini.RunOnAddr` fonksiyonunu kullanın.
 
 ~~~ go
   m := martini.Classic()
@@ -367,15 +369,16 @@ To have more flexibility over port and host, use the `martini.RunOnAddr` functio
   log.Fatal(m.RunOnAddr(":8080"))
 ~~~
 
-### Live code reload?
+### Anlık Kod Yüklemesi?
 
-[gin](https://github.com/codegangsta/gin) and [fresh](https://github.com/pilu/fresh) both live reload martini apps.
+[gin](https://github.com/codegangsta/gin) ve [fresh](https://github.com/pilu/fresh) anlık kod yüklemeleri yapan martini uygulamalarıdır.
 
-## Contributing
-Martini is meant to be kept tiny and clean. Most contributions should end up in a repository in the [martini-contrib](https://github.com/martini-contrib) organization. If you do have a contribution for the core of Martini feel free to put up a Pull Request.
+## Katkıda Bulunmak
+Martini'nin temiz ve düzenli olaması gerekiyordu. 
+Martini is meant to be kept tiny and clean. Tüm kullanıcılar katkı yapmak için [martini-contrib](https://github.com/martini-contrib) organizasyonunda yer alan repoları bitirmelidirler. Eğer martini core için katkıda bulunacaksanız fork işlemini yaparak başlayabilirsiniz.
 
-## About
+## Hakkında 
 
-Inspired by [express](https://github.com/visionmedia/express) and [sinatra](https://github.com/sinatra/sinatra)
+[express](https://github.com/visionmedia/express) ve [sinatra](https://github.com/sinatra/sinatra) projelerinden esinlenmiştir.
 
-Martini is obsessively designed by none other than the [Code Gangsta](http://codegangsta.io/)
+Martini [Code Gangsta](http://codegangsta.io/) tarafından tasarlanılmıştır.
