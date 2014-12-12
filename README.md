@@ -10,6 +10,7 @@ Language Translations:
 * [Русский](translations/README_ru_RU.md)
 * [日本語](translations/README_ja_JP.md)
 * [French](translations/README_fr_FR.md)
+* [Turkish](translations/README_tr_TR.md)
 
 ## Getting Started
 
