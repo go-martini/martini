@@ -58,9 +58,9 @@ Stackoverflow üzerinde [martini etiketine](http://stackoverflow.com/questions/t
 * **[http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) arayüzü ile tam uyumludur.**
 * Varsayılan belgelendirme işlemleri (örnek olarak, AngularJS uygulamalarının HTML5 modunda servis edilmesi).
 
-## Daha Fazla Middleware(Katman)
+## Daha Fazla Middleware(Ara Katman)
 
-Daha fazla katman ve fonksiyonellik için, şu repoları inceleyin [martini-contrib](https://github.com/martini-contrib).
+Daha fazla ara katman ve fonksiyonellik için, şu repoları inceleyin [martini-contrib](https://github.com/martini-contrib).
 
 ## Tablo İçerikleri
 * [Classic Martini](#classic-martini)
@@ -68,7 +68,7 @@ Daha fazla katman ve fonksiyonellik için, şu repoları inceleyin [martini-cont
   * [Yönlendirmeler / Routing](#routing)
   * [Servisler](#services)
   * [Statik Dosyaların Sunumu](#serving-static-files)
-* [Katman İleyiciler / Middleware Handlers](#middleware-handlers)
+* [Katman İşleyiciler / Middleware Handlers](#middleware-handlers)
   * [Next()](#next)
 * [Martini Env](#martini-env)
 * [FAQ](#faq)
@@ -210,7 +210,7 @@ m.Group("/books", func(r martini.Router) {
 })
 ~~~
 
-Tıpkı katmanların işleyiciler için bazı katman işlemlerini atlayabileceği gibi gruplar içinde atlayabilir.
+Tıpkı ara katmanların işleyiciler için bazı ara katman işlemlerini atlayabileceği gibi gruplar içinde atlayabilir.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -220,11 +220,14 @@ m.Group("/books", func(r martini.Router) {
 }, MyMiddleware1, MyMiddleware2)
 ~~~
 
-### Services
-Services are objects that are available to be injected into a Handler's argument list. You can map a service on a *Global* or *Request* level.
+### Servisler
 
-#### Global Mapping
-A Martini instance implements the inject.Injector interface, so mapping a service is easy:
+Servisler işleyicilerin arguman listesine enjekte edilecek kullanılabilir nesnelerdir. İstenildiği taktirde bir servis *Global* ve *Request* seviyesinde eşlenebilir.
+
+#### Global Eşleme - Global Mapping
+
+Bir martini örneği(instance) projeye enjekte edilir. 
+A Martini instance implements the inject.Enjekte arayüzü, çok kolay bir şekilde servis eşlemesi yapar:
 ~~~ go
 db := &MyDatabase{}
 m := martini.Classic()
@@ -234,7 +237,7 @@ m.Run()
 ~~~
 
 #### Request-Level Mapping
-Mapping on the request level can be done in a handler via [martini.Context](http://godoc.org/github.com/go-martini/martini#Context):
+Request düzeyinde eşleme yapmak üzere işleyici [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) ile oluşturulabilir:
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
   logger := &MyCustomLogger{req}
@@ -242,8 +245,9 @@ func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
 }
 ~~~
 
-#### Mapping values to Interfaces
-One of the most powerful parts about services is the ability to map a service to an interface. For instance, if you wanted to override the [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) with an object that wrapped it and performed extra operations, you can write the following handler:
+#### Arayüz Eşleme Değerleri
+Servisler hakkındaki en güçlü şeylerden birisi bir arabirim ile bir servis eşleşmektedir. Örneğin, istenirse [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) yapısı paketlenmiş ve ekstra işlemleri gerçekleştirilen bir nesne ile  override edilebilir. Şu işleyici yazılabilir:
+
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
@@ -251,36 +255,34 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 }
 ~~~
 
-### Serving Static Files
-A [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) instance automatically serves static files from the "public" directory in the root of your server.
-You can serve from more directories by adding more [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) handlers.
+### Statik Dosyaların Sunumu
+
+[martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) örneği otomatik olarak statik dosyaları serverda root içinde yer alan "public" dizininden servis edilir.
+
+Eğer istenirse daha fazla [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) işleyicisi eklenerek daha fazla dizin servis edilebilir.
 ~~~ go
 m.Use(martini.Static("assets")) // serve from the "assets" directory as well
 ~~~
 
-#### Serving a Default Document
-You can specify the URL of a local file to serve when the requested URL is not
-found. You can also specify an exclusion prefix so that certain URLs are ignored.
-This is useful for servers that serve both static files and have additional
-handlers defined (e.g., REST API). When doing so, it's useful to define the
-static handler as a part of the NotFound chain.
+#### Standart Dökümanların Sunulması - Serving a Default Document
 
-The following example serves the `/index.html` file whenever any URL is
-requested that does not match any local file and does not start with `/api/v`:
+Eğer istenilen URL bulunamaz ise özel bir URL dönderilebilir. Ayrıca bir dışlama(exclusion) ön eki ile bazı URL'ler göz ardı edilir. Bu durum statik dosyaların ve ilave işleyiciler için kullanışlıdır(Örneğin, REST API). Bunu yaparken, bu işlem ile NotFound zincirinin bir parçası olan statik işleyiciyi tanımlamak kolaydır.
+
+Herhangi bir URL isteği bir local dosya ile eşleşmediği ve `/api/v` ile başlamadığı zaman aşağıdaki örnek `/index.html` dosyasını sonuç olarak geriye döndürecektir.
 ~~~ go
 static := martini.Static("assets", martini.StaticOptions{Fallback: "/index.html", Exclude: "/api/v"})
 m.NotFound(static, http.NotFound)
 ~~~
 
-## Middleware Handlers
-Middleware Handlers sit between the incoming http request and the router. In essence they are no different than any other Handler in Martini. You can add a middleware handler to the stack like so:
+## Ara Katman İşleyicileri
+Ara katmana ait işleyiciler http isteği ve yönlendirici arasında bulunmaktadır. Özünde onlar diğer Martini işleyicilerinden farklı değildirler. İstenildiği taktirde bir yığına ara katman işleyicisi şu şekilde eklenebilir:
 ~~~ go
 m.Use(func() {
   // do some middleware stuff
 })
 ~~~
 
-You can have full control over the middleware stack with the `Handlers` function. This will replace any handlers that have been previously set:
+`Handlers` fonksiyonu ile ara katman yığını üzerinde tüm kontrole sahip olunabilir. Bu daha önceden ayarlanmış herhangi bir işleyicinin yerini alacaktır:
 ~~~ go
 m.Handlers(
   Middleware1,
@@ -289,7 +291,8 @@ m.Handlers(
 )
 ~~~
 
-Middleware Handlers work really well for things like logging, authorization, authentication, sessions, gzipping, error pages and any other operations that must happen before or after an http request:
+Orta katman işleyicileri loglama, giriş , yetkilendirme , sessionlar, sıkıştırma(gzipping) , hata sayfaları ve HTTP isteklerinden önce ve sonra herhangi bir olay sonucu oluşan durumlar için gerçekten iyi bir yapıya sahiptir:
+
 ~~~ go
 // validate an api key
 m.Use(func(res http.ResponseWriter, req *http.Request) {
@@ -300,7 +303,7 @@ m.Use(func(res http.ResponseWriter, req *http.Request) {
 ~~~
 
 ### Next()
-[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) is an optional function that Middleware Handlers can call to yield the until after the other Handlers have been executed. This works really well for any operations that must happen after an http request:
+[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) orta katman işleyicilerinin diğer işleyiciler yok edilmeden çağrılmasını sağlayan opsiyonel bir fonksiyondur.Bu iş http işlemlerinden sonra gerçekleşecek işlemler için gerçekten iyidir:
 ~~~ go
 // log before and after a request
 m.Use(func(c martini.Context, log *log.Logger){
@@ -318,7 +321,7 @@ Bazı Martini işleyicileri `martini.Env` yapısının özel fonksiyonlarını k
 
 ## FAQ
 
-### Katman X'i Nerede Bulurum?
+### Ara Katmanda X'i Nerede Bulurum?
 
 [martini-contrib](https://github.com/martini-contrib) projelerine bakarak başlayın. Eğer aradığınız şey orada mevcut değil ise yeni bir repo eklemek için martini-contrib takım üyeleri ile iletişime geçin.
 
