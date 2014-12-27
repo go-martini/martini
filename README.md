@@ -30,7 +30,7 @@ func main() {
 }
 ~~~
 
-Then install the Martini package (**go 1.1** and greater is required):
+Then install the Martini package (**go 1.1** or greater is required):
 ~~~
 go get github.com/go-martini/martini
 ~~~
