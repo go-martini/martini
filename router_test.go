@@ -50,6 +50,30 @@ func Test_Routing(t *testing.T) {
 	req13, _ := http.NewRequest("GET", "http://localhost:3000/bazz/in/ga", nil)
 	context13 := New().createContext(recorder, req13)
 
+	routeGetReq, _ := http.NewRequest("GET", "http://localhost:3000/route", nil)
+	routeGetContext := New().createContext(recorder, routeGetReq)
+
+	routePostReq, _ := http.NewRequest("POST", "http://localhost:3000/route", nil)
+	routePostContext := New().createContext(recorder, routePostReq)
+
+	routePutReq, _ := http.NewRequest("PUT", "http://localhost:3000/route", nil)
+	routePutContext := New().createContext(recorder, routePutReq)
+
+	routePatchReq, _ := http.NewRequest("PATCH", "http://localhost:3000/route", nil)
+	routePatchContext := New().createContext(recorder, routePatchReq)
+
+	routeDeleteReq, _ := http.NewRequest("DELETE", "http://localhost:3000/route", nil)
+	routeDeleteContext := New().createContext(recorder, routeDeleteReq)
+
+	routeOptionsReq, _ := http.NewRequest("OPTIONS", "http://localhost:3000/route", nil)
+	routeOptionsContext := New().createContext(recorder, routeOptionsReq)
+
+	routeHeadReq, _ := http.NewRequest("HEAD", "http://localhost:3000/route", nil)
+	routeHeadContext := New().createContext(recorder, routeHeadReq)
+
+	routeGetParamsReq, _ := http.NewRequest("GET", "http://localhost:3000/route/66", nil)
+	routeGetParamsContext := New().createContext(recorder, routeGetParamsReq)
+
 	result := ""
 	router.Get("/foo", func(req *http.Request) {
 		result += "foo"
@@ -111,6 +135,27 @@ func Test_Routing(t *testing.T) {
 		result += "inga"
 	})
 
+	routeResult := ""
+	router.Route("/route").Get(func() {
+		routeResult += "gethead"
+	}).Post(func() {
+		routeResult += "post"
+	}).Put(func() {
+		routeResult += "put"
+	}).Patch(func() {
+		routeResult += "patch"
+	}).Delete(func() {
+		routeResult += "delete"
+	}).Options(func() {
+		routeResult += "options"
+	}).Head(func() {
+		routeResult += "gethead"
+	})
+	router.Route("/route/:route").Get(func(params Params) {
+		expect(t, params["route"], "66")
+		routeResult += "params"
+	})
+
 	router.Handle(recorder, req, context)
 	router.Handle(recorder, req2, context2)
 	router.Handle(recorder, req3, context3)
@@ -124,7 +169,16 @@ func Test_Routing(t *testing.T) {
 	router.Handle(recorder, req11, context11)
 	router.Handle(recorder, req12, context12)
 	router.Handle(recorder, req13, context13)
+	router.Handle(recorder, routeGetReq, routeGetContext)
+	router.Handle(recorder, routePostReq, routePostContext)
+	router.Handle(recorder, routePutReq, routePutContext)
+	router.Handle(recorder, routePatchReq, routePatchContext)
+	router.Handle(recorder, routeDeleteReq, routeDeleteContext)
+	router.Handle(recorder, routeOptionsReq, routeOptionsContext)
+	router.Handle(recorder, routeHeadReq, routeHeadContext)
+	router.Handle(recorder, routeGetParamsReq, routeGetParamsContext)
 	expect(t, result, "foobarbatbarfoofezpopbapwappowwappowoptsfoobazzingagetbazzingapostbazzingagroupception")
+	expect(t, routeResult, "getheadpostputpatchdeleteoptionsgetheadparams")
 	expect(t, recorder.Code, http.StatusNotFound)
 	expect(t, recorder.Body.String(), "404 page not found\n")
 }
