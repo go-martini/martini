@@ -33,6 +33,7 @@ type Router interface {
 	Head(string, ...Handler) Route
 	// Any adds a route for any HTTP method request to the specified matching pattern.
 	Any(string, ...Handler) Route
+	Route(string) RouteSet
 
 	// NotFound sets the handlers that are called when a no route matches a request. Throws a basic 404 by default.
 	NotFound(...Handler)
@@ -45,6 +46,7 @@ type router struct {
 	routes    []*route
 	notFounds []Handler
 	groups    []group
+	routeSets []*routeset
 }
 
 type group struct {
@@ -101,6 +103,17 @@ func (r *router) Head(pattern string, h ...Handler) Route {
 
 func (r *router) Any(pattern string, h ...Handler) Route {
 	return r.addRoute("*", pattern, h)
+}
+
+func (r *router) Route(pattern string) RouteSet {
+	return r.addRouteSet(pattern)
+}
+
+func (r *router) addRouteSet(pattern string) *routeset {
+	routeSet := newRouteSet(pattern, r)
+	//routeSet.Validate()
+	r.routeSets = append(r.routeSets, routeSet)
+	return routeSet
 }
 
 func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Context) {
@@ -176,21 +189,55 @@ type route struct {
 	name     string
 }
 
+type RouteSet interface {
+	// Get adds a route for a HTTP GET request to the specified matching pattern.
+	Get(...Handler) RouteSet
+	// Patch adds a route for a HTTP PATCH request to the specified matching pattern.
+	/*Patch(string, ...Handler) RouteSet
+	// Post adds a route for a HTTP POST request to the specified matching pattern.
+	Post(string, ...Handler) RouteSet
+	// Put adds a route for a HTTP PUT request to the specified matching pattern.
+	Put(string, ...Handler) RouteSet
+	// Delete adds a route for a HTTP DELETE request to the specified matching pattern.
+	Delete(string, ...Handler) RouteSet
+	// Options adds a route for a HTTP OPTIONS request to the specified matching pattern.
+	Options(string, ...Handler) RouteSet
+	// Head adds a route for a HTTP HEAD request to the specified matching pattern.
+	Head(string, ...Handler) RouteSet
+	// Any adds a route for any HTTP method request to the specified matching pattern.
+	Any(string, ...Handler) RouteSet*/
+}
+
+func (rs *routeset) Get(h ...Handler) RouteSet {
+	rs.router.addRoute("GET", rs.pattern, h)
+	return rs
+}
+
+type routeset struct {
+	pattern string
+	router *router
+}
+
 func newRoute(method string, pattern string, handlers []Handler) *route {
 	route := route{method, nil, handlers, pattern, ""}
 	r := regexp.MustCompile(`:[^/#?()\.\\]+`)
 	pattern = r.ReplaceAllStringFunc(pattern, func(m string) string {
-		return fmt.Sprintf(`(?P<%s>[^/#?]+)`, m[1:])
-	})
+			return fmt.Sprintf(`(?P<%s>[^/#?]+)`, m[1:])
+		})
 	r2 := regexp.MustCompile(`\*\*`)
 	var index int
 	pattern = r2.ReplaceAllStringFunc(pattern, func(m string) string {
-		index++
-		return fmt.Sprintf(`(?P<_%d>[^#?]*)`, index)
-	})
+			index++
+			return fmt.Sprintf(`(?P<_%d>[^#?]*)`, index)
+		})
 	pattern += `\/?`
 	route.regex = regexp.MustCompile(pattern)
 	return &route
+}
+
+func newRouteSet(pattern string, router *router) *routeset {
+	routeset := routeset{pattern, router}
+	return &routeset
 }
 
 func (r route) MatchMethod(method string) bool {
