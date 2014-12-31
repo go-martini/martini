@@ -111,7 +111,6 @@ func (r *router) Route(pattern string) RouteSet {
 
 func (r *router) addRouteSet(pattern string) *routeset {
 	routeSet := newRouteSet(pattern, r)
-	//routeSet.Validate()
 	r.routeSets = append(r.routeSets, routeSet)
 	return routeSet
 }
@@ -193,23 +192,58 @@ type RouteSet interface {
 	// Get adds a route for a HTTP GET request to the specified matching pattern.
 	Get(...Handler) RouteSet
 	// Patch adds a route for a HTTP PATCH request to the specified matching pattern.
-	/*Patch(string, ...Handler) RouteSet
+	Patch(...Handler) RouteSet
 	// Post adds a route for a HTTP POST request to the specified matching pattern.
-	Post(string, ...Handler) RouteSet
+	Post(...Handler) RouteSet
 	// Put adds a route for a HTTP PUT request to the specified matching pattern.
-	Put(string, ...Handler) RouteSet
+	Put(...Handler) RouteSet
 	// Delete adds a route for a HTTP DELETE request to the specified matching pattern.
-	Delete(string, ...Handler) RouteSet
+	Delete(...Handler) RouteSet
 	// Options adds a route for a HTTP OPTIONS request to the specified matching pattern.
-	Options(string, ...Handler) RouteSet
+	Options(...Handler) RouteSet
 	// Head adds a route for a HTTP HEAD request to the specified matching pattern.
-	Head(string, ...Handler) RouteSet
+	Head(...Handler) RouteSet
 	// Any adds a route for any HTTP method request to the specified matching pattern.
-	Any(string, ...Handler) RouteSet*/
+	Any(...Handler) RouteSet
 }
 
 func (rs *routeset) Get(h ...Handler) RouteSet {
 	rs.router.addRoute("GET", rs.pattern, h)
+	return rs
+}
+
+func (rs *routeset) Patch(h ...Handler) RouteSet {
+	rs.router.addRoute("PATCH", rs.pattern, h)
+	return rs
+}
+
+func (rs *routeset) Post(h ...Handler) RouteSet {
+	rs.router.addRoute("POST", rs.pattern, h)
+	return rs
+}
+
+func (rs *routeset) Put(h ...Handler) RouteSet {
+	rs.router.addRoute("PUT", rs.pattern, h)
+	return rs
+}
+
+func (rs *routeset) Delete(h ...Handler) RouteSet {
+	rs.router.addRoute("DELETE", rs.pattern, h)
+	return rs
+}
+
+func (rs *routeset) Options(h ...Handler) RouteSet {
+	rs.router.addRoute("OPTIONS", rs.pattern, h)
+	return rs
+}
+
+func (rs *routeset) Head(h ...Handler) RouteSet {
+	rs.router.addRoute("HEAD", rs.pattern, h)
+	return rs
+}
+
+func (rs *routeset) Any(h ...Handler) RouteSet {
+	rs.router.addRoute("*", rs.pattern, h)
 	return rs
 }
 
