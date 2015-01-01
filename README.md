@@ -218,6 +218,17 @@ m.Group("/books", func(r martini.Router) {
 }, MyMiddleware1, MyMiddleware2)
 ~~~
 
+It's possible to define a route set to listen on different HTTP methods of a single route with the *Route* feature:
+~~~ go
+m.Route("/").Get(func() {
+    // show something
+}).Post(func() {
+    // create something
+}).Put(func() {
+    // replace something
+})
+~~~
+
 ### Services
 Services are objects that are available to be injected into a Handler's argument list. You can map a service on a *Global* or *Request* level.
 
