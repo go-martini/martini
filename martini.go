@@ -141,16 +141,18 @@ func (m *Martini) RunOnAddr(addr string) {
 
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {
-		panic(err)
+		logger.Fatalln(err)
 	}
 
 	newSl, err := newStoppableListener(ln)
 	if err != nil {
-		panic(err)
+		logger.Fatalln(err)
 	}
 
 	m.sl = newSl
+
 	serveError := http.Serve(m.sl, m)
+
 	if serveError == stoppedError {
 		logger.Println("Server stopped.")
 		// do nothing, we were stopping
