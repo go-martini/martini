@@ -1,21 +1,12 @@
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
-Martini is a powerful package for quickly writing modular web applications/services in Golang.
+Martini是一個使用Go語言來快速開發模組化Web應用程式或服務的強大套件
 
-Language Translations:
-* [繁體中文](translations/README_zh_tw.md)
-* [简体中文](translations/README_zh_cn.md)
-* [Português Brasileiro (pt_BR)](translations/README_pt_br.md)
-* [Español](translations/README_es_ES.md)
-* [한국어 번역](translations/README_ko_kr.md)
-* [Русский](translations/README_ru_RU.md)
-* [日本語](translations/README_ja_JP.md)
-* [French](translations/README_fr_FR.md)
-* [Turkish](translations/README_tr_TR.md)
+## 開始
 
-## Getting Started
-
-After installing Go and setting up your [GOPATH](http://golang.org/doc/code.html#GOPATH), create your first `.go` file. We'll call it `server.go`.
+在您安裝Go語言以及設定好
+[GOPATH](http://golang.org/doc/code.html#GOPATH)環境變數後,
+開始寫您第一支`.go`檔, 我們將稱它為`server.go`
 
 ~~~ go
 package main
@@ -31,92 +22,93 @@ func main() {
 }
 ~~~
 
-Then install the Martini package (**go 1.1** or greater is required):
+然後安裝Martini套件 (**go 1.1**以上的版本是必要的)
 ~~~
 go get github.com/go-martini/martini
 ~~~
 
-Then run your server:
+然後利用以下指令執行你的程式:
 ~~~
 go run server.go
 ~~~
 
-You will now have a Martini webserver running on `localhost:3000`.
+此時, 您將會看到一個Martini Web伺服器在`localhost:3000`上執行
 
-## Getting Help
+## 尋求幫助
 
-Join the [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
+可以加入 [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
 
-Watch the [Demo Video](http://martini.codegangsta.io/#demo)
+觀看 [Demo Video](http://martini.codegangsta.io/#demo)
 
-Ask questions on Stackoverflow using the [martini tag](http://stackoverflow.com/questions/tagged/martini)
+## 功能
 
-GoDoc [documentation](http://godoc.org/github.com/go-martini/martini)
+* 超容易使用
+* 非侵入式設計
+* 很容易跟其他Go套件同時使用
+* 很棒的路徑matching和routing方式
+* 模組化設計 - 容易增加或移除功能
+* 有很多handlers或middlewares可以直接使用
+* 已經提供很多內建功能
+* **跟[http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) 介面**完全相容
+* 預設document服務 (例如, 提供AngularJS在HTML5模式的服務)
 
+## 其他Middleware
+尋找更多的middleware或功能, 請到  [martini-contrib](https://github.com/martini-contrib)程式集搜尋
 
-## Features
-* Extremely simple to use.
-* Non-intrusive design.
-* Plays nice with other Golang packages.
-* Awesome path matching and routing.
-* Modular design - Easy to add functionality, easy to rip stuff out.
-* Lots of good handlers/middlewares to use.
-* Great 'out of the box' feature set.
-* **Fully compatible with the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
-* Default document serving (e.g., for serving AngularJS apps in HTML5 mode).
-
-## More Middleware
-For more middleware and functionality, check out the repositories in the  [martini-contrib](https://github.com/martini-contrib) organization.
-
-## Table of Contents
+## 目錄
 * [Classic Martini](#classic-martini)
-  * [Handlers](#handlers)
-  * [Routing](#routing)
-  * [Services](#services)
-  * [Serving Static Files](#serving-static-files)
+* [Handlers](#handlers)
+* [Routing](#routing)
+* [服務](#services)
+* [伺服靜態檔案](#serving-static-files)
 * [Middleware Handlers](#middleware-handlers)
-  * [Next()](#next)
+* [Next()](#next)
 * [Martini Env](#martini-env)
-* [FAQ](#faq)
+* [常見問題與答案](#faq)
 
 ## Classic Martini
-To get up and running quickly, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) provides some reasonable defaults that work well for most web applications:
+
+[martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic)
+提供大部份web應用程式所需要的基本預設功能:
+
 ~~~ go
   m := martini.Classic()
   // ... middleware and routing goes here
   m.Run()
 ~~~
+[martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic)
+ 會自動提供以下功能
+* Request/Response Logging - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
+* Panic Recovery - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
+* Static File serving - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
+* Routing - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
 
-Below is some of the functionality [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) pulls in automatically:
-  * Request/Response Logging - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
-  * Panic Recovery - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
-  * Static File serving - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
-  * Routing - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
 
 ### Handlers
-Handlers are the heart and soul of Martini. A handler is basically any kind of callable function:
+Handlers是Martini的核心, 每個handler就是一個基本的呼叫函式, 例如:
 ~~~ go
 m.Get("/", func() {
   println("hello world")
 })
 ~~~
 
-#### Return Values
-If a handler returns something, Martini will write the result to the current [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) as a string:
+#### 回傳值
+如果一個handler有回傳值, Martini就會用字串的方式將結果寫回現在的
+[http.ResponseWriter](http://godoc.org/net/http#ResponseWriter), 例如:
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
 })
 ~~~
 
-You can also optionally return a status code:
+你也可以選擇回傳狀態碼, 例如:
 ~~~ go
 m.Get("/", func() (int, string) {
   return 418, "i'm a teapot" // HTTP 418 : "i'm a teapot"
 })
 ~~~
 
-#### Service Injection
+#### 注入服務
 Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.**
 
 If you add an argument to your Handler, Martini will search its list of services and attempt to resolve the dependency via type assertion:
