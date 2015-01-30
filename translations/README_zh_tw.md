@@ -59,12 +59,12 @@ go run server.go
 * [Classic Martini](#classic-martini)
 * [Handlers](#handlers)
 * [Routing](#routing)
-* [服務](#services)
-* [伺服靜態檔案](#serving-static-files)
+* [服務](#服務)
+* [伺服靜態檔案](#伺服靜態檔案)
 * [Middleware Handlers](#middleware-handlers)
 * [Next()](#next)
 * [Martini Env](#martini-env)
-* [常見問題與答案](#faq)
+* [常見問題與答案](#常見問題與答案)
 
 ## Classic Martini
 
