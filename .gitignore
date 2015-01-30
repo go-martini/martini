@@ -24,3 +24,5 @@ _testmain.go
 
 /.godeps
 /.envrc
+
+.idea
