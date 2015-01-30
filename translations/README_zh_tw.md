@@ -1,6 +1,6 @@
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
-Martini是一個使用Go語言來快速開發模組化Web應用程式或服務的強大套件
+Martini 是一個使用 Go 語言來快速開發模組化 Web 應用程式或服務的強大套件
 
 ## 開始
 
@@ -32,7 +32,7 @@ go get github.com/go-martini/martini
 go run server.go
 ~~~
 
-此時, 您將會看到一個Martini Web伺服器在`localhost:3000`上執行
+此時, 您將會看到一個 Martini Web 伺服器在`localhost:3000`上執行
 
 ## 尋求幫助
 
@@ -59,12 +59,12 @@ go run server.go
 * [Classic Martini](#classic-martini)
 * [Handlers](#handlers)
 * [Routing](#routing)
-* [服務](#服務)
-* [伺服靜態檔案](#伺服靜態檔案)
+* [Service (服務)](#service)
+* [Serving Static Files (伺服靜態檔案)](#serving-static-files)
 * [Middleware Handlers](#middleware-handlers)
 * [Next()](#next)
 * [Martini Env](#martini-env)
-* [常見問題與答案](#常見問題與答案)
+* [FAQ (常見問題與答案)](#faq)
 
 ## Classic Martini
 
@@ -213,7 +213,7 @@ m.Group("/books", func(r martini.Router) {
 }, MyMiddleware1, MyMiddleware2)
 ~~~
 
-### 服務
+### Services (服務)
 服務是一些物件可以被注入 Handler 變數裡的東西, 可以分對應到 *Global* 或 *Request* 兩種等級.
 
 #### Global Mapping (全域級對應)
@@ -245,7 +245,7 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 }
 ~~~
 
-### 伺服靜態檔案
+### Serving Static Files (伺服靜態檔案)
 一個[martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) 實體會將伺服器根目錄下 public 子目錄裡的檔案自動當成靜態檔案處理. 你也可以手動用 [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) 增加其他目錄, 例如.
 ~~~ go
 m.Use(martini.Static("assets")) // "assets" 子目錄裡, 也視為靜態檔案
@@ -311,7 +311,7 @@ m.Use(func(c martini.Context, log *log.Logger){
 有些 Martini handlers 使用 `martini.Env` 全區域變數, 來當成開發環境或是上架 (production)
 環境的設定判斷. 建議用 `MARTINI_ENV=production` 環境變數來設定 Martini 伺服器是上架與否.
 
-## 常見問題與答案
+## FAQ (常見問題與答案)
 
 ### 我去哪可以找到 middleware X?
 
