@@ -16,7 +16,7 @@ import "github.com/go-martini/martini"
 func main() {
   m := martini.Classic()
   m.Get("/", func() string {
-    return "Hello world!"
+    return "Hello 世界!"
   })
   m.Run()
 }
@@ -73,7 +73,7 @@ go run server.go
 
 ~~~ go
   m := martini.Classic()
-  // ... middleware and routing goes here
+  // ... middleware 或 routing 寫在這裡
   m.Run()
 ~~~
 [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic)
@@ -85,73 +85,76 @@ go run server.go
 
 
 ### Handlers
-Handlers是Martini的核心, 每個handler就是一個基本的呼叫函式, 例如:
+Handlers 是 Martini 的核心, 每個 handler 就是一個基本的呼叫函式, 例如:
 ~~~ go
 m.Get("/", func() {
-  println("hello world")
+  println("hello 世界")
 })
 ~~~
 
 #### 回傳值
-如果一個handler有回傳值, Martini就會用字串的方式將結果寫回現在的
+如果一個 handler 有回傳值, Martini就會用字串的方式將結果寫回現在的
 [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter), 例如:
 ~~~ go
 m.Get("/", func() string {
-  return "hello world" // HTTP 200 : "hello world"
+  return "hello 世界" // HTTP 200 : "hello 世界"
 })
 ~~~
 
 你也可以選擇回傳狀態碼, 例如:
 ~~~ go
 m.Get("/", func() (int, string) {
-  return 418, "i'm a teapot" // HTTP 418 : "i'm a teapot"
+  return 418, "我是一個茶壺" // HTTP 418 : "我是一個茶壺"
 })
 ~~~
 
-#### 注入服務
-Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.**
+#### 注入服務 (Service Injection)
+Handlers 是透過 reflection 方式被喚起, Martini 使用 *Dependency Injection* 的方法
+載入 Handler 變數所需要的相關物件 **這也是 Martini 跟 Go 語言`http.HandlerFunc`介面
+完全相容的原因**
 
-If you add an argument to your Handler, Martini will search its list of services and attempt to resolve the dependency via type assertion:
+如果你在 Handler 裡加入一個變數, Martini 會嘗試著從它的服務清單裡透過 type assertion
+方式將相關物件載入
 ~~~ go
-m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are injected by Martini
+m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res 和 req 是由 Martini 注入
   res.WriteHeader(200) // HTTP 200
 })
 ~~~
 
-The following services are included with [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
-  * [*log.Logger](http://godoc.org/log#Logger) - Global logger for Martini.
-  * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request context.
+[martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) 包含以下物件:
+  * [*log.Logger](http://godoc.org/log#Logger) - Martini 的全區域 Logger.
+  * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request 內文.
   * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` of named params found by route matching.
-  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Route helper service.
-  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface.
-  * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
+  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Route helper 服務.
+  * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http 回應 writer 介面.
+  * [*http.Request](http://godoc.org/net/http/#Request) - http 請求.
 
 ### Routing
-In Martini, a route is an HTTP method paired with a URL-matching pattern.
-Each route can take one or more handler methods:
+在 Martini 裡, 一個 route 就是一個 HTTP 方法與其 URL 的比對模式.
+每個 route 可以有ㄧ或多個 handler 方法:
 ~~~ go
 m.Get("/", func() {
-  // show something
+  // 顯示（值）
 })
 
 m.Patch("/", func() {
-  // update something
+  // 更新
 })
 
 m.Post("/", func() {
-  // create something
+  // 產生
 })
 
 m.Put("/", func() {
-  // replace something
+  // 取代
 })
 
 m.Delete("/", func() {
-  // destroy something
+  // 刪除
 })
 
 m.Options("/", func() {
-  // http options
+  // http 選項
 })
 
 m.NotFound(func() {
@@ -159,39 +162,38 @@ m.NotFound(func() {
 })
 ~~~
 
-Routes are matched in the order they are defined. The first route that
-matches the request is invoked.
+Routes 依照它們被定義時的順序做比對. 第一個跟請求 (request) 相同的 route 就被執行.
 
-Route patterns may include named parameters, accessible via the [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) service:
+Route 比對模式可以包含變數部分, 可以透過 [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) 物件來取值:
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
   return "Hello " + params["name"]
 })
 ~~~
 
-Routes can be matched with globs:
+Routes 也可以用 "**" 來配對, 例如:
 ~~~ go
 m.Get("/hello/**", func(params martini.Params) string {
   return "Hello " + params["_1"]
 })
 ~~~
 
-Regular expressions can be used as well:
+也可以用正規表示法 (regular expressions) 來做比對, 例如:
 ~~~go
 m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
   return fmt.Sprintf ("Hello %s", params["name"])
 })
 ~~~
-Take a look at the [Go documentation](http://golang.org/pkg/regexp/syntax/) for more info about regular expressions syntax .
+更多有關正規表示法文法的資訊, 請參考 [Go 文件](http://golang.org/pkg/regexp/syntax/).
 
-Route handlers can be stacked on top of each other, which is useful for things like authentication and authorization:
+Route handlers 也可以相互堆疊, 尤其是認證與授權相當好用:
 ~~~ go
 m.Get("/secret", authorize, func() {
-  // this will execute as long as authorize doesn't write a response
+  // 這裏開始處理授權問題, 而非寫出回應
 })
 ~~~
 
-Route groups can be added too using the Group method.
+也可以用 Group 方法, 將 route 編成一組.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -201,7 +203,7 @@ m.Group("/books", func(r martini.Router) {
 })
 ~~~
 
-Just like you can pass middlewares to a handler you can pass middlewares to groups.
+跟對 handler 增加 middleware 方法一樣, 你也可以為一組 routes 增加 middleware.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -211,67 +213,66 @@ m.Group("/books", func(r martini.Router) {
 }, MyMiddleware1, MyMiddleware2)
 ~~~
 
-### Services
-Services are objects that are available to be injected into a Handler's argument list. You can map a service on a *Global* or *Request* level.
+### 服務
+服務是一些物件可以被注入 Handler 變數裡的東西, 可以分對應到 *Global* 或 *Request* 兩種等級.
 
-#### Global Mapping
-A Martini instance implements the inject.Injector interface, so mapping a service is easy:
+#### Global Mapping (全域級對應)
+一個 Martini 實體 (instance) 實現了 inject.Injector 介面, 所以非常容易對應到所需要的服務, 例如:
 ~~~ go
 db := &MyDatabase{}
 m := martini.Classic()
-m.Map(db) // the service will be available to all handlers as *MyDatabase
+m.Map(db) // 所以 *MyDatabase 就可以被所有的 handlers 使用
 // ...
 m.Run()
 ~~~
 
-#### Request-Level Mapping
-Mapping on the request level can be done in a handler via [martini.Context](http://godoc.org/github.com/go-martini/martini#Context):
+#### Request-Level Mapping (請求級對應)
+如果只在一個 handler 裡定義, 透由  [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) 獲得一個請求 (request) 級的對應:
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
   logger := &MyCustomLogger{req}
-  c.Map(logger) // mapped as *MyCustomLogger
+  c.Map(logger) // 對應到 *MyCustomLogger
 }
 ~~~
 
-#### Mapping values to Interfaces
-One of the most powerful parts about services is the ability to map a service to an interface. For instance, if you wanted to override the [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) with an object that wrapped it and performed extra operations, you can write the following handler:
+#### 透由介面對應
+有關服務, 最強的部分是它還能對應到一個介面 (interface), 例如,
+如果你想要包裹並增加一個變數而改寫 (override) 原有的 [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter), 你的 handler 可以寫成:
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
-  c.MapTo(rw, (*http.ResponseWriter)(nil)) // override ResponseWriter with our wrapper ResponseWriter
+  c.MapTo(rw, (*http.ResponseWriter)(nil)) // 我們包裹的 ResponseWriter 蓋掉原始的 ResponseWrite
 }
 ~~~
 
-### Serving Static Files
-A [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) instance automatically serves static files from the "public" directory in the root of your server.
-You can serve from more directories by adding more [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) handlers.
+### 伺服靜態檔案
+一個[martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) 實體會將伺服器根目錄下 public 子目錄裡的檔案自動當成靜態檔案處理. 你也可以手動用 [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) 增加其他目錄, 例如.
 ~~~ go
-m.Use(martini.Static("assets")) // serve from the "assets" directory as well
+m.Use(martini.Static("assets")) // "assets" 子目錄裡, 也視為靜態檔案
 ~~~
 
 #### Serving a Default Document
-You can specify the URL of a local file to serve when the requested URL is not
-found. You can also specify an exclusion prefix so that certain URLs are ignored.
-This is useful for servers that serve both static files and have additional
-handlers defined (e.g., REST API). When doing so, it's useful to define the
-static handler as a part of the NotFound chain.
+當某些 URL 找不到時, 你也可以指定本地檔案的 URL 來顯示.
+你也可以用開頭除外 (exclusion prefix) 的方式, 來忽略某些 URLs,
+它尤其在某些伺服器同時伺服靜態檔案, 而且還有額外 handlers 處理 (例如 REST API) 時, 特別好用.
+比如說, 在比對找不到之後, 想要用靜態檔來處理特別好用.
 
-The following example serves the `/index.html` file whenever any URL is
-requested that does not match any local file and does not start with `/api/v`:
+以下範例, 就是在 URL 開頭不是`/api/v`而且也不是本地檔案的情況下, 顯示`/index.html`檔:
 ~~~ go
 static := martini.Static("assets", martini.StaticOptions{Fallback: "/index.html", Exclude: "/api/v"})
 m.NotFound(static, http.NotFound)
 ~~~
 
 ## Middleware Handlers
-Middleware Handlers sit between the incoming http request and the router. In essence they are no different than any other Handler in Martini. You can add a middleware handler to the stack like so:
+Middleware Handlers 位於進來的 http 請求與 router 之間, 在 Martini 裡, 本質上它跟其他
+ Handler 沒有什麼不同, 例如, 你可加入一個 middleware 方法如下
 ~~~ go
 m.Use(func() {
-  // do some middleware stuff
+  // 做 middleware 的事
 })
 ~~~
 
-You can have full control over the middleware stack with the `Handlers` function. This will replace any handlers that have been previously set:
+你也可以用`Handlers`完全控制 middelware 層, 把先前設定的 handlers 都替換掉, 例如:
 ~~~ go
 m.Handlers(
   Middleware1,
@@ -280,7 +281,8 @@ m.Handlers(
 )
 ~~~
 
-Middleware Handlers work really well for things like logging, authorization, authentication, sessions, gzipping, error pages and any other operations that must happen before or after an http request:
+Middleware Handlers 成被拿來處理 http 請求之前和之後的事, 尤其是用來紀錄logs, 授權, 認證,
+sessions, 壓縮 （gzipping), 顯示錯誤頁面等等, 都非常好用, 例如:
 ~~~ go
 // validate an api key
 m.Use(func(res http.ResponseWriter, req *http.Request) {
@@ -291,9 +293,10 @@ m.Use(func(res http.ResponseWriter, req *http.Request) {
 ~~~
 
 ### Next()
-[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) is an optional function that Middleware Handlers can call to yield the until after the other Handlers have been executed. This works really well for any operations that must happen after an http request:
+[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) 是 Middleware Handlers 可以呼叫的選項功能, 用來等到其他 handlers 處理完再開始執行.
+它常常被用來處理那些必須在 http 請求之後才能發生的事件, 例如:
 ~~~ go
-// log before and after a request
+// 在請求前後加 logs
 m.Use(func(c martini.Context, log *log.Logger){
   log.Println("before a request")
 
@@ -305,32 +308,36 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ## Martini Env
 
-Some Martini handlers make use of the `martini.Env` global variable to provide special functionality for development environments vs production environments. It is recommended that the `MARTINI_ENV=production` environment variable to be set when deploying a Martini server into a production environment.
+有些 Martini handlers 使用 `martini.Env` 全區域變數, 來當成開發環境或是上架 (production)
+環境的設定判斷. 建議用 `MARTINI_ENV=production` 環境變數來設定 Martini 伺服器是上架與否.
 
-## FAQ
+## 常見問題與答案
 
-### Where do I find middleware X?
+### 我去哪可以找到 middleware X?
 
-Start by looking in the [martini-contrib](https://github.com/martini-contrib) projects. If it is not there feel free to contact a martini-contrib team member about adding a new repo to the organization.
+可以從 [martini-contrib](https://github.com/martini-contrib) 裡的專案找起.
+如果那裡沒有, 請與 martini-contrib 團隊聯絡, 將它加入.
 
-* [auth](https://github.com/martini-contrib/auth) - Handlers for authentication.
-* [binding](https://github.com/martini-contrib/binding) - Handler for mapping/validating a raw request into a structure.
-* [gzip](https://github.com/martini-contrib/gzip) - Handler for adding gzip compress to requests
-* [render](https://github.com/martini-contrib/render) - Handler that provides a service for easily rendering JSON and HTML templates.
-* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler for parsing the `Accept-Language` HTTP header.
-* [sessions](https://github.com/martini-contrib/sessions) - Handler that provides a Session service.
-* [strip](https://github.com/martini-contrib/strip) - URL Prefix stripping.
-* [method](https://github.com/martini-contrib/method) - HTTP method overriding via Header or form fields.
-* [secure](https://github.com/martini-contrib/secure) - Implements a few quick security wins.
-* [encoder](https://github.com/martini-contrib/encoder) - Encoder service for rendering data in several formats and content negotiation.
-* [cors](https://github.com/martini-contrib/cors) - Handler that enables CORS support.
-* [oauth2](https://github.com/martini-contrib/oauth2) - Handler that provides OAuth 2.0 login for Martini apps. Google Sign-in, Facebook Connect and Github login is supported.
-* [vauth](https://github.com/rafecolton/vauth) - Handlers for vender webhook authentication (currently GitHub and TravisCI)
+* [auth](https://github.com/martini-contrib/auth) - 處理認證的 Handler.
+* [binding](https://github.com/martini-contrib/binding) -
+處理一個單純的請求對應到一個結構體與確認內容正確與否的 Handler.
+* [gzip](https://github.com/martini-contrib/gzip) - 對請求加 gzip 壓縮的 Handler.
+* [render](https://github.com/martini-contrib/render) - 提供簡單處理 JSON 和
+HTML 樣板成形 (rendering) 的 Handler.
+* [acceptlang](https://github.com/martini-contrib/acceptlang) - 解析 `Accept-Language` HTTP 檔頭的 Handler.
+* [sessions](https://github.com/martini-contrib/sessions) - 提供 Session 服務的 Handler.
+* [strip](https://github.com/martini-contrib/strip) - URL 字頭處理 (Prefix stripping).
+* [method](https://github.com/martini-contrib/method) - 透過 Header 或表格 (form) 欄位蓋過 HTTP 方法 (method).
+* [secure](https://github.com/martini-contrib/secure) - 提供一些簡單的安全機制.
+* [encoder](https://github.com/martini-contrib/encoder) - 轉換資料格式之 Encoder 服務.
+* [cors](https://github.com/martini-contrib/cors) - 啟動支援 CORS 之 Handler.
+* [oauth2](https://github.com/martini-contrib/oauth2) - 讓 Martini 應用程式能提供 OAuth 2.0 登入的 Handler. 其中支援 Google 登錄, Facebook Connect 與 Github 的登入等.
+* [vauth](https://github.com/rafecolton/vauth) - 處理 vender webhook 認證的 Handler (目前支援 GitHub 以及 TravisCI)
 
-### How do I integrate with existing servers?
+### 我如何整合到現有的伺服器?
 
-A Martini instance implements `http.Handler`, so it can easily be used to serve subtrees
-on existing Go servers. For example this is a working Martini app for Google App Engine:
+Martini 實作 `http.Handler`,所以可以非常容易整合到現有的 Go 伺服器裡.
+以下寫法, 是一個能在 Google App Engine 上運行的 Martini 應用程式:
 
 ~~~ go
 package hello
@@ -349,10 +356,10 @@ func init() {
 }
 ~~~
 
-### How do I change the port/host?
+### 我要如何改變 port/host?
 
-Martini's `Run` function looks for the PORT and HOST environment variables and uses those. Otherwise Martini will default to localhost:3000.
-To have more flexibility over port and host, use the `martini.RunOnAddr` function instead.
+Martini 的 `Run` 功能會看 PORT 及 HOST 當時的環境變數, 否則 Martini 會用 localhost:3000
+當預設值. 讓 port 及 host 更有彈性, 可以用 `martini.RunOnAddr` 取代.
 
 ~~~ go
   m := martini.Classic()
@@ -360,15 +367,15 @@ To have more flexibility over port and host, use the `martini.RunOnAddr` functio
   log.Fatal(m.RunOnAddr(":8080"))
 ~~~
 
-### Live code reload?
+### 可以線上更新 (live reload) 嗎?
 
-[gin](https://github.com/codegangsta/gin) and [fresh](https://github.com/pilu/fresh) both live reload martini apps.
+[gin](https://github.com/codegangsta/gin) 和 [fresh](https://github.com/pilu/fresh) 可以幫 Martini 程式做到線上更新.
 
-## Contributing
-Martini is meant to be kept tiny and clean. Most contributions should end up in a repository in the [martini-contrib](https://github.com/martini-contrib) organization. If you do have a contribution for the core of Martini feel free to put up a Pull Request.
+## 貢獻
+Martini 盡量保持小而美的精神, 大多數的程式貢獻者可以在 [martini-contrib](https://github.com/martini-contrib) 組織提供代碼. 如果你想要對 Martini 核心提出貢獻, 請丟出 Pull Request.
 
-## About
+## 關於
 
-Inspired by [express](https://github.com/visionmedia/express) and [sinatra](https://github.com/sinatra/sinatra)
+靈感來自與 [express](https://github.com/visionmedia/express) 以及 [sinatra](https://github.com/sinatra/sinatra)
 
-Martini is obsessively designed by none other than the [Code Gangsta](http://codegangsta.io/)
+Martini 由 [Code Gangsta](http://codegangsta.io/) 公司設計出品 (著魔地)
