@@ -50,6 +50,9 @@ func Test_Routing(t *testing.T) {
 	req13, _ := http.NewRequest("GET", "http://localhost:3000/bazz/in/ga", nil)
 	context13 := New().createContext(recorder, req13)
 
+	req14, _ := http.NewRequest("GET", "http://localhost:3000/bzz", nil)
+	context14 := New().createContext(recorder, req14)
+
 	result := ""
 	router.Get("/foo", func(req *http.Request) {
 		result += "foo"
@@ -110,6 +113,9 @@ func Test_Routing(t *testing.T) {
 	}, func() {
 		result += "inga"
 	})
+	router.AddRoute("GET", "/bzz", func(c Context) {
+		result += "bzz"
+	})
 
 	router.Handle(recorder, req, context)
 	router.Handle(recorder, req2, context2)
@@ -124,7 +130,8 @@ func Test_Routing(t *testing.T) {
 	router.Handle(recorder, req11, context11)
 	router.Handle(recorder, req12, context12)
 	router.Handle(recorder, req13, context13)
-	expect(t, result, "foobarbatbarfoofezpopbapwappowwappowoptsfoobazzingagetbazzingapostbazzingagroupception")
+	router.Handle(recorder, req14, context14)
+	expect(t, result, "foobarbatbarfoofezpopbapwappowwappowoptsfoobazzingagetbazzingapostbazzingagroupceptionbzz")
 	expect(t, recorder.Code, http.StatusNotFound)
 	expect(t, recorder.Body.String(), "404 page not found\n")
 }
