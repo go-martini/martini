@@ -1,3 +1,17 @@
+<!--
+
+TODO:
+  - Proof reading
+  - Check, if specific code parts like URL's are NOT translated
+  - Check, if only the "Du"-form is used
+  - Check the table of contents with the titles of each section
+
+-->
+
+
+
+
+
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
 Martini ist eine mächtiges Package zur schnellen Entwicklung von Webanwendungen/services in Golang. 
@@ -109,7 +123,7 @@ m.Get("/", func() (int, string) {
 #### Service Injection
 Handler werden per Reflection aufgerufen. Martini macht Gebrauch von *Dependency Injection*, um Abhängigkeiten in der Argumentliste von Handlern aufzulösen. **Dies macht Martini komplett inkompatibel mit Golangs `http.HandlerFunc` Interface.**
 
-Fügst Du einem Handler ein Argument hinzu, sucht Martini seine Liste von Services und versucht, die Abhängigkeiten via Type Assertion aufzulösen. 
+Fügst Du einem Handler ein Argument hinzu, sucht Martini in seiner Liste von Services und versucht, die Abhängigkeiten via Type Assertion aufzulösen. 
 ~~~ go
 m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res und req wurden von Martini injiziert
   res.WriteHeader(200) // HTTP 200
@@ -156,39 +170,38 @@ m.NotFound(func() {
 })
 ~~~
 
-Routes are matched in the order they are defined. The first route that
-matches the request is invoked.
+Routen werden in der Reihenfolge, in welcher sie definiert wurden, zugeordnet. Die erste zugeordnete Route wird daraufhin aufgerufen.  
 
-Route patterns may include named parameters, accessible via the [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) service:
+Routen-Muster enhalten gegebenenfalls benannte Parameter, die über den [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) Service aufrufbar sind:
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
-  return "Hello " + params["name"]
+  return "Hallo " + params["name"]
 })
 ~~~
 
-Routes can be matched with globs:
+Routen können mit Globs versehen werden:
 ~~~ go
 m.Get("/hello/**", func(params martini.Params) string {
-  return "Hello " + params["_1"]
+  return "Hallo " + params["_1"]
 })
 ~~~
 
-Regular expressions can be used as well:
+Reguläre Ausdrücke sind ebenfalls möglich:
 ~~~go
 m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
-  return fmt.Sprintf ("Hello %s", params["name"])
+  return fmt.Sprintf ("Hallo %s", params["name"])
 })
 ~~~
-Take a look at the [Go documentation](http://golang.org/pkg/regexp/syntax/) for more info about regular expressions syntax .
+Weitere Informationen zum Syntax regulärer Ausdrücke findest Du in der [Go Dokumentation](http://golang.org/pkg/regexp/syntax/).
 
-Route handlers can be stacked on top of each other, which is useful for things like authentication and authorization:
+Routen-Handler können auch in einander verschachtelt werden. Dies ist bei der Authentifizierung und Berechtigungen nützlich.
 ~~~ go
 m.Get("/secret", authorize, func() {
-  // this will execute as long as authorize doesn't write a response
+  // dies wird ausgeführt, solange authorize nichts zurückgibt
 })
 ~~~
 
-Route groups can be added too using the Group method.
+Routen-Gruppen können durch die Group-Methode hinzugefügt werden.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -198,7 +211,7 @@ m.Group("/books", func(r martini.Router) {
 })
 ~~~
 
-Just like you can pass middlewares to a handler you can pass middlewares to groups.
+Wie bei Handlern können Middlewares auch Gruppen übergeben werden.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -209,29 +222,30 @@ m.Group("/books", func(r martini.Router) {
 ~~~
 
 ### Services
-Services are objects that are available to be injected into a Handler's argument list. You can map a service on a *Global* or *Request* level.
+Services sind Okjekte, welche der Argumentliste von Handlern beigefügt werden können.
+Du kannst einen Service der *Global* oder *Request* Ebene zuordnen.
 
 #### Global Mapping
-A Martini instance implements the inject.Injector interface, so mapping a service is easy:
+Eine Martini-Instanz implementiert das inject.Injector interface, sodass ein Service leicht zugeordnet werden kann:
 ~~~ go
 db := &MyDatabase{}
 m := martini.Classic()
-m.Map(db) // the service will be available to all handlers as *MyDatabase
+m.Map(db) // Der Service ist allen Handlern unter *MyDatabase verfügbar
 // ...
 m.Run()
 ~~~
 
 #### Request-Level Mapping
-Mapping on the request level can be done in a handler via [martini.Context](http://godoc.org/github.com/go-martini/martini#Context):
+Das Zuordnen auf der Request-Ebene kann in einem Handler via  [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) realisiert werden:
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
   logger := &MyCustomLogger{req}
-  c.Map(logger) // mapped as *MyCustomLogger
+  c.Map(logger) // Zugeordnet als *MyCustomLogger
 }
 ~~~
 
 #### Mapping values to Interfaces
-One of the most powerful parts about services is the ability to map a service to an interface. For instance, if you wanted to override the [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) with an object that wrapped it and performed extra operations, you can write the following handler:
+Einer der mächtigsten Aspekte von Services ist dessen Fähigkeit, einen Service einem Interface zuzuordnen. TODO: For instance, if you wanted to override the [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) with an object that wrapped it and performed extra operations, you can write the following handler:
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
@@ -240,10 +254,9 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 ~~~
 
 ### Serving Static Files
-A [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) instance automatically serves static files from the "public" directory in the root of your server.
-You can serve from more directories by adding more [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) handlers.
+Eine [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) Instanz übertragt automatisch statische Dateien aus dem "pulbic"-Ordner im Stammverzeichnis Deines Servers. Dieses Verhalten lässt sirch durch weitere [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) Handler auf andere Verzeichnisse übertragen.
 ~~~ go
-m.Use(martini.Static("assets")) // serve from the "assets" directory as well
+m.Use(martini.Static("assets")) // Überträgt auch vom "assets"-Verzeichnis
 ~~~
 
 #### Serving a Default Document
