@@ -91,8 +91,9 @@ m.Get("/", func() {
 })
 ~~~
 
-#### Return Values
-If a handler returns something, Martini will write the result to the current [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) as a string:
+#### Rückgabewerte
+Wenn ein Handerl etwas zurückgibt, übergibt Martini den Wert an den aktuellen
+If a handler returns something, Martini will write the result to the current [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) in Form einen String:
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
@@ -347,10 +348,10 @@ func init() {
 }
 ~~~
 
-### How do I change the port/host?
+### Wie ändere ich den Port/Host?
 
-Martini's `Run` function looks for the PORT and HOST environment variables and uses those. Otherwise Martini will default to localhost:3000.
-To have more flexibility over port and host, use the `martini.RunOnAddr` function instead.
+Martinis `Run` Funktion sucht automatisch nach den PORT und HOST Umgebungsvariablen, um diese zu nutzen. Andernfalls ist localhost:3000 voreingestellt.
+Für mehr Flexibilität über den Port und den Host nutze stattdessen die `martini.RunOnAddr` Funktion.
 
 ~~~ go
   m := martini.Classic()
@@ -358,15 +359,15 @@ To have more flexibility over port and host, use the `martini.RunOnAddr` functio
   log.Fatal(m.RunOnAddr(":8080"))
 ~~~
 
-### Live code reload?
+### Automatisches Aktualisieren?
 
-[gin](https://github.com/codegangsta/gin) and [fresh](https://github.com/pilu/fresh) both live reload martini apps.
+[Gin](https://github.com/codegangsta/gin) und [Fresh](https://github.com/pilu/fresh) aktualisieren Martini-Apps live.
 
-## Contributing
-Martini is meant to be kept tiny and clean. Most contributions should end up in a repository in the [martini-contrib](https://github.com/martini-contrib) organization. If you do have a contribution for the core of Martini feel free to put up a Pull Request.
+## Beitragen
+Martinis Grundsatz ist Minimalismus und sauberer Code. Die meisten Beiträge sollten sich in der [martini-contrib](https://github.com/martini-contrib) Repository wiederfinden. Beinhaltet Dein Beitrag Veränderungen am Kern von Martini, zögere nicht, einen Pull Request zu machen.
 
-## About
+## Über das Projekt
 
-Inspired by [express](https://github.com/visionmedia/express) and [sinatra](https://github.com/sinatra/sinatra)
+Inspiriert von [Express](https://github.com/visionmedia/express) und [Sinatra](https://github.com/sinatra/sinatra)
 
-Martini is obsessively designed by none other than the [Code Gangsta](http://codegangsta.io/)
+Martini wird leidenschaftlich entwickelt von Niemand gerigeren als dem [Code Gangsta](http://codegangsta.io/)
