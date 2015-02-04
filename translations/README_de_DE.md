@@ -20,12 +20,12 @@ func main() {
 }
 ~~~
 
-Installiere anschließend das Martini Package (**go 1.1** oder höher ist vorausgesetzt):
+Installiere anschließend das Martini Package (**Go 1.1** oder höher ist vorausgesetzt):
 ~~~
 go get github.com/go-martini/martini
 ~~~
 
-Starte den lokalen Server:
+Starte den Server:
 ~~~
 go run server.go
 ~~~
@@ -84,7 +84,7 @@ Below is some of the functionality [martini.Classic()](http://godoc.org/github.c
   * Routing - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
 
 ### Handlers
-Handlers sind das Herz und die Seele von Martini. Ein Handler ist grundsätzlich jede Art von aufrufbaren Functionen:
+Handlers sind das Herz und die Seele von Martini. Ein Handler ist grundsätzlich jede Art von aufrufbaren Funktionen:
 ~~~ go
 m.Get("/", func() {
   println("Hallo Welt")
@@ -92,69 +92,67 @@ m.Get("/", func() {
 ~~~
 
 #### Rückgabewerte
-Wenn ein Handerl etwas zurückgibt, übergibt Martini den Wert an den aktuellen
-If a handler returns something, Martini will write the result to the current [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) in Form einen String:
+Wenn ein Handerl etwas zurückgibt, übergibt Martini den Wert an den aktuellen [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) in Form einen String:
 ~~~ go
 m.Get("/", func() string {
-  return "hello world" // HTTP 200 : "hello world"
+  return "Hallo Welt" // HTTP 200 : "Hallo Welt"
 })
 ~~~
 
-You can also optionally return a status code:
+Die Rückgabe eines Statuscode ist optional:
 ~~~ go
 m.Get("/", func() (int, string) {
-  return 418, "i'm a teapot" // HTTP 418 : "i'm a teapot"
+  return 418, "Ich bin eine Teekanne" // HTTP 418 : "Ich bin eine Teekanne"
 })
 ~~~
 
 #### Service Injection
-Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.**
+Handler werden per Reflection aufgerufen. Martini macht Gebrauch von *Dependency Injection*, um Abhängigkeiten in der Argumentliste von Handlern aufzulösen. **Dies macht Martini komplett inkompatibel mit Golangs `http.HandlerFunc` Interface.**
 
-If you add an argument to your Handler, Martini will search its list of services and attempt to resolve the dependency via type assertion:
+Fügst Du einem Handler ein Argument hinzu, sucht Martini seine Liste von Services und versucht, die Abhängigkeiten via Type Assertion aufzulösen. 
 ~~~ go
-m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are injected by Martini
+m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res und req wurden von Martini injiziert
   res.WriteHeader(200) // HTTP 200
 })
 ~~~
 
-The following services are included with [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
-  * [*log.Logger](http://godoc.org/log#Logger) - Global logger for Martini.
+Die Folgenden Services sind Bestandteil von [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
+  * [*log.Logger](http://godoc.org/log#Logger) - Globaler Logger für Martini.
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request context.
-  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` of named params found by route matching.
+  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` von benannten Parametern, welche durch route matching gefunden wurden.
   * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Route helper service.
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface.
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
 
 ### Routing
-In Martini, a route is an HTTP method paired with a URL-matching pattern.
-Each route can take one or more handler methods:
+Eine Route ist in Martini eine HTTP-Methode gepaart mit einem TODO: URL-matching pattern. Jede Route kann ein oder mehrere Handler-Methoden übernehmen:
 ~~~ go
 m.Get("/", func() {
-  // show something
+  // zeige etwas
 })
 
 m.Patch("/", func() {
-  // update something
+  // aktualisiere etwas
 })
 
 m.Post("/", func() {
-  // create something
+  // erstelle etwas
 })
 
 m.Put("/", func() {
-  // replace something
+  // ersetzte etwas
 })
 
 m.Delete("/", func() {
-  // destroy something
+  // Lösche etwas
 })
 
 m.Options("/", func() {
-  // http options
+  // HTTP Optionen
 })
 
 m.NotFound(func() {
-  // handle 404
+  // behandle 404 Statuscode
 })
 ~~~
 
