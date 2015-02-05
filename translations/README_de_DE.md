@@ -5,6 +5,9 @@ TODO:
   - Check, if specific code parts like URL's are NOT translated
   - Check, if only the "Du"-form is used
   - Check the table of contents with the titles of each section
+    - Translations sometimes seem more idiomatic
+  - Translated singular / plural form of handlers is handler
+  - Verbs in comments begin lowercase
 
 -->
 
@@ -14,11 +17,11 @@ TODO:
 
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
-Martini ist eine mächtiges Package zur schnellen Entwicklung von Webanwendungen/services in Golang. 
+Martini ist eine mächtiges Package zur schnellen Entwicklung von Webanwendungen und -services in Golang. 
 
 ## Ein Projekt starten
 
-Nach der Installation von Go und dem Einrichten des [GOPATH](http://golang.org/doc/code.html#GOPATH), erstelle deine erste `.go`-Datei. Speichere sie unter `server.go`.
+Nach der Installation von Go und dem Einrichten des [GOPATH](http://golang.org/doc/code.html#GOPATH), erstelle Deine erste `.go`-Datei. Speichere sie unter `server.go`.
 
 ~~~ go
 package main
@@ -34,7 +37,7 @@ func main() {
 }
 ~~~
 
-Installiere anschließend das Martini Package (**Go 1.1** oder höher ist vorausgesetzt):
+Installiere anschließend das Martini Package (**Go 1.1** oder höher wird vorausgesetzt):
 ~~~
 go get github.com/go-martini/martini
 ~~~
@@ -59,17 +62,17 @@ GoDoc [Dokumentation](http://godoc.org/github.com/go-martini/martini)
 
 ## Eigenschaften
 * Sehr einfach nutzbar
-* Systemunabhängiges Design
-* Einfach anwendbar mit Anderen Golang Packages
-* TODO: Awesome path matching and routing.
+* TODO: Systemunabhängiges Design
+* Leicht kombinierbar mit anderen Golang Packages
+* Ausgezeichnetes Path Matching und Routing.
 * Modulares Design - einfaches Hinzufügen und Entfernen von Funktionen
 * Eine Vielzahl von guten Handlern/Middlewares nutzbar
-* TODO: Großer Funktionsumfang mitgeliefert // Great 'out of the box' feature set.
+* Großer Funktionsumfang mitgeliefert // Great 'out of the box' feature set.
 * **Voll kompatibel mit dem [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) Interface.**
-* TODO: Standardmäßge Seitenübertragung //Default document serving (e.g., for serving AngularJS apps in HTML5 mode).
+* TODO: Standardmäßge ausliefern von Dateien (z.B. von AngularJS Apps im HTML5-Modus)
 
 ## Mehr Middleware
-Mehr Informationen zur Middleware und Funktionalität finden Du in der [martini-contrib](https://github.com/martini-contrib) Repository.
+Mehr Informationen zur Middleware und Funktionalität finden Du in den Repositories der [martini-contrib](https://github.com/martini-contrib) Gruppe.
 
 ## Inhaltsverzeichnis
 * [Classic Martini](#classic-martini)
@@ -90,15 +93,15 @@ Einen schnellen Start in ein Projekt ermöglicht [martini.Classic()](http://godo
   m.Run()
 ~~~
 
-TODO:
-Below is some of the functionality [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) pulls in automatically:
+Aufgelistet findest Du einige Aspekte, die [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) automatich berücksichtigt:
+
   * Request/Response Logging - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
   * Panic Recovery - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
   * Static File serving - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
   * Routing - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
 
-### Handlers
-Handlers sind das Herz und die Seele von Martini. Ein Handler ist grundsätzlich jede Art von aufrufbaren Funktionen:
+### Handler
+Handler sind das Herz und die Seele von Martini. Ein Handler ist grundsätzlich jede Art von aufrufbaren Funktionen:
 ~~~ go
 m.Get("/", func() {
   println("Hallo Welt")
@@ -106,7 +109,7 @@ m.Get("/", func() {
 ~~~
 
 #### Rückgabewerte
-Wenn ein Handerl etwas zurückgibt, übergibt Martini den Wert an den aktuellen [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) in Form einen String:
+Wenn ein Handler Rückgabewerte beinhaltet, übergibt Martini diese an den aktuellen [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) in Form eines String:
 ~~~ go
 m.Get("/", func() string {
   return "Hallo Welt" // HTTP 200 : "Hallo Welt"
@@ -134,15 +137,15 @@ Die Folgenden Services sind Bestandteil von [martini.Classic()](http://godoc.org
   * [*log.Logger](http://godoc.org/log#Logger) - Globaler Logger für Martini.
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request context.
   * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` von benannten Parametern, welche durch route matching gefunden wurden.
-  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Route helper service.
+  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Route Helferservice.
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface.
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
 
 ### Routing
-Eine Route ist in Martini eine HTTP-Methode gepaart mit einem TODO: URL-matching pattern. Jede Route kann ein oder mehrere Handler-Methoden übernehmen:
+Eine Route ist in Martini eine HTTP-Methode gepaart mit einem URL-matching pattern. Jede Route kann eine oder mehrere Handler-Methoden übernehmen:
 ~~~ go
 m.Get("/", func() {
-  // zeige etwas
+  // zeige etwas an
 })
 
 m.Patch("/", func() {
@@ -158,7 +161,7 @@ m.Put("/", func() {
 })
 
 m.Delete("/", func() {
-  // Lösche etwas
+  // lösche etwas
 })
 
 m.Options("/", func() {
@@ -166,13 +169,13 @@ m.Options("/", func() {
 })
 
 m.NotFound(func() {
-  // behandle 404 Statuscode
+  // bearbeite 404 Statuscode
 })
 ~~~
 
-Routen werden in der Reihenfolge, in welcher sie definiert wurden, zugeordnet. Die erste zugeordnete Route wird daraufhin aufgerufen.  
+Routen werden in der Reihenfolge, in welcher sie definiert wurden, zugeordnet. Die bei einer Anfrage zuerst zugeordnete Route wird daraufhin aufgerufen.  
 
-Routen-Muster enhalten gegebenenfalls benannte Parameter, die über den [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) Service aufrufbar sind:
+Routenmuster enhalten gegebenenfalls benannte Parameter, die über den [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) Service abrufbar sind:
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
   return "Hallo " + params["name"]
@@ -201,7 +204,7 @@ m.Get("/secret", authorize, func() {
 })
 ~~~
 
-Routen-Gruppen können durch die Group-Methode hinzugefügt werden.
+Routengruppen können durch die Group-Methode hinzugefügt werden.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -211,7 +214,7 @@ m.Group("/books", func(r martini.Router) {
 })
 ~~~
 
-Wie bei Handlern können Middlewares auch Gruppen übergeben werden.
+Sowohl Handlern als auch Middlewares können Gruppen übergeben werden.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -223,10 +226,10 @@ m.Group("/books", func(r martini.Router) {
 
 ### Services
 Services sind Okjekte, welche der Argumentliste von Handlern beigefügt werden können.
-Du kannst einen Service der *Global* oder *Request* Ebene zuordnen.
+Du kannst einem Service der *Global* oder *Request* Ebene zuordnen.
 
 #### Global Mapping
-Eine Martini-Instanz implementiert das inject.Injector interface, sodass ein Service leicht zugeordnet werden kann:
+Eine Martini-Instanz implementiert das inject.Injector Interface, sodass ein Service leicht zugeordnet werden kann:
 ~~~ go
 db := &MyDatabase{}
 m := martini.Classic()
@@ -240,30 +243,30 @@ Das Zuordnen auf der Request-Ebene kann in einem Handler via  [martini.Context](
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
   logger := &MyCustomLogger{req}
-  c.Map(logger) // Zugeordnet als *MyCustomLogger
+  c.Map(logger) // zugeordnet als *MyCustomLogger
 }
 ~~~
 
 #### Mapping values to Interfaces
-Einer der mächtigsten Aspekte von Services ist dessen Fähigkeit, einen Service einem Interface zuzuordnen. TODO: For instance, if you wanted to override the [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) with an object that wrapped it and performed extra operations, you can write the following handler:
+Einer der mächtigsten Aspekte von Services ist dessen Fähigkeit, einen Service einem Interface zuzuordnen. Möchtest Du den [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) mit einem Decorator (Objekt) und dessen Zusatzfunktionen überschreiben, definiere den Handler wie folgt:
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
-  c.MapTo(rw, (*http.ResponseWriter)(nil)) // override ResponseWriter with our wrapper ResponseWriter
+  c.MapTo(rw, (*http.ResponseWriter)(nil)) // überschribe ResponseWriter mit dem  ResponseWriter Decorator
 }
 ~~~
 
-### Serving Static Files
-Eine [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) Instanz übertragt automatisch statische Dateien aus dem "pulbic"-Ordner im Stammverzeichnis Deines Servers. Dieses Verhalten lässt sirch durch weitere [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) Handler auf andere Verzeichnisse übertragen.
+### Statische Dateien bereitstellen
+Eine [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) Instanz übertragt automatisch statische Dateien aus dem "pulbic"-Ordner im Stammverzeichnis Deines Servers. Dieses Verhalten lässt sich durch weitere [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) Handler auf andere Verzeichnisse übertragen.
 ~~~ go
-m.Use(martini.Static("assets")) // Überträgt auch vom "assets"-Verzeichnis
+m.Use(martini.Static("assets")) // überträgt auch vom "assets"-Verzeichnis
 ~~~
 
-#### Serving a Default Document
-You can specify the URL of a local file to serve when the requested URL is not
-found. You can also specify an exclusion prefix so that certain URLs are ignored.
-This is useful for servers that serve both static files and have additional
-handlers defined (e.g., REST API). When doing so, it's useful to define the
+#### Eine voreingestelle Datei übertragen
+Du kannst die URL zu einer lokalen Datei angeben, sollte die URL einer Anfrage nicht gefunden werden. Durch einen Präfix können bestimmte URLs ignoriert werden.
+Dies ist für Server nützlich, welche statische Dateien übertragen und ggf. zusätzliche Handler defineren (z.B. eine REST-API). Ist dies der Fall, ist das Anlegen eines Handlers in der NotFound-Reihe nützlich.
+
+When doing so, it's useful to define the
 static handler as a part of the NotFound chain.
 
 The following example serves the `/index.html` file whenever any URL is
@@ -273,15 +276,17 @@ static := martini.Static("assets", martini.StaticOptions{Fallback: "/index.html"
 m.NotFound(static, http.NotFound)
 ~~~
 
-## Middleware Handlers
-Middleware Handlers sit between the incoming http request and the router. In essence they are no different than any other Handler in Martini. You can add a middleware handler to the stack like so:
+## Middleware Handler
+Middleware Handler befinden sich logisch zwischen einer Anfrage via HTTP und dem Router. Im wesentlichen unterscheiden sie sich nicht von anderen Handlern in Martini.
+Du kannst einen Middleware Handler dem Stack folgendermaßen anfügen:
 ~~~ go
 m.Use(func() {
-  // do some middleware stuff
+  // durchlaufe die Middleware
 })
 ~~~
 
-You can have full control over the middleware stack with the `Handlers` function. This will replace any handlers that have been previously set:
+Volle Kontrolle über den Middleware Stack erlangst Du mit der `Handlers`-Funktion.
+Sie ersetzt jeden zuvor definierten Handler:
 ~~~ go
 m.Handlers(
   Middleware1,
@@ -290,7 +295,7 @@ m.Handlers(
 )
 ~~~
 
-Middleware Handlers work really well for things like logging, authorization, authentication, sessions, gzipping, error pages and any other operations that must happen before or after an http request:
+Middleware Handler arbeiten gut mit Aspekten wie Logging, Berechtigungen, Authentifizierung, Sessions, Komprimierung durch gzip, Fehlerseiten und anderen Operationen zusammen, die vor oder nach einer Anfrage passieren.
 ~~~ go
 // validate an api key
 m.Use(func(res http.ResponseWriter, req *http.Request) {
