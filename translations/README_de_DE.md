@@ -333,7 +333,7 @@ Starte die Suche mit einem Blick in die Projekte von [martini-contrib](https://g
 * [oauth2](https://github.com/martini-contrib/oauth2) - Handler der den Login mit OAuth 2.0 in Martinianwendungen ermöglicht. Google Sign-in, Facebook Connect und Github werden ebenfalls unterstützt.
 * [vauth](https://github.com/rafecolton/vauth) - Handlers zur Webhook Authentifizierung (momentan nur GitHub und TravisCI)
 
-### Wie erweitere ich bei bestehenden Servern?
+### Wie integriere ich in bestehende Systeme?
 
 Eine Martiniinstanz implementiert `http.Handler`, sodass Subrouten in bestehenden Servern einfach genutzt werden können. Hier ist eine funktionierende Martinianwendungen für die Google App Engine:
 
