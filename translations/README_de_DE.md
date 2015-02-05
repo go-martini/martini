@@ -1,13 +1,7 @@
 <!--
 
 TODO:
-  - Proof reading
-  - Check, if specific code parts like URL's are NOT translated
-  - Check, if only the "Du"-form is used
-  - Check the table of contents with the titles of each section
-    - Translations sometimes seem more idiomatic
-  - Translated singular / plural form of handlers is handler
-  - Verbs in comments begin lowercase
+  - Translation of the Next() paragraph. See https://github.com/go-martini/martini/issues/338
 
 -->
 
@@ -17,7 +11,7 @@ TODO:
 
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
-Martini ist eine mächtiges Package zur schnellen Entwicklung von Webanwendungen und -services in Golang. 
+Martini ist eine mächtiges Package zur schnellen Entwicklung von modularen Webanwendungen und -services in Golang. 
 
 ## Ein Projekt starten
 
@@ -47,11 +41,11 @@ Starte den Server:
 go run server.go
 ~~~
 
-Der Martini Webserver ist nun unter `localhost:3000` erreichbar.
+Der Martini-Webserver ist nun unter `localhost:3000` erreichbar.
 
 ## Hilfe
 
-Abboniere die [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
+Abboniere den [Emailverteiler](https://groups.google.com/forum/#!forum/martini-go)
 
 Schaue das [Demovideo](http://martini.codegangsta.io/#demo)
 
@@ -62,25 +56,25 @@ GoDoc [Dokumentation](http://godoc.org/github.com/go-martini/martini)
 
 ## Eigenschaften
 * Sehr einfach nutzbar
-* TODO: Systemunabhängiges Design
+* Nicht-intrusives Design
 * Leicht kombinierbar mit anderen Golang Packages
 * Ausgezeichnetes Path Matching und Routing.
 * Modulares Design - einfaches Hinzufügen und Entfernen von Funktionen
 * Eine Vielzahl von guten Handlern/Middlewares nutzbar
-* Großer Funktionsumfang mitgeliefert // Great 'out of the box' feature set.
+* Großer Funktionsumfang mitgeliefert
 * **Voll kompatibel mit dem [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) Interface.**
-* TODO: Standardmäßge ausliefern von Dateien (z.B. von AngularJS Apps im HTML5-Modus)
+* Standardmäßge ausliefern von Dateien (z.B. von AngularJS Apps im HTML5-Modus)
 
 ## Mehr Middleware
-Mehr Informationen zur Middleware und Funktionalität finden Du in den Repositories der [martini-contrib](https://github.com/martini-contrib) Gruppe.
+Mehr Informationen zur Middleware und Funktionalität findest Du in den Repositories der [martini-contrib](https://github.com/martini-contrib) Gruppe.
 
 ## Inhaltsverzeichnis
 * [Classic Martini](#classic-martini)
-  * [Handlers](#handlers)
+  * [Handler](#handler)
   * [Routing](#routing)
   * [Services](#services)
-  * [Serving Static Files](#serving-static-files)
-* [Middleware Handlers](#middleware-handlers)
+  * [Statische Dateien bereitstellens](#statische-dateien-bereitstellen)
+* [Middleware Handler](#middleware-handler)
   * [Next()](#next)
 * [Martini Env](#martini-env)
 * [FAQ](#faq)
@@ -134,15 +128,16 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res und req wur
 ~~~
 
 Die Folgenden Services sind Bestandteil von [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
+
   * [*log.Logger](http://godoc.org/log#Logger) - Globaler Logger für Martini.
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request context.
-  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` von benannten Parametern, welche durch route matching gefunden wurden.
-  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Route Helferservice.
+  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` von benannten Parametern, welche durch Route Matching gefunden wurden.
+  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Routen Hilfeservice.
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface.
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
 
 ### Routing
-Eine Route ist in Martini eine HTTP-Methode gepaart mit einem URL-matching pattern. Jede Route kann eine oder mehrere Handler-Methoden übernehmen:
+Eine Route ist in Martini eine HTTP-Methode gepaart mit einem URL-Matching-Pattern. Jede Route kann eine oder mehrere Handler-Methoden übernehmen:
 ~~~ go
 m.Get("/", func() {
   // zeige etwas an
@@ -169,13 +164,13 @@ m.Options("/", func() {
 })
 
 m.NotFound(func() {
-  // bearbeite 404 Statuscode
+  // bearbeite 404-Fehler
 })
 ~~~
 
 Routen werden in der Reihenfolge, in welcher sie definiert wurden, zugeordnet. Die bei einer Anfrage zuerst zugeordnete Route wird daraufhin aufgerufen.  
 
-Routenmuster enhalten gegebenenfalls benannte Parameter, die über den [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) Service abrufbar sind:
+Routenmuster enhalten ggf. benannte Parameter, die über den [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) Service abrufbar sind:
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
   return "Hallo " + params["name"]
@@ -200,7 +195,7 @@ Weitere Informationen zum Syntax regulärer Ausdrücke findest Du in der [Go Dok
 Routen-Handler können auch in einander verschachtelt werden. Dies ist bei der Authentifizierung und Berechtigungen nützlich.
 ~~~ go
 m.Get("/secret", authorize, func() {
-  // dies wird ausgeführt, solange authorize nichts zurückgibt
+  // wird ausgeführt, solange authorize nichts zurückgibt
 })
 ~~~
 
@@ -233,7 +228,7 @@ Eine Martini-Instanz implementiert das inject.Injector Interface, sodass ein Ser
 ~~~ go
 db := &MyDatabase{}
 m := martini.Classic()
-m.Map(db) // Der Service ist allen Handlern unter *MyDatabase verfügbar
+m.Map(db) // der Service ist allen Handlern unter *MyDatabase verfügbar
 // ...
 m.Run()
 ~~~
@@ -247,7 +242,7 @@ func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
 }
 ~~~
 
-#### Mapping values to Interfaces
+#### Werten einem Interface zuordnen
 Einer der mächtigsten Aspekte von Services ist dessen Fähigkeit, einen Service einem Interface zuzuordnen. Möchtest Du den [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) mit einem Decorator (Objekt) und dessen Zusatzfunktionen überschreiben, definiere den Handler wie folgt:
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
@@ -264,21 +259,17 @@ m.Use(martini.Static("assets")) // überträgt auch vom "assets"-Verzeichnis
 
 #### Eine voreingestelle Datei übertragen
 Du kannst die URL zu einer lokalen Datei angeben, sollte die URL einer Anfrage nicht gefunden werden. Durch einen Präfix können bestimmte URLs ignoriert werden.
-Dies ist für Server nützlich, welche statische Dateien übertragen und ggf. zusätzliche Handler defineren (z.B. eine REST-API). Ist dies der Fall, ist das Anlegen eines Handlers in der NotFound-Reihe nützlich.
+Dies ist für Server nützlich, welche statische Dateien übertragen und ggf. zusätzliche Handler defineren (z.B. eine REST-API). Ist dies der Fall, so ist das Anlegen eines Handlers in der NotFound-Reihe nützlich.
 
-When doing so, it's useful to define the
-static handler as a part of the NotFound chain.
-
-The following example serves the `/index.html` file whenever any URL is
-requested that does not match any local file and does not start with `/api/v`:
+Das gezeigte Beispiel zeigt die `/index.html` immer an, wenn die angefrage URL keiner lokalen Datei zugeordnet werden kann bzw. wenn sie nicht mit `/api/v` beginnt:
 ~~~ go
 static := martini.Static("assets", martini.StaticOptions{Fallback: "/index.html", Exclude: "/api/v"})
 m.NotFound(static, http.NotFound)
 ~~~
 
 ## Middleware Handler
-Middleware Handler befinden sich logisch zwischen einer Anfrage via HTTP und dem Router. Im wesentlichen unterscheiden sie sich nicht von anderen Handlern in Martini.
-Du kannst einen Middleware Handler dem Stack folgendermaßen anfügen:
+Middleware-Handler befinden sich logisch zwischen einer Anfrage via HTTP und dem Router. Im wesentlichen unterscheiden sie sich nicht von anderen Handlern in Martini.
+Du kannst einen Middleware-Handler dem Stack folgendermaßen anfügen:
 ~~~ go
 m.Use(func() {
   // durchlaufe die Middleware
@@ -297,7 +288,7 @@ m.Handlers(
 
 Middleware Handler arbeiten gut mit Aspekten wie Logging, Berechtigungen, Authentifizierung, Sessions, Komprimierung durch gzip, Fehlerseiten und anderen Operationen zusammen, die vor oder nach einer Anfrage passieren.
 ~~~ go
-// validate an api key
+// überprüfe einen API-Schlüssel
 m.Use(func(res http.ResponseWriter, req *http.Request) {
   if req.Header.Get("X-API-KEY") != "secret123" {
     res.WriteHeader(http.StatusUnauthorized)
@@ -308,44 +299,43 @@ m.Use(func(res http.ResponseWriter, req *http.Request) {
 ### Next()
 [Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) is an optional function that Middleware Handlers can call to yield the until after the other Handlers have been executed. This works really well for any operations that must happen after an http request:
 ~~~ go
-// log before and after a request
+// protokolliere vor und nach einer Anfrage
 m.Use(func(c martini.Context, log *log.Logger){
-  log.Println("before a request")
+  log.Println("vor einer Anfrage")
 
   c.Next()
 
-  log.Println("after a request")
+  log.Println("nach einer Anfrage")
 })
 ~~~
 
 ## Martini Env
 
-Some Martini handlers make use of the `martini.Env` global variable to provide special functionality for development environments vs production environments. It is recommended that the `MARTINI_ENV=production` environment variable to be set when deploying a Martini server into a production environment.
+Einige Martini-Handler machen von der globalen `martini.Env` Variable gebrauch, die der Entwicklungsumgebung erweiterte Funktionen bietet, welche die Produktivumgebung nicht enthält. Es wird empfohlen, die `MARTINI_ENV=production` Umgebungsvariable zu setzen, sobald der Martini-Server in den Live-Betrieb übergeht.
 
 ## FAQ
 
-### Where do I find middleware X?
+### Wo finde ich eine bestimmte Middleware?
 
-Start by looking in the [martini-contrib](https://github.com/martini-contrib) projects. If it is not there feel free to contact a martini-contrib team member about adding a new repo to the organization.
+Starte die Suche mit einem Blick in die Projekte von [martini-contrib](https://github.com/martini-contrib). Solltest Du nicht fündig werden, kontaktiere ein Mitglied des martini-contrib Teams, um eine neue Repository anzulegen.
 
-* [auth](https://github.com/martini-contrib/auth) - Handlers for authentication.
-* [binding](https://github.com/martini-contrib/binding) - Handler for mapping/validating a raw request into a structure.
-* [gzip](https://github.com/martini-contrib/gzip) - Handler for adding gzip compress to requests
-* [render](https://github.com/martini-contrib/render) - Handler that provides a service for easily rendering JSON and HTML templates.
-* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler for parsing the `Accept-Language` HTTP header.
-* [sessions](https://github.com/martini-contrib/sessions) - Handler that provides a Session service.
+* [auth](https://github.com/martini-contrib/auth) - Handler zur Authentifizierung.
+* [binding](https://github.com/martini-contrib/binding) - Handler zum Zuordnen/Validieren einer Anfrage zu einem Struct.
+* [gzip](https://github.com/martini-contrib/gzip) - Handler zum Ermöglichen von  gzip-Kompression bei Anfragen.
+* [render](https://github.com/martini-contrib/render) - Handler der einen einfachen Service zum  Rendern von JSON und HTML Templates bereitstellt.
+* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler zum Parsen des `Accept-Language` HTTP-Header.
+* [sessions](https://github.com/martini-contrib/sessions) - Handler mit einem Session service.
 * [strip](https://github.com/martini-contrib/strip) - URL Prefix stripping.
-* [method](https://github.com/martini-contrib/method) - HTTP method overriding via Header or form fields.
-* [secure](https://github.com/martini-contrib/secure) - Implements a few quick security wins.
-* [encoder](https://github.com/martini-contrib/encoder) - Encoder service for rendering data in several formats and content negotiation.
-* [cors](https://github.com/martini-contrib/cors) - Handler that enables CORS support.
-* [oauth2](https://github.com/martini-contrib/oauth2) - Handler that provides OAuth 2.0 login for Martini apps. Google Sign-in, Facebook Connect and Github login is supported.
-* [vauth](https://github.com/rafecolton/vauth) - Handlers for vender webhook authentication (currently GitHub and TravisCI)
+* [method](https://github.com/martini-contrib/method) - Überschreibe eine HTTP-Method via Header oder Formularfelder.
+* [secure](https://github.com/martini-contrib/secure) - Implementation von Sicherheitsfunktionen
+* [encoder](https://github.com/martini-contrib/encoder) - Encoderservice zum Datenrendering in den verschiedensten Formaten.
+* [cors](https://github.com/martini-contrib/cors) - Handler der CORS ermöglicht.
+* [oauth2](https://github.com/martini-contrib/oauth2) - Handler der den Login mit OAuth 2.0 in Martinianwendungen ermöglicht. Google Sign-in, Facebook Connect und Github werden ebenfalls unterstützt.
+* [vauth](https://github.com/rafecolton/vauth) - Handlers zur Webhook Authentifizierung (momentan nur GitHub und TravisCI)
 
-### How do I integrate with existing servers?
+### Wie erweitere ich bei bestehenden Servern?
 
-A Martini instance implements `http.Handler`, so it can easily be used to serve subtrees
-on existing Go servers. For example this is a working Martini app for Google App Engine:
+Eine Martiniinstanz implementiert `http.Handler`, sodass Subrouten in bestehenden Servern einfach genutzt werden können. Hier ist eine funktionierende Martinianwendungen für die Google App Engine:
 
 ~~~ go
 package hello
@@ -358,7 +348,7 @@ import (
 func init() {
   m := martini.Classic()
   m.Get("/", func() string {
-    return "Hello world!"
+    return "Hallo Welt!"
   })
   http.Handle("/", m)
 }
@@ -379,8 +369,9 @@ Für mehr Flexibilität über den Port und den Host nutze stattdessen die `marti
 
 [Gin](https://github.com/codegangsta/gin) und [Fresh](https://github.com/pilu/fresh) aktualisieren Martini-Apps live.
 
-## Beitragen
-Martinis Grundsatz ist Minimalismus und sauberer Code. Die meisten Beiträge sollten sich in der [martini-contrib](https://github.com/martini-contrib) Repository wiederfinden. Beinhaltet Dein Beitrag Veränderungen am Kern von Martini, zögere nicht, einen Pull Request zu machen.
+## Bei Martini mitwirken
+
+Martinis Maxime ist Minimalismus und sauberer Code. Die meisten Beiträge sollten sich in den Repositories der [martini-contrib](https://github.com/martini-contrib) Gruppe wiederfinden. Beinhaltet Dein Beitrag Veränderungen am Kern von Martini, zögere nicht, einen Pull Request zu machen.
 
 ## Über das Projekt
 
