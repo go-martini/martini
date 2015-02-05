@@ -1,14 +1,3 @@
-<!--
-
-TODO:
-  - Translation of the Next() paragraph. See https://github.com/go-martini/martini/issues/338
-
--->
-
-
-
-
-
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
 Martini ist eine mächtiges Package zur schnellen Entwicklung von modularen Webanwendungen und -services in Golang. 
@@ -333,7 +322,7 @@ Starte die Suche mit einem Blick in die Projekte von [martini-contrib](https://g
 * [oauth2](https://github.com/martini-contrib/oauth2) - Handler der den Login mit OAuth 2.0 in Martinianwendungen ermöglicht. Google Sign-in, Facebook Connect und Github werden ebenfalls unterstützt.
 * [vauth](https://github.com/rafecolton/vauth) - Handlers zur Webhook Authentifizierung (momentan nur GitHub und TravisCI)
 
-### Wie erweitere ich bei bestehenden Servern?
+### Wie integriere ich in bestehende Systeme?
 
 Eine Martiniinstanz implementiert `http.Handler`, sodass Subrouten in bestehenden Servern einfach genutzt werden können. Hier ist eine funktionierende Martinianwendungen für die Google App Engine:
 
