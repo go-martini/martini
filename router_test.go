@@ -466,3 +466,25 @@ func Test_ActiveRoute(t *testing.T) {
 	context.MapTo(router, (*Routes)(nil))
 	router.Handle(recorder, req, context)
 }
+
+func Test_GetMatchedRoute_NoMatch(t *testing.T) {
+	router := NewRouter()
+
+	route := router.GetMatchedRoute("GET", "/foo")
+
+	if route != nil {
+		t.Errorf("expected: (nil) got: (%v)", route)
+	}
+}
+
+func Test_GetMatchedRoute_Match(t *testing.T) {
+	router := NewRouter()
+	router.Get("/foo", func() {
+	}).Name("Foo")
+
+	route := router.GetMatchedRoute("GET", "/foo")
+
+	if route == nil || route.GetName() != "Foo" {
+		t.Errorf("expected: (%v) got: (%v)", route, route)
+	}
+}
