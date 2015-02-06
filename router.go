@@ -45,7 +45,7 @@ type Router interface {
 
 	// GetMatchedRoute will return a Martini route if a can be found
 	// given a METHOD and path. If none can be found, nil is returned
-	GetMatchedRoute(string, string) route
+	GetMatchedRoute(string, string) *route
 }
 
 type router struct {
@@ -134,7 +134,7 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 
 // GetMatchedRoute will return a Martini route if a can be found
 // given a METHOD and path. If none can be found, nil is returned
-func (r *router) GetMatchedRoute(method string, path string) route {
+func (r *router) GetMatchedRoute(method string, path string) *route {
 	for _, route := range r.routes {
 		ok, _ := route.Match(method, path)
 		if ok {
