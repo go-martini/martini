@@ -479,12 +479,12 @@ func Test_GetMatchedRoute_NoMatch(t *testing.T) {
 
 func Test_GetMatchedRoute_Match(t *testing.T) {
 	router := NewRouter()
-	router.Get("/foo", func() {
-	}).Name("Foo")
+	expected := router.Get("/foo", func() {
+	})
+	expected.Name("Foo")
 
 	route := router.GetMatchedRoute("GET", "/foo")
-
 	if route == nil || route.GetName() != "Foo" {
-		t.Errorf("expected: (%v) got: (%v)", route, route)
+		t.Errorf("expected: (%v) got: (%v)", expected, route)
 	}
 }
