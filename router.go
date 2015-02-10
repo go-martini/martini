@@ -43,8 +43,8 @@ type Router interface {
 	// Handle is the entry point for routing. This is used as a martini.Handler
 	Handle(http.ResponseWriter, *http.Request, Context)
 
-	// GetMatchedRoute will return a Martini route if a can be found
-	// given a METHOD and path. If none can be found, nil is returned
+	// GetMatchedRoute will return a Martini route if one is found
+	// given a method and path. If no route is found, nil is returned
 	GetMatchedRoute(string, string) Route
 }
 
@@ -132,8 +132,8 @@ func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Cont
 	c.run()
 }
 
-// GetMatchedRoute will return a Martini route if a can be found
-// given a METHOD and path. If none can be found, nil is returned
+// GetMatchedRoute will return a Martini route if one is found
+// given a method and path. If no route is found, nil is returned
 func (r *router) GetMatchedRoute(method string, path string) Route {
 	for _, route := range r.routes {
 		ok, _ := route.Match(method, path)
