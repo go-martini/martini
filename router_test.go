@@ -289,6 +289,39 @@ func Test_MethodsFor(t *testing.T) {
 	expect(t, recorder.Header().Get("Allow"), "GET,PUT")
 }
 
+func Test_DefaultNotFoundHandler(t *testing.T) {
+	router := NewRouter()
+	recorder := httptest.NewRecorder()
+	req, _ := http.NewRequest("POST", "http://localhost:3000/foo", nil)
+	context := New().createContext(recorder, req)
+	context.MapTo(router, (*Routes)(nil))
+
+	router.Post("/foo/bar", func() {
+	})
+
+	router.Post("/fo", func() {
+	})
+
+	router.Get("/foo", func() {
+	})
+
+	router.Put("/foo", func() {
+	})
+
+	//request unsupported method but valid route, should be 405
+	router.Handle(recorder, req, context)
+	expect(t, recorder.Code, http.StatusMethodNotAllowed)
+	expect(t, recorder.Header().Get("Allow"), "GET,PUT")
+
+	//request invalid route, should still be 404
+	recorder = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "http://localhost:3000/fooblach", nil)
+	context = New().createContext(recorder, req)
+	router.Handle(recorder, req, context)
+	expect(t, recorder.Code, http.StatusNotFound)
+
+}
+
 func Test_NotFound(t *testing.T) {
 	router := NewRouter()
 	recorder := httptest.NewRecorder()
