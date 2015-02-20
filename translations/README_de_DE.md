@@ -34,7 +34,7 @@ Der Martini-Webserver ist nun unter `localhost:3000` erreichbar.
 
 ## Hilfe
 
-Abboniere den [Emailverteiler](https://groups.google.com/forum/#!forum/martini-go)
+Aboniere den [Emailverteiler](https://groups.google.com/forum/#!forum/martini-go)
 
 Schaue das [Demovideo](http://martini.codegangsta.io/#demo)
 
@@ -47,12 +47,12 @@ GoDoc [Dokumentation](http://godoc.org/github.com/go-martini/martini)
 * Sehr einfach nutzbar
 * Nicht-intrusives Design
 * Leicht kombinierbar mit anderen Golang Packages
-* Ausgezeichnetes Path Matching und Routing.
+* Ausgezeichnetes Path Matching und Routing
 * Modulares Design - einfaches Hinzufügen und Entfernen von Funktionen
 * Eine Vielzahl von guten Handlern/Middlewares nutzbar
 * Großer Funktionsumfang mitgeliefert
 * **Voll kompatibel mit dem [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) Interface.**
-* Standardmäßge ausliefern von Dateien (z.B. von AngularJS Apps im HTML5-Modus)
+* Standardmäßges ausliefern von Dateien (z.B. von AngularJS-Apps im HTML5-Modus)
 
 ## Mehr Middleware
 Mehr Informationen zur Middleware und Funktionalität findest Du in den Repositories der [martini-contrib](https://github.com/martini-contrib) Gruppe.
@@ -62,7 +62,7 @@ Mehr Informationen zur Middleware und Funktionalität findest Du in den Reposito
   * [Handler](#handler)
   * [Routing](#routing)
   * [Services](#services)
-  * [Statische Dateien bereitstellens](#statische-dateien-bereitstellen)
+  * [Statische Dateien bereitstellen](#statische-dateien-bereitstellen)
 * [Middleware Handler](#middleware-handler)
   * [Next()](#next)
 * [Martini Env](#martini-env)
@@ -241,7 +241,7 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 ~~~
 
 ### Statische Dateien bereitstellen
-Eine [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) Instanz übertragt automatisch statische Dateien aus dem "pulbic"-Ordner im Stammverzeichnis Deines Servers. Dieses Verhalten lässt sich durch weitere [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) Handler auf andere Verzeichnisse übertragen.
+Eine [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) Instanz übertragt automatisch statische Dateien aus dem "public"-Ordner im Stammverzeichnis Deines Servers. Dieses Verhalten lässt sich durch weitere [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) Handler auf andere Verzeichnisse übertragen.
 ~~~ go
 m.Use(martini.Static("assets")) // überträgt auch vom "assets"-Verzeichnis
 ~~~
@@ -366,4 +366,4 @@ Martinis Maxime ist Minimalismus und sauberer Code. Die meisten Beiträge sollte
 
 Inspiriert von [Express](https://github.com/visionmedia/express) und [Sinatra](https://github.com/sinatra/sinatra)
 
-Martini wird leidenschaftlich entwickelt von Niemand gerigeren als dem [Code Gangsta](http://codegangsta.io/)
+Martini wird leidenschaftlich von Niemand gerigeren als dem [Code Gangsta](http://codegangsta.io/) entwickelt
