@@ -198,6 +198,11 @@ type route struct {
 
 func newRoute(method string, pattern string, handlers []Handler) *route {
 	route := route{method, nil, handlers, pattern, ""}
+	if n := len(pattern); n > 0 && pattern[n-1] == '/' {
+		pattern += `?`
+	} else {
+		pattern += `/?`
+	}
 	r := regexp.MustCompile(`:[^/#?()\.\\]+`)
 	pattern = r.ReplaceAllStringFunc(pattern, func(m string) string {
 		return fmt.Sprintf(`(?P<%s>[^/#?]+)`, m[1:])
@@ -208,7 +213,6 @@ func newRoute(method string, pattern string, handlers []Handler) *route {
 		index++
 		return fmt.Sprintf(`(?P<_%d>[^#?]*)`, index)
 	})
-	pattern += `\/?`
 	route.regex = regexp.MustCompile(pattern)
 	return &route
 }

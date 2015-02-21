@@ -258,6 +258,46 @@ func Test_RouteMatching(t *testing.T) {
 	}
 }
 
+var routeSlashTests = [...][]struct {
+	// in
+	method string
+	path   string
+
+	// out
+	ok bool
+}{
+	{
+		{"GET", "/foo", true},
+		{"GET", "/foo/", true},
+		{"GET", "/foo//", false},
+	},
+	{
+		{"POST", "/bar", true},
+		{"POST", "/bar/", true},
+		{"POST", "/bar//", false},
+	},
+}
+
+func Test_RouteSlashMatching(t *testing.T) {
+	router := NewRouter()
+	router.Get("/foo", func() {
+	})
+	router.Group("/bar", func(r Router) {
+		r.Post("/", func() {
+		})
+	})
+
+	for i, v := range router.All() {
+		r := v.(*route)
+		for _, tt := range routeSlashTests[i] {
+			ok, _ := r.Match(tt.method, tt.path)
+			if ok != tt.ok {
+				t.Errorf("%s %s: expected (%v) got (%v)", tt.method, tt.path, tt.ok, ok)
+			}
+		}
+	}
+}
+
 func Test_MethodsFor(t *testing.T) {
 	router := NewRouter()
 	recorder := httptest.NewRecorder()
