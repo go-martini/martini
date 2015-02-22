@@ -335,6 +335,7 @@ Start by looking in the [martini-contrib](https://github.com/martini-contrib) pr
 * [cors](https://github.com/martini-contrib/cors) - Handler that enables CORS support.
 * [oauth2](https://github.com/martini-contrib/oauth2) - Handler that provides OAuth 2.0 login for Martini apps. Google Sign-in, Facebook Connect and Github login is supported.
 * [vauth](https://github.com/rafecolton/vauth) - Handlers for vender webhook authentication (currently GitHub and TravisCI)
+* [permissions2](https://github.com/xyproto/permissions2) - Handler for keeping track of users, login states and permissions.
 
 ### How do I integrate with existing servers?
 
