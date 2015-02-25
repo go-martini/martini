@@ -196,15 +196,16 @@ type route struct {
 	name     string
 }
 
+var routeReg1 = regexp.MustCompile(`:[^/#?()\.\\]+`)
+var routeReg2 = regexp.MustCompile(`\*\*`)
+
 func newRoute(method string, pattern string, handlers []Handler) *route {
 	route := route{method, nil, handlers, pattern, ""}
-	r := regexp.MustCompile(`:[^/#?()\.\\]+`)
-	pattern = r.ReplaceAllStringFunc(pattern, func(m string) string {
+	pattern = routeReg1.ReplaceAllStringFunc(pattern, func(m string) string {
 		return fmt.Sprintf(`(?P<%s>[^/#?]+)`, m[1:])
 	})
-	r2 := regexp.MustCompile(`\*\*`)
 	var index int
-	pattern = r2.ReplaceAllStringFunc(pattern, func(m string) string {
+	pattern = routeReg2.ReplaceAllStringFunc(pattern, func(m string) string {
 		index++
 		return fmt.Sprintf(`(?P<_%d>[^#?]*)`, index)
 	})
@@ -249,13 +250,14 @@ func (r *route) Handle(c Context, res http.ResponseWriter) {
 	context.run()
 }
 
+var urlReg = regexp.MustCompile(`:[^/#?()\.\\]+|\(\?P<[a-zA-Z0-9]+>.*\)`)
+
 // URLWith returns the url pattern replacing the parameters for its values
 func (r *route) URLWith(args []string) string {
 	if len(args) > 0 {
-		reg := regexp.MustCompile(`:[^/#?()\.\\]+|\(\?P<[a-zA-Z0-9]+>.*\)`)
 		argCount := len(args)
 		i := 0
-		url := reg.ReplaceAllStringFunc(r.pattern, func(m string) string {
+		url := urlReg.ReplaceAllStringFunc(r.pattern, func(m string) string {
 			var val interface{}
 			if i < argCount {
 				val = args[i]
