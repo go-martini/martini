@@ -132,6 +132,7 @@ The following services are included with [martini.Classic()](http://godoc.org/gi
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request context.
   * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` of named params found by route matching.
   * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Route helper service.
+  * [martini.Route](http://godoc.org/github.com/go-martini/martini#Route) - Current active route.
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface.
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
 
