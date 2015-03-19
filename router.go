@@ -3,7 +3,7 @@ package martini
 import (
 	"fmt"
 	"net/http"
-	"reflect"
+	// "reflect"
 	"regexp"
 	"strconv"
 	"sync"
@@ -111,20 +111,20 @@ func (r *router) AddRoute(method, pattern string, h ...Handler) Route {
 	return r.addRoute(method, pattern, h)
 }
 
-func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Context) {
+func (r *router) Handle(res http.ResponseWriter, req *http.Request, ctx Context) {
 	for _, route := range r.getRoutes() {
 		ok, vals := route.Match(req.Method, req.URL.Path)
 		if ok {
 			params := Params(vals)
-			context.Map(params)
-			route.Handle(context, res)
+			ctx.Map(params)
+			route.Handle(ctx, res)
 			return
 		}
 	}
 
 	// no routes exist, 404
-	c := &routeContext{context, 0, r.notFounds}
-	context.MapTo(c, (*Context)(nil))
+	c := &context{ctx, r.notFounds, func() {}, NewResponseWriter(res), 0}
+	ctx.MapTo(c, (*Context)(nil))
 	c.run()
 }
 
@@ -244,10 +244,11 @@ func (r *route) Validate() {
 }
 
 func (r *route) Handle(c Context, res http.ResponseWriter) {
-	context := &routeContext{c, 0, r.handlers}
-	c.MapTo(context, (*Context)(nil))
+	ctx := &context{c, r.handlers, func() {}, NewResponseWriter(res), 0}
+	// ctx := &context{c, 0, r.handlers}
+	c.MapTo(ctx, (*Context)(nil))
 	c.MapTo(r, (*Route)(nil))
-	context.run()
+	ctx.run()
 }
 
 var urlReg = regexp.MustCompile(`:[^/#?()\.\\]+|\(\?P<[a-zA-Z0-9]+>.*\)`)
@@ -354,37 +355,4 @@ func (r *router) MethodsFor(path string) []string {
 		}
 	}
 	return methods
-}
-
-type routeContext struct {
-	Context
-	index    int
-	handlers []Handler
-}
-
-func (r *routeContext) Next() {
-	r.index += 1
-	r.run()
-}
-
-func (r *routeContext) run() {
-	for r.index < len(r.handlers) {
-		handler := r.handlers[r.index]
-		vals, err := r.Invoke(handler)
-		if err != nil {
-			panic(err)
-		}
-		r.index += 1
-
-		// if the handler returned something, write it to the http response
-		if len(vals) > 0 {
-			ev := r.Get(reflect.TypeOf(ReturnHandler(nil)))
-			handleReturn := ev.Interface().(ReturnHandler)
-			handleReturn(r, vals)
-		}
-
-		if r.Written() {
-			return
-		}
-	}
 }
