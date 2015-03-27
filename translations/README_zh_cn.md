@@ -70,7 +70,7 @@ go run server.go
 ~~~
 
 下面是Martini核心已经包含的功能 [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
-  * Request/Response Logging （请求/相应日志） - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
+  * Request/Response Logging （请求/响应日志） - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
   * Panic Recovery （容错） - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
   * Static File serving （静态文件服务） - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
   * Routing （路由） - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
