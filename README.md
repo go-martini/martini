@@ -370,6 +370,8 @@ To have more flexibility over port and host, use the `martini.RunOnAddr` functio
   // ...
   log.Fatal(m.RunOnAddr(":8080"))
 ~~~
+### Fixed 
+  change code struct,optimized code *context* 
 
 ### Live code reload?
 
