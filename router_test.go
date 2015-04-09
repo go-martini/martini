@@ -236,24 +236,25 @@ var routeTests = []struct {
 	path   string
 
 	// out
-	ok     bool
+	match  RouteMatch
 	params map[string]string
 }{
-	{"GET", "/foo/123/bat/321", true, map[string]string{"bar": "123", "baz": "321"}},
-	{"POST", "/foo/123/bat/321", false, map[string]string{}},
-	{"GET", "/foo/hello/bat/world", true, map[string]string{"bar": "hello", "baz": "world"}},
-	{"GET", "foo/hello/bat/world", false, map[string]string{}},
-	{"GET", "/foo/123/bat/321/", true, map[string]string{"bar": "123", "baz": "321"}},
-	{"GET", "/foo/123/bat/321//", false, map[string]string{}},
-	{"GET", "/foo/123//bat/321/", false, map[string]string{}},
+	{"GET", "/foo/123/bat/321", ExactMatch, map[string]string{"bar": "123", "baz": "321"}},
+	{"POST", "/foo/123/bat/321", NoMatch, map[string]string{}},
+	{"GET", "/foo/hello/bat/world", ExactMatch, map[string]string{"bar": "hello", "baz": "world"}},
+	{"GET", "foo/hello/bat/world", NoMatch, map[string]string{}},
+	{"GET", "/foo/123/bat/321/", ExactMatch, map[string]string{"bar": "123", "baz": "321"}},
+	{"GET", "/foo/123/bat/321//", NoMatch, map[string]string{}},
+	{"GET", "/foo/123//bat/321/", NoMatch, map[string]string{}},
+	{"HEAD", "/foo/123/bat/321/", OverloadMatch, map[string]string{"bar": "123", "baz": "321"}},
 }
 
 func Test_RouteMatching(t *testing.T) {
 	route := newRoute("GET", "/foo/:bar/bat/:baz", nil)
 	for _, tt := range routeTests {
-		ok, params := route.Match(tt.method, tt.path)
-		if ok != tt.ok || params["bar"] != tt.params["bar"] || params["baz"] != tt.params["baz"] {
-			t.Errorf("expected: (%v, %v) got: (%v, %v)", tt.ok, tt.params, ok, params)
+		match, params := route.Match(tt.method, tt.path)
+		if match != tt.match || params["bar"] != tt.params["bar"] || params["baz"] != tt.params["baz"] {
+			t.Errorf("expected: (%v, %v) got: (%v, %v)", tt.match, tt.params, match, params)
 		}
 	}
 }

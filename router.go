@@ -112,14 +112,25 @@ func (r *router) AddRoute(method, pattern string, h ...Handler) Route {
 }
 
 func (r *router) Handle(res http.ResponseWriter, req *http.Request, context Context) {
+	bestMatch := NoMatch
+	var bestVals map[string]string
+	var bestRoute *route
 	for _, route := range r.getRoutes() {
-		ok, vals := route.Match(req.Method, req.URL.Path)
-		if ok {
-			params := Params(vals)
-			context.Map(params)
-			route.Handle(context, res)
-			return
+		match, vals := route.Match(req.Method, req.URL.Path)
+		if match.BetterThan(bestMatch) {
+			bestMatch = match
+			bestVals = vals
+			bestRoute = route
+			if match == ExactMatch {
+				break
+			}
 		}
+	}
+	if bestMatch != NoMatch {
+		params := Params(bestVals)
+		context.Map(params)
+		bestRoute.Handle(context, res)
+		return
 	}
 
 	// no routes exist, 404
@@ -214,14 +225,38 @@ func newRoute(method string, pattern string, handlers []Handler) *route {
 	return &route
 }
 
-func (r route) MatchMethod(method string) bool {
-	return r.method == "*" || method == r.method || (method == "HEAD" && r.method == "GET")
+type RouteMatch int
+
+const (
+	NoMatch RouteMatch = iota
+	StarMatch
+	OverloadMatch
+	ExactMatch
+)
+
+//Higher number = better match
+func (r RouteMatch) BetterThan(o RouteMatch) bool {
+	return r > o
 }
 
-func (r route) Match(method string, path string) (bool, map[string]string) {
+func (r route) MatchMethod(method string) RouteMatch {
+	switch {
+	case method == r.method:
+		return ExactMatch
+	case method == "HEAD" && r.method == "GET":
+		return OverloadMatch
+	case r.method == "*":
+		return StarMatch
+	default:
+		return NoMatch
+	}
+}
+
+func (r route) Match(method string, path string) (RouteMatch, map[string]string) {
 	// add Any method matching support
-	if !r.MatchMethod(method) {
-		return false, nil
+	match := r.MatchMethod(method)
+	if match == NoMatch {
+		return match, nil
 	}
 
 	matches := r.regex.FindStringSubmatch(path)
@@ -232,9 +267,9 @@ func (r route) Match(method string, path string) (bool, map[string]string) {
 				params[name] = matches[i]
 			}
 		}
-		return true, params
+		return match, params
 	}
-	return false, nil
+	return NoMatch, nil
 }
 
 func (r *route) Validate() {
