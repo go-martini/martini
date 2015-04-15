@@ -251,6 +251,10 @@ m.Use(func(c martini.Context, log *log.Logger){
 })
 ~~~
 
+## Martini Env
+一些handler使用环境变量 `martini.Env` 对开发环境和生产环境提供特殊功能. 推荐在生产环境设置环境变量 `MARTINI_ENV=production`.
+
+
 ## 常见问答
 
 ### 我在哪里可以找到中间件资源?
