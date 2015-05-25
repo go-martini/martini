@@ -323,20 +323,29 @@ Some Martini handlers make use of the `martini.Env` global variable to provide s
 
 Start by looking in the [martini-contrib](https://github.com/martini-contrib) projects. If it is not there feel free to contact a martini-contrib team member about adding a new repo to the organization.
 
+* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler for parsing the `Accept-Language` HTTP header.
+* [accessflags](https://github.com/martini-contrib/accessflags) - Handler to enable Access Control.
 * [auth](https://github.com/martini-contrib/auth) - Handlers for authentication.
 * [binding](https://github.com/martini-contrib/binding) - Handler for mapping/validating a raw request into a structure.
-* [gzip](https://github.com/martini-contrib/gzip) - Handler for adding gzip compress to requests
-* [render](https://github.com/martini-contrib/render) - Handler that provides a service for easily rendering JSON and HTML templates.
-* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler for parsing the `Accept-Language` HTTP header.
-* [sessions](https://github.com/martini-contrib/sessions) - Handler that provides a Session service.
-* [strip](https://github.com/martini-contrib/strip) - URL Prefix stripping.
-* [method](https://github.com/martini-contrib/method) - HTTP method overriding via Header or form fields.
-* [secure](https://github.com/martini-contrib/secure) - Implements a few quick security wins.
-* [encoder](https://github.com/martini-contrib/encoder) - Encoder service for rendering data in several formats and content negotiation.
 * [cors](https://github.com/martini-contrib/cors) - Handler that enables CORS support.
+* [csrf](https://github.com/martini-contrib/csrf) - CSRF protection for applications
+* [encoder](https://github.com/martini-contrib/encoder) - Encoder service for rendering data in several formats and content negotiation.
+* [gzip](https://github.com/martini-contrib/gzip) - Handler for adding gzip compress to requests
+* [gorelic](https://github.com/martini-contrib/gorelic) - NewRelic middleware
+* [logstasher](https://github.com/martini-contrib/logstasher) - Middleware that prints logstash-compatiable JSON 
+* [method](https://github.com/martini-contrib/method) - HTTP method overriding via Header or form fields.
 * [oauth2](https://github.com/martini-contrib/oauth2) - Handler that provides OAuth 2.0 login for Martini apps. Google Sign-in, Facebook Connect and Github login is supported.
-* [vauth](https://github.com/rafecolton/vauth) - Handlers for vender webhook authentication (currently GitHub and TravisCI)
 * [permissions2](https://github.com/xyproto/permissions2) - Handler for keeping track of users, login states and permissions.
+* [render](https://github.com/martini-contrib/render) - Handler that provides a service for easily rendering JSON and HTML templates.
+* [secure](https://github.com/martini-contrib/secure) - Implements a few quick security wins.
+* [sessions](https://github.com/martini-contrib/sessions) - Handler that provides a Session service.
+* [sessionauth](https://github.com/martini-contrib/sessionauth) - Handler that provides a simple way to make routes require a login, and to handle user logins in the session
+* [strict](https://github.com/martini-contrib/strict) - Strict Mode 
+* [strip](https://github.com/martini-contrib/strip) - URL Prefix stripping.
+* [staticbin](https://github.com/martini-contrib/staticbin) - Handler for serving static files from binary data
+* [throttle](https://github.com/martini-contrib/throttle) - Request rate throttling middleware.
+* [vauth](https://github.com/rafecolton/vauth) - Handlers for vender webhook authentication (currently GitHub and TravisCI)
+* [web](https://github.com/martini-contrib/web) - hoisie web.go's Context
 
 ### How do I integrate with existing servers?
 
