@@ -24,3 +24,7 @@ _testmain.go
 
 /.godeps
 /.envrc
+
+# Godeps
+Godeps/_workspace
+Godeps/Readme
