@@ -12,7 +12,7 @@ import (
 // that are passed into this function.
 type ReturnHandler func(Context, []reflect.Value)
 
-func defaultReturnHandler() ReturnHandler {
+func DefaultReturnHandler() ReturnHandler {
 	return func(ctx Context, vals []reflect.Value) {
 		rv := ctx.Get(inject.InterfaceOf((*http.ResponseWriter)(nil)))
 		res := rv.Interface().(http.ResponseWriter)
