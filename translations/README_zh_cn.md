@@ -164,6 +164,15 @@ m.Get("/hello/**", func(params martini.Params) string {
 })
 ~~~
 
+也可以这样使用正则表达式:
+~~~go
+m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
+  return fmt.Sprintf ("Hello %s", params["name"])
+})
+~~~
+有关正则表达式的更多信息请参见[Go官方文档](http://golang.org/pkg/regexp/syntax/).
+
+
 路由处理器可以被相互叠加使用, 例如很有用的地方可以是在验证和授权的时候:
 ~~~ go
 m.Get("/secret", authorize, func() {
