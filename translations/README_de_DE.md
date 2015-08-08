@@ -1,6 +1,6 @@
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
-Martini ist eine mächtiges Package zur schnellen Entwicklung von modularen Webanwendungen und -services in Golang. 
+Martini ist ein mächtiges Package zur schnellen Entwicklung von modularen Webanwendungen und -services in Golang. 
 
 ## Ein Projekt starten
 
@@ -34,7 +34,7 @@ Der Martini-Webserver ist nun unter `localhost:3000` erreichbar.
 
 ## Hilfe
 
-Aboniere den [Emailverteiler](https://groups.google.com/forum/#!forum/martini-go)
+Abonniere den [Emailverteiler](https://groups.google.com/forum/#!forum/martini-go)
 
 Schaue das [Demovideo](http://martini.codegangsta.io/#demo)
 
@@ -52,7 +52,7 @@ GoDoc [Dokumentation](http://godoc.org/github.com/go-martini/martini)
 * Eine Vielzahl von guten Handlern/Middlewares nutzbar
 * Großer Funktionsumfang mitgeliefert
 * **Voll kompatibel mit dem [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) Interface.**
-* Standardmäßges ausliefern von Dateien (z.B. von AngularJS-Apps im HTML5-Modus)
+* Standardmäßiges Ausliefern von Dateien (z.B. von AngularJS-Apps im HTML5-Modus)
 
 ## Mehr Middleware
 Mehr Informationen zur Middleware und Funktionalität findest Du in den Repositories der [martini-contrib](https://github.com/martini-contrib) Gruppe.
@@ -122,6 +122,7 @@ Die Folgenden Services sind Bestandteil von [martini.Classic()](http://godoc.org
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request context.
   * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` von benannten Parametern, welche durch Route Matching gefunden wurden.
   * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Routen Hilfeservice.
+  * [martini.Route](http://godoc.org/github.com/go-martini/martini#Route) - Aktuelle, aktive Route.
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer interface.
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
 
@@ -141,7 +142,7 @@ m.Post("/", func() {
 })
 
 m.Put("/", func() {
-  // ersetzte etwas
+  // ersetze etwas
 })
 
 m.Delete("/", func() {
@@ -149,7 +150,7 @@ m.Delete("/", func() {
 })
 
 m.Options("/", func() {
-  // HTTP Optionen
+  // HTTP-Optionen
 })
 
 m.NotFound(func() {
@@ -159,7 +160,7 @@ m.NotFound(func() {
 
 Routen werden in der Reihenfolge, in welcher sie definiert wurden, zugeordnet. Die bei einer Anfrage zuerst zugeordnete Route wird daraufhin aufgerufen.  
 
-Routenmuster enhalten ggf. benannte Parameter, die über den [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) Service abrufbar sind:
+Routenmuster enthalten ggf. benannte Parameter, die über den [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) Service abrufbar sind:
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
   return "Hallo " + params["name"]
@@ -181,7 +182,7 @@ m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
 ~~~
 Weitere Informationen zum Syntax regulärer Ausdrücke findest Du in der [Go Dokumentation](http://golang.org/pkg/regexp/syntax/).
 
-Routen-Handler können auch in einander verschachtelt werden. Dies ist bei der Authentifizierung und Berechtigungen nützlich.
+Routen-Handler können auch ineinander verschachtelt werden. Dies ist bei der Authentifizierung und den Berechtigungen nützlich.
 ~~~ go
 m.Get("/secret", authorize, func() {
   // wird ausgeführt, solange authorize nichts zurückgibt
@@ -209,7 +210,7 @@ m.Group("/books", func(r martini.Router) {
 ~~~
 
 ### Services
-Services sind Okjekte, welche der Argumentliste von Handlern beigefügt werden können.
+Services sind Objekte, welche der Argumentliste von Handlern beigefügt werden können.
 Du kannst einem Service der *Global* oder *Request* Ebene zuordnen.
 
 #### Global Mapping
@@ -308,19 +309,29 @@ Einige Martini-Handler machen von der globalen `martini.Env` Variable gebrauch, 
 
 Starte die Suche mit einem Blick in die Projekte von [martini-contrib](https://github.com/martini-contrib). Solltest Du nicht fündig werden, kontaktiere ein Mitglied des martini-contrib Teams, um eine neue Repository anzulegen.
 
-* [auth](https://github.com/martini-contrib/auth) - Handler zur Authentifizierung.
-* [binding](https://github.com/martini-contrib/binding) - Handler zum Zuordnen/Validieren einer Anfrage zu einem Struct.
-* [gzip](https://github.com/martini-contrib/gzip) - Handler zum Ermöglichen von  gzip-Kompression bei Anfragen.
-* [render](https://github.com/martini-contrib/render) - Handler der einen einfachen Service zum  Rendern von JSON und HTML Templates bereitstellt.
-* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler zum Parsen des `Accept-Language` HTTP-Header.
-* [sessions](https://github.com/martini-contrib/sessions) - Handler mit einem Session service.
-* [strip](https://github.com/martini-contrib/strip) - URL Prefix stripping.
-* [method](https://github.com/martini-contrib/method) - Überschreibe eine HTTP-Method via Header oder Formularfelder.
-* [secure](https://github.com/martini-contrib/secure) - Implementation von Sicherheitsfunktionen
-* [encoder](https://github.com/martini-contrib/encoder) - Encoderservice zum Datenrendering in den verschiedensten Formaten.
-* [cors](https://github.com/martini-contrib/cors) - Handler der CORS ermöglicht.
-* [oauth2](https://github.com/martini-contrib/oauth2) - Handler der den Login mit OAuth 2.0 in Martinianwendungen ermöglicht. Google Sign-in, Facebook Connect und Github werden ebenfalls unterstützt.
-* [vauth](https://github.com/rafecolton/vauth) - Handlers zur Webhook Authentifizierung (momentan nur GitHub und TravisCI)
+ * [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler zum Parsen des `Accept-Language` HTTP-Header.
+ * [accessflags](https://github.com/martini-contrib/accessflags) - Handler zur Ermöglichung von Zugriffskontrollen.
+ * [auth](https://github.com/martini-contrib/auth) - Handler zur Authentifizierung.
+ * [binding](https://github.com/martini-contrib/binding) - Handler zum Zuordnen/Validieren einer Anfrage zu einem Struct.
+ * [cors](https://github.com/martini-contrib/cors) - Handler für CORS-Support.
+ * [csrf](https://github.com/martini-contrib/csrf) - CSRF-Schutz für Applikationen
+ * [encoder](https://github.com/martini-contrib/encoder) - Enkodierungsservice zum Datenrendering in den verschiedensten Formaten.
+ * [gzip](https://github.com/martini-contrib/gzip) - Handler zum Ermöglichen von gzip-Kompression bei HTTP-Anfragen.
+ * [gorelic](https://github.com/martini-contrib/gorelic) - NewRelic Middleware
+ * [logstasher](https://github.com/martini-contrib/logstasher) - Middlewaredie Logstashkompatibles JSON ausgibt
+ * [method](https://github.com/martini-contrib/method) - Überschreibe eine HTTP-Method via Header oder Formularfelder.
+ * [oauth2](https://github.com/martini-contrib/oauth2) - Handler der den Login mit OAuth 2.0 in Martinianwendungen ermöglicht. Google Sign-in, Facebook Connect und Github werden ebenfalls unterstützt.
+ * [permissions2](https://github.com/xyproto/permissions2) - Handler zum Mitverfolgen von Benutzern, Loginstatus und Berechtigungen.
+ * [render](https://github.com/martini-contrib/render) - Handler, der einen einfachen Service zum Rendern von JSON und HTML-Templates bereitstellt.
+ * [secure](https://github.com/martini-contrib/secure) - Implementation von Sicherheitsfunktionen
+ * [sessions](https://github.com/martini-contrib/sessions) - Handler mit einem Session service.
+ * [sessionauth](https://github.com/martini-contrib/sessionauth) - Handler zur einfachen Aufforderung eines Logins für Routes und zur Bearbeitung von Benutzerlogins in der Sitzung
+ * [strict](https://github.com/martini-contrib/strict) - Strikter Modus.
+ * [strip](https://github.com/martini-contrib/strip) - URL-Prefix Stripping.
+ * [staticbin](https://github.com/martini-contrib/staticbin) - Handler for serving static files from binary data
+ * [throttle](https://github.com/martini-contrib/throttle) - Middleware zum Drosseln von HTTP-Anfragen.
+ * [vauth](https://github.com/rafecolton/vauth) - Handler zur Webhook-Authentifizierung (momentan nur GitHub und TravisCI)
+ * [web](https://github.com/martini-contrib/web) - hoisie web.go's Kontext
 
 ### Wie integriere ich in bestehende Systeme?
 
@@ -366,4 +377,4 @@ Martinis Maxime ist Minimalismus und sauberer Code. Die meisten Beiträge sollte
 
 Inspiriert von [Express](https://github.com/visionmedia/express) und [Sinatra](https://github.com/sinatra/sinatra)
 
-Martini wird leidenschaftlich von Niemand gerigeren als dem [Code Gangsta](http://codegangsta.io/) entwickelt
+Martini wird leidenschaftlich von niemand Geringerem als dem [Code Gangsta](http://codegangsta.io/) entwickelt
