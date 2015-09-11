@@ -5,7 +5,7 @@ Martini es un poderoso paquete para escribir rápidamente aplicaciones/servicios
 
 ## Vamos a iniciar
 
-Antes de instalar Go y de configurar su [GOPATH](http://golang.org/doc/code.html#GOPATH), cree su primer archivo `.go`. Vamos a llamar a este `server.go`.
+Después de instalar Go y de configurar su [GOPATH](http://golang.org/doc/code.html#GOPATH), cree su primer archivo `.go`. Vamos a llamar a este `server.go`.
 
 ~~~ go
 package main
