@@ -13,6 +13,7 @@ Language Translations:
 * [French](translations/README_fr_FR.md)
 * [Turkish](translations/README_tr_TR.md)
 * [German](translations/README_de_DE.md)
+* [Polski](translations/README_pl_PL.md)
 
 ## Getting Started
 
