@@ -47,7 +47,7 @@ GoDoc [dokumentacja](http://godoc.org/github.com/go-martini/martini)
 * Bardzo prosty w użyciu.
 * Posiada niewymagającą ingerencji budowę.
 * Łatwo integruje się z innymi pakietami w języku Go.
-* Sprawne dopasowywanie ścieżek i routingu.
+* Sprawnie dopasowuje ścieżki i routing.
 * Modularny projekt - łatwo dodać funkcję i łatwo usunąć.
 * Bogate zasoby handlerów i middleware'ów do wykorzystania.
 * Spora część funkcji działa 'z paczki'.
@@ -55,7 +55,7 @@ GoDoc [dokumentacja](http://godoc.org/github.com/go-martini/martini)
 * Umożliwia serwowanie domyślnych stron (np. przy serwowaniu aplikacji napisanych w AngularJS w trybie HTML5).
 
 ## Więcej middleware'ów
-W celu uzyskania większej liczby informacji o middleware'ach i ich możliwościach, przejrzyj repozytoria należące do organizacji [martini-contrib](https://github.com/martini-contrib).
+W celu uzyskania więcej informacji o middleware'ach i ich możliwościach, przejrzyj repozytoria należące do organizacji [martini-contrib](https://github.com/martini-contrib).
 
 ## Spis treści
 * [Domyślna konfiguracja (Martini Classic)](#classic-martini)
