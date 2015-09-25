@@ -20,7 +20,7 @@ func main() {
 }
 ~~~
 
-Następnie zainstaluj pakiet Martini (środowisko **go 1.1** lub w nowszej wersji jest wymagane):
+Następnie zainstaluj pakiet Martini (środowisko **go** w wersji **1.1** lub nowszej jest wymagane):
 ~~~
 go get github.com/go-martini/martini
 ~~~
