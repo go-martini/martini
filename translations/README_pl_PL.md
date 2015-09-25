@@ -55,7 +55,7 @@ GoDoc [dokumentacja](http://godoc.org/github.com/go-martini/martini)
 * Umożliwia serwowanie domyślnych stron (np. przy serwowaniu aplikacji napisanych w AngularJS w trybie HTML5).
 
 ## Więcej middleware'ów
-W celu uzystkania więcej informacji o middleware'ach i ich możliwościach, przejrzyj repozytoria należące do organizacji [martini-contrib](https://github.com/martini-contrib).
+W celu uzyskania większej liczby informacji o middleware'ach i ich możliwościach, przejrzyj repozytoria należące do organizacji [martini-contrib](https://github.com/martini-contrib).
 
 ## Spis treści
 * [Tryb klasyczny](#classic-martini)
@@ -68,7 +68,7 @@ W celu uzystkania więcej informacji o middleware'ach i ich możliwościach, prz
 * [Zmienne środowiskowe Martini](#martini-env)
 * [FAQ](#faq)
 
-## Classic Martini
+## Tryb klasyczny
 To get up and running quickly, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) provides some reasonable defaults that work well for most web applications:
 ~~~ go
   m := martini.Classic()
