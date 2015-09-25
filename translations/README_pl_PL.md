@@ -58,7 +58,7 @@ GoDoc [dokumentacja](http://godoc.org/github.com/go-martini/martini)
 W celu uzyskania większej liczby informacji o middleware'ach i ich możliwościach, przejrzyj repozytoria należące do organizacji [martini-contrib](https://github.com/martini-contrib).
 
 ## Spis treści
-* [Tryb klasyczny](#classic-martini)
+* [Domyślna konfiguracja (Martini Classic)](#classic-martini)
   * [Handlery](#handlers)
   * [Routing](#routing)
   * [Usługi](#services)
@@ -68,7 +68,7 @@ W celu uzyskania większej liczby informacji o middleware'ach i ich możliwości
 * [Zmienne środowiskowe Martini](#martini-env)
 * [FAQ](#faq)
 
-## Tryb klasyczny
+## Domyślna konfiguracja (Martini Classic)
 To get up and running quickly, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) provides some reasonable defaults that work well for most web applications:
 ~~~ go
   m := martini.Classic()
