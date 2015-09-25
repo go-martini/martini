@@ -51,7 +51,7 @@ GoDoc [dokumentacja](http://godoc.org/github.com/go-martini/martini)
 * Modularny projekt - łatwo dodać funkcję i łatwo usunąć.
 * Bogate zasoby handlerów i middleware'ów do wykorzystania.
 * Spora część funkcji działa 'z paczki'.
-* **W pełni kompatybilnym z interfejsem [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc).**
+* **W pełni kompatybilny z interfejsem [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc).**
 * Umożliwia serwowanie domyślnych stron (np. przy serwowaniu aplikacji napisanych w AngularJS w trybie HTML5).
 
 ## Więcej middleware'ów
