@@ -4,7 +4,7 @@ Martini to solidny framework umożliwiający sprawne tworzenie modularnych aplik
 
 ## Pierwsze kroki
 
-After installing Go and setting up your [GOPATH](http://golang.org/doc/code.html#GOPATH), create your first `.go` file. We'll call it `server.go`.
+Po zakończonej instalacji Go i ustawieniu zmiennej [GOPATH](http://golang.org/doc/code.html#GOPATH), utwórz swój pierwszy plik `.go`. Nazwijmy go `server.go`.
 
 ~~~ go
 package main
@@ -20,30 +20,30 @@ func main() {
 }
 ~~~
 
-Then install the Martini package (**go 1.1** or greater is required):
+Następnie zainstaluj pakiet Martini (środowisko **go 1.1** lub w nowszej wersji jest wymagane):
 ~~~
 go get github.com/go-martini/martini
 ~~~
 
-Then run your server:
+Uruchom serwer:
 ~~~
 go run server.go
 ~~~
 
-You will now have a Martini webserver running on `localhost:3000`.
+W tym momencie webserwer Martini jest uruchomiony na `localhost:3000`.
 
-## Getting Help
+## Uzyskiwanie pomocy
 
-Join the [Mailing list](https://groups.google.com/forum/#!forum/martini-go)
+Dołącz do [grup dyskusyjnych](https://groups.google.com/forum/#!forum/martini-go)
 
-Watch the [Demo Video](http://martini.codegangsta.io/#demo)
+Obejrzyj przygotowane [demo](http://martini.codegangsta.io/#demo)
 
-Ask questions on Stackoverflow using the [martini tag](http://stackoverflow.com/questions/tagged/martini)
+Zadawaj pytania na Stackoverflow dodając [tag martini](http://stackoverflow.com/questions/tagged/martini)
 
-GoDoc [documentation](http://godoc.org/github.com/go-martini/martini)
+GoDoc [dokumentacja](http://godoc.org/github.com/go-martini/martini)
 
 
-## Features
+## Cechy
 * Extremely simple to use.
 * Non-intrusive design.
 * Plays nice with other Golang packages.
