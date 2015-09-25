@@ -43,29 +43,29 @@ Zadawaj pytania na Stackoverflow dodając [tag martini](http://stackoverflow.com
 GoDoc [dokumentacja](http://godoc.org/github.com/go-martini/martini)
 
 
-## Cechy
-* Extremely simple to use.
-* Non-intrusive design.
-* Plays nice with other Golang packages.
-* Awesome path matching and routing.
-* Modular design - Easy to add functionality, easy to rip stuff out.
-* Lots of good handlers/middlewares to use.
-* Great 'out of the box' feature set.
-* **Fully compatible with the [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc) interface.**
-* Default document serving (e.g., for serving AngularJS apps in HTML5 mode).
+## Cechy frameworka
+* Bardzo prosty w użyciu.
+* Posiada niewymagającą ingerencji budowę.
+* Łatwo integruje się z innymi pakietami w języku Go.
+* Sprawne dopasowywanie ścieżek i routingu.
+* Modularny projekt - łatwo dodać funkcję i łatwo usunąć.
+* Bogate zasoby handlerów i middleware'ów do wykorzystania.
+* Spora część funkcji działa 'z paczki'.
+* **W pełni kompatybilnym z interfejsem [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc).**
+* Umożliwia serwowanie domyślnych stron (np. przy serwowaniu aplikacji napisanych w AngularJS w trybie HTML5).
 
-## More Middleware
-For more middleware and functionality, check out the repositories in the  [martini-contrib](https://github.com/martini-contrib) organization.
+## Więcej middleware'ów
+W celu uzystkania więcej informacji o middleware'ach i ich możliwościach, przejrzyj repozytoria należące do organizacji [martini-contrib](https://github.com/martini-contrib).
 
-## Table of Contents
-* [Classic Martini](#classic-martini)
-  * [Handlers](#handlers)
+## Spis treści
+* [Tryb klasyczny](#classic-martini)
+  * [Handlery](#handlers)
   * [Routing](#routing)
-  * [Services](#services)
-  * [Serving Static Files](#serving-static-files)
-* [Middleware Handlers](#middleware-handlers)
+  * [Usługi](#services)
+  * [Serwowanie plików statycznych](#serving-static-files)
+* [Handlery middleware'ów](#middleware-handlers)
   * [Next()](#next)
-* [Martini Env](#martini-env)
+* [Zmienne środowiskowe Martini](#martini-env)
 * [FAQ](#faq)
 
 ## Classic Martini
