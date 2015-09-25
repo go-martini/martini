@@ -2,19 +2,6 @@
 
 Martini is a powerful package for quickly writing modular web applications/services in Golang.
 
-Language Translations:
-* [繁體中文](translations/README_zh_tw.md)
-* [简体中文](translations/README_zh_cn.md)
-* [Português Brasileiro (pt_BR)](translations/README_pt_br.md)
-* [Español](translations/README_es_ES.md)
-* [한국어 번역](translations/README_ko_kr.md)
-* [Русский](translations/README_ru_RU.md)
-* [日本語](translations/README_ja_JP.md)
-* [French](translations/README_fr_FR.md)
-* [Turkish](translations/README_tr_TR.md)
-* [German](translations/README_de_DE.md)
-* [Polski](translations/README_pl_PL.md)
-
 ## Getting Started
 
 After installing Go and setting up your [GOPATH](http://golang.org/doc/code.html#GOPATH), create your first `.go` file. We'll call it `server.go`.
