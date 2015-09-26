@@ -255,7 +255,7 @@ m.NotFound(static, http.NotFound)
 ~~~
 
 ## Handlery middleware'ów
-Handlery middleware'ów są uruchamiane po otrzymaniu nadchodzącego żądanie HTTP a przed przekazaniem go do routera. W zasadzie nie ma różnicy między nimi a handlerami Martini. Handler middleware'u można dodać do stosu wywołań w następujący sposób:
+Handlery middleware'ów są uruchamiane po otrzymaniu żądania HTTP a przed przekazaniem go do routera. W zasadzie nie ma różnicy między nimi a handlerami Martini. Handler middleware'a można dodać do stosu wywołań w następujący sposób:
 ~~~ go
 m.Use(func() {
   // wykonaj operacje zdefiniowane przez middleware
@@ -282,9 +282,9 @@ m.Use(func(res http.ResponseWriter, req *http.Request) {
 ~~~
 
 ### Next()
-[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) is an optional function that Middleware Handlers can call to yield the until after the other Handlers have been executed. This works really well for any operations that must happen after an http request:
+[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) jest opcjonalną funkcją, którą handlery middleware'ów wywołują, żeby przekazać tymczasowo obsługę żadania do kolejnych handlerów, a później do niej wrócić. Mechanizm sprawdza się doskonale w przypadku wykonywania operacji po obsłudze żądania HTTP:
 ~~~ go
-// log before and after a request
+// zaloguj przed i po żądaniu
 m.Use(func(c martini.Context, log *log.Logger){
   log.Println("before a request")
 
