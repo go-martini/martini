@@ -294,9 +294,9 @@ m.Use(func(c martini.Context, log *log.Logger){
 })
 ~~~
 
-## Martini Env
+## Zmienne środowiskowe Martini
 
-Some Martini handlers make use of the `martini.Env` global variable to provide special functionality for development environments vs production environments. It is recommended that the `MARTINI_ENV=production` environment variable to be set when deploying a Martini server into a production environment.
+Niektóre handlery Martini wykorzystują globalną zmienną `martini.Env` by dostarcząć specjalne funkcje dla środowisk deweloperskich i produkcyjnych. Zaleca się ustawienie zmiennej `MARTINI_ENV=production` w środowisku produkcyjnym.
 
 ## FAQ
 
@@ -328,10 +328,9 @@ Start by looking in the [martini-contrib](https://github.com/martini-contrib) pr
 * [vauth](https://github.com/rafecolton/vauth) - Handlers for vender webhook authentication (currently GitHub and TravisCI)
 * [web](https://github.com/martini-contrib/web) - hoisie web.go's Context
 
-### How do I integrate with existing servers?
+### Jak mogę zintegrować Martini z istniejącymi serwerami?
 
-A Martini instance implements `http.Handler`, so it can easily be used to serve subtrees
-on existing Go servers. For example this is a working Martini app for Google App Engine:
+Instacja Martini implementuje `http.Handler`, więc może być łatwo wykorzystana do serwowania całych drzew zasobów na istniejących serwerach Go. Przykład przedstawia działającą aplikację Martini dla Google App Engine:
 
 ~~~ go
 package hello
@@ -350,10 +349,10 @@ func init() {
 }
 ~~~
 
-### How do I change the port/host?
+### Jak mogę zmienić host/port?
 
-Martini's `Run` function looks for the PORT and HOST environment variables and uses those. Otherwise Martini will default to localhost:3000.
-To have more flexibility over port and host, use the `martini.RunOnAddr` function instead.
+Funkcja `Run` sprawdza, czy są zdefiniowane zmienne środowiskowe HOST i PORT, i jeśli są to ich używa. W przeciwnym wypadku Martini uruchomi się z domyślnymi ustawieniami localhost:3000.
+W celu uzyskania większej kontroli nad hostem i portem, skorzystaj z funkcji `martini.RunOnAddr`.
 
 ~~~ go
   m := martini.Classic()
@@ -366,10 +365,10 @@ To have more flexibility over port and host, use the `martini.RunOnAddr` functio
 [gin](https://github.com/codegangsta/gin) i [fresh](https://github.com/pilu/fresh) wspierają przeładowywanie kodu aplikacji.
 
 ## Rozwijanie
-Martini w założeniu ma pozostać czysty i zwięzły. Większość kontrybucji powinna trafić jako repozytorium organizacji [martini-contrib](https://github.com/martini-contrib). Jeśli masz kontrybucję do core'a projektu Martini, zgłoś Pull Requesta.
+Martini w założeniu ma pozostać czysty i uporządkowany. Większość kontrybucji powinna trafić jako repozytorium organizacji [martini-contrib](https://github.com/martini-contrib). Jeśli masz kontrybucję do core'a projektu Martini, zgłoś Pull Requesta.
 
 ## O projekcie
 
 Inspirowany [expressem](https://github.com/visionmedia/express) i [sinatrą](https://github.com/sinatra/sinatra)
 
-Martini jest obsesyjnie projektowany przez nikogo innego jak przez [Code Gangsta](http://codegangsta.io/)
+Martini został obsesyjnie zaprojektowany przez nikogo innego jak przez [Code Gangsta](http://codegangsta.io/)
