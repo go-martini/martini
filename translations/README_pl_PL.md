@@ -91,21 +91,21 @@ m.Get("/", func() {
 ~~~
 
 #### Wartości zwracane
-If a handler returns something, Martini will write the result to the current [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) as a string:
+Jeśli handler zwróci wartośc, Martini przekaże ją do bieżącego [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) jako łańcuch znaków:
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
 })
 ~~~
 
-You can also optionally return a status code:
+Opcjonalnie można zwrócić także status HTTP:
 ~~~ go
 m.Get("/", func() (int, string) {
   return 418, "i'm a teapot" // HTTP 418 : "i'm a teapot"
 })
 ~~~
 
-#### Service Injection
+#### Wstrzykiwanie usług
 Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.**
 
 If you add an argument to your Handler, Martini will search its list of services and attempt to resolve the dependency via type assertion:
