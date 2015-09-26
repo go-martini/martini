@@ -116,17 +116,17 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res i req są w
 ~~~
 
 Następujące usługi są dostarczane razem z [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
-  * [*log.Logger](http://godoc.org/log#Logger) - Globalny logger dla Martini.
+  * [*log.Logger](http://godoc.org/log#Logger) - globalny logger dla Martini.
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - kontekst żądania HTTP.
   * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` przechowująca nazwane parametry, znalezione podczas dopasowywania _routes_.
-  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - usługa wspierająca _routes_.
+  * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - usługa wspierająca _route'y_.
   * [martini.Route](http://godoc.org/github.com/go-martini/martini#Route) - bieżacy aktywny _route_.
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - interfejs zapisu odpowiedzi HTTP.
   * [*http.Request](http://godoc.org/net/http/#Request) - żądanie HTTP.
 
 ### Routing
 W Martini, jako _route_ należy rozumieć metodę HTTP skojarzoną ze wzorcem dopasowującym adres URL.
-Każdy wzorzec może być skojarzony z jedną lub wiecęj metodą handlera:
+Każdy wzorzec może być skojarzony z jedną lub więcej metod handlera:
 ~~~ go
 m.Get("/", func() {
   // wyświetl coś
@@ -157,39 +157,38 @@ m.NotFound(func() {
 })
 ~~~
 
-Routes are matched in the order they are defined. The first route that
-matches the request is invoked.
+_Route'y_ są dopasowywane w kolejności ich zdefiniowania. Pierwszy dopasowany _route_ zostanie wywołany. 
 
-Route patterns may include named parameters, accessible via the [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) service:
+Wzorce ścieżek _route'ów_ mogą zawierać nazwane paremetry, dostępne poprzez usługę  [martini.Params](http://godoc.org/github.com/go-martini/martini#Params):
 ~~~ go
 m.Get("/hello/:name", func(params martini.Params) string {
   return "Hello " + params["name"]
 })
 ~~~
 
-Routes can be matched with globs:
+_Route'y_ mogą zostać dopasowane z wartościami globalnymi:
 ~~~ go
 m.Get("/hello/**", func(params martini.Params) string {
   return "Hello " + params["_1"]
 })
 ~~~
 
-Regular expressions can be used as well:
+Również wyrażenia regularne mogą zostać użyte:
 ~~~go
 m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
   return fmt.Sprintf ("Hello %s", params["name"])
 })
 ~~~
-Take a look at the [Go documentation](http://golang.org/pkg/regexp/syntax/) for more info about regular expressions syntax .
+Więcej informacji o budowie wyrażeń regularnych znajdziesz w [dokumentacji Go](http://golang.org/pkg/regexp/syntax/).
 
-Route handlers can be stacked on top of each other, which is useful for things like authentication and authorization:
+Handlery można organizować w stosy wywołań, co przydaje się np. przy mechanizmach takich jak uwierzytelnianie i autoryzacja:
 ~~~ go
 m.Get("/secret", authorize, func() {
-  // this will execute as long as authorize doesn't write a response
+  // funkcja będzie wykonywana dopóty, dopóki authorize nie zwróci odpowiedzi
 })
 ~~~
 
-Route groups can be added too using the Group method.
+Grupy _route'ów_ mogą zostać dodane przy pomocy metody Group.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -199,7 +198,7 @@ m.Group("/books", func(r martini.Router) {
 })
 ~~~
 
-Just like you can pass middlewares to a handler you can pass middlewares to groups.
+W taki sam sposób jak przekazujesz middleware'y do handlerów, to możesz przekazywać middleware'y do grup.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -209,7 +208,7 @@ m.Group("/books", func(r martini.Router) {
 }, MyMiddleware1, MyMiddleware2)
 ~~~
 
-### Services
+### Usługi
 Services are objects that are available to be injected into a Handler's argument list. You can map a service on a *Global* or *Request* level.
 
 #### Global Mapping
