@@ -58,7 +58,7 @@ GoDoc [dokumentacja](http://godoc.org/github.com/go-martini/martini)
 W celu uzyskania więcej informacji o middleware'ach i ich możliwościach, przejrzyj repozytoria należące do organizacji [martini-contrib](https://github.com/martini-contrib).
 
 ## Spis treści
-* [Domyślna konfiguracja (Martini Classic)](#classic-martini)
+* [Domyślna konfiguracja (Martini Classic)](#domyslna-konfiguracja-(Martini-Classic))
   * [Handlery](#handlers)
   * [Routing](#routing)
   * [Usługi](#services)
@@ -296,7 +296,7 @@ m.Use(func(c martini.Context, log *log.Logger){
 
 ## Zmienne środowiskowe Martini
 
-Niektóre handlery Martini wykorzystują globalną zmienną `martini.Env` by dostarcząć specjalne funkcje dla środowisk deweloperskich i produkcyjnych. Zaleca się ustawienie zmiennej `MARTINI_ENV=production` w środowisku produkcyjnym.
+Niektóre handlery Martini wykorzystują globalną zmienną `martini.Env` by dostarczać specjalne funkcje dla środowisk deweloperskich i produkcyjnych. Zaleca się ustawienie zmiennej `MARTINI_ENV=production` w środowisku produkcyjnym.
 
 ## FAQ
 
