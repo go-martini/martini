@@ -304,29 +304,29 @@ Niektóre handlery Martini wykorzystują globalną zmienną `martini.Env` by dos
 
 Proponujemy zacząć poszukiwania od projektów należących do [martini-contrib](https://github.com/martini-contrib). Jeśli dany middleware się tam nie znajduje, skontaktuj się z członkiem zespołu martini-contrib i poproś go o dodanie nowego repozytorium do organizacji.
 
-* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler for parsing the `Accept-Language` HTTP header.
-* [accessflags](https://github.com/martini-contrib/accessflags) - Handler to enable Access Control.
-* [auth](https://github.com/martini-contrib/auth) - Handlers for authentication.
-* [binding](https://github.com/martini-contrib/binding) - Handler for mapping/validating a raw request into a structure.
-* [cors](https://github.com/martini-contrib/cors) - Handler that enables CORS support.
-* [csrf](https://github.com/martini-contrib/csrf) - CSRF protection for applications
-* [encoder](https://github.com/martini-contrib/encoder) - Encoder service for rendering data in several formats and content negotiation.
-* [gzip](https://github.com/martini-contrib/gzip) - Handler for adding gzip compress to requests
-* [gorelic](https://github.com/martini-contrib/gorelic) - NewRelic middleware
-* [logstasher](https://github.com/martini-contrib/logstasher) - Middleware that prints logstash-compatiable JSON 
-* [method](https://github.com/martini-contrib/method) - HTTP method overriding via Header or form fields.
-* [oauth2](https://github.com/martini-contrib/oauth2) - Handler that provides OAuth 2.0 login for Martini apps. Google Sign-in, Facebook Connect and Github login is supported.
-* [permissions2](https://github.com/xyproto/permissions2) - Handler for keeping track of users, login states and permissions.
-* [render](https://github.com/martini-contrib/render) - Handler that provides a service for easily rendering JSON and HTML templates.
-* [secure](https://github.com/martini-contrib/secure) - Implements a few quick security wins.
-* [sessions](https://github.com/martini-contrib/sessions) - Handler that provides a Session service.
-* [sessionauth](https://github.com/martini-contrib/sessionauth) - Handler that provides a simple way to make routes require a login, and to handle user logins in the session
+* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler umożliwiający parsowanie nagłówka HTTP `Accept-Language`.
+* [accessflags](https://github.com/martini-contrib/accessflags) - Handler dołączający obsługę kontroli dostępu.
+* [auth](https://github.com/martini-contrib/auth) - Handlery uwierzytelniające.
+* [binding](https://github.com/martini-contrib/binding) - Handler mapujący/walidujący żądanie na strukturę.
+* [cors](https://github.com/martini-contrib/cors) - Handler dostarcza wsparcie dla CORS.
+* [csrf](https://github.com/martini-contrib/csrf) - Ochrona CSRF dla aplikacji.
+* [encoder](https://github.com/martini-contrib/encoder) - Usługa enkodująca treść odpowiedzi w różnych formatach, wspiera negocjacje formatu.
+* [gzip](https://github.com/martini-contrib/gzip) - Handler dla kompresji GZIP żądań.
+* [gorelic](https://github.com/martini-contrib/gorelic) - NewRelic middleware.
+* [logstasher](https://github.com/martini-contrib/logstasher) - Middleware zwracający odpowiedź formacie kompatybilnym z logstash JSON.
+* [method](https://github.com/martini-contrib/method) - Nadpisywanie metod HTTP poprzez nagłówek.
+* [oauth2](https://github.com/martini-contrib/oauth2) - Handler dostarczający logowanie OAuth 2.0 dla aplikacji Martini. Logowanie Google Sign-in, Facebook Connect i Github wspierane.
+* [permissions2](https://github.com/xyproto/permissions2) - Handler śledzący użytkowników, ich logowania i uprawnienia.
+* [render](https://github.com/martini-contrib/render) - Handler dostarczający usługę łatwo renderującą odpowiedź do formatu JSON i szablonów HTML.
+* [secure](https://github.com/martini-contrib/secure) - Implementuje kilka szybkich "quick-wins" związanych z bezpieczeństwem.
+* [sessions](https://github.com/martini-contrib/sessions) - Handler dostarcza usługę sesji.
+* [sessionauth](https://github.com/martini-contrib/sessionauth) - Handler, który umożliwia w prosty sposób nałożenie reguły wymagania logowania dla konkretnych adresów oraz obsługę zalogowanych użytkowników w sesji. 
 * [strict](https://github.com/martini-contrib/strict) - Strict Mode 
-* [strip](https://github.com/martini-contrib/strip) - URL Prefix stripping.
-* [staticbin](https://github.com/martini-contrib/staticbin) - Handler for serving static files from binary data
-* [throttle](https://github.com/martini-contrib/throttle) - Request rate throttling middleware.
-* [vauth](https://github.com/rafecolton/vauth) - Handlers for vender webhook authentication (currently GitHub and TravisCI)
-* [web](https://github.com/martini-contrib/web) - hoisie web.go's Context
+* [strip](https://github.com/martini-contrib/strip) - Pomijanie prefiksu URL.
+* [staticbin](https://github.com/martini-contrib/staticbin) - Handler umożliwia serwowanie statycznych plików z zasobów binarnych.
+* [throttle](https://github.com/martini-contrib/throttle) - Middleware kontrolujący przepustowość handlerów.
+* [vauth](https://github.com/rafecolton/vauth) - Handlery wspierające vendorowe uwierzytelnianie (obecnie GitHub i TravisCI)
+* [web](https://github.com/martini-contrib/web) - Kontekst znany z web.go.
 
 ### Jak mogę zintegrować Martini z istniejącymi serwerami?
 
