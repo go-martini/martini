@@ -125,35 +125,35 @@ Następujące usługi są dostarczane razem z [martini.Classic()](http://godoc.o
   * [*http.Request](http://godoc.org/net/http/#Request) - żądanie HTTP.
 
 ### Routing
-In Martini, a route is an HTTP method paired with a URL-matching pattern.
-Each route can take one or more handler methods:
+W Martini, jako _route_ należy rozumieć metodę HTTP skojarzoną ze wzorcem dopasowującym adres URL.
+Każdy wzorzec może być skojarzony z jedną lub wiecęj metodą handlera:
 ~~~ go
 m.Get("/", func() {
-  // show something
+  // wyświetl coś
 })
 
 m.Patch("/", func() {
-  // update something
+  // zaaktualizuj coś
 })
 
 m.Post("/", func() {
-  // create something
+  // utwórz coś
 })
 
 m.Put("/", func() {
-  // replace something
+  // zamień coś
 })
 
 m.Delete("/", func() {
-  // destroy something
+  // zniszcz coś
 })
 
 m.Options("/", func() {
-  // http options
+  // opcje HTTP
 })
 
 m.NotFound(func() {
-  // handle 404
+  // obsłuż 404
 })
 ~~~
 
