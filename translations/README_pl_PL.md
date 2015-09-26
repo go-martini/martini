@@ -240,21 +240,21 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 ~~~
 
 ### Serwowanie plików statycznych
-Instancja [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) automatycznie serwuje statyczne pliki z katalogu "public", znajdującym się bezpośrednio w korzeniu (_root_) serwera. Możliwe jest serwowanie dodatkowych katalogów poprzez dodanie handlerów [martini.Static](http://godoc.org/github.com/go-martini/martini#Static).
+Instancja [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) automatycznie serwuje statyczne pliki z katalogu "public" znajdującym się bezpośrednio w głównym katalogu serwera. Możliwe jest serwowanie dodatkowych katalogów poprzez dodanie handlerów [martini.Static](http://godoc.org/github.com/go-martini/martini#Static).
 ~~~ go
 m.Use(martini.Static("assets")) // serwuj zasoby z katalogu "assets"
 ~~~
 
 #### Serwowanie domyślnej strony
-Możesz zdefiniować adres URL lokalnego pliku, który będzie serwowany gdy żądany adres URL nie zostanie odnaleziony. Dodatkowo możesz zdefiniować prefiks wykluczający, który spowoduje, że niektórze adresy URL zostaną zignorowane. Jest to przydatna opcja dla serwerów, które jednocześnie serwują statyczne pliki i mają zdefiniowane handlery (np. REST API). Warto także rozważyć zdefiniowanie statycznych handlerów jako części łańcucha NotFound.
+Możesz zdefiniować adres URL lokalnego pliku, który będzie serwowany gdy żądany adres URL nie zostanie znaleziony. Dodatkowo możesz zdefiniować prefiks wykluczający, który spowoduje, że niektórze adresy URL zostaną zignorowane. Jest to przydatna opcja dla serwerów, które jednocześnie serwują statyczne pliki i mają zdefiniowane handlery (np. REST API). Warto także rozważyć zdefiniowanie statycznych handlerów jako części łańcucha NotFound.
 
-W poniższym przykładzie aplikacja serwuje plik `/index.html`, gdy tylko jakikolwiek adres URL nie zostanie dopasowany do istniejącego lokalnego pliku i nie zaczyna się prefiksem `/api/v`:
+W poniższym przykładzie aplikacja serwuje plik `/index.html`, gdy tylko adres URL nie zostanie dopasowany do istniejącego lokalnego pliku i nie zaczyna się prefiksem `/api/v`:
 ~~~ go
 static := martini.Static("assets", martini.StaticOptions{Fallback: "/index.html", Exclude: "/api/v"})
 m.NotFound(static, http.NotFound)
 ~~~
 
-## Middleware Handlers
+## Handlery middleware'ów
 Middleware Handlers sit between the incoming http request and the router. In essence they are no different than any other Handler in Martini. You can add a middleware handler to the stack like so:
 ~~~ go
 m.Use(func() {
@@ -361,15 +361,15 @@ To have more flexibility over port and host, use the `martini.RunOnAddr` functio
   log.Fatal(m.RunOnAddr(":8080"))
 ~~~
 
-### Live code reload?
+### Automatyczne przeładowywanie kodu aplikacji (Live code reload)
 
-[gin](https://github.com/codegangsta/gin) and [fresh](https://github.com/pilu/fresh) both live reload martini apps.
+[gin](https://github.com/codegangsta/gin) i [fresh](https://github.com/pilu/fresh) wspierają przeładowywanie kodu aplikacji.
 
-## Contributing
-Martini is meant to be kept tiny and clean. Most contributions should end up in a repository in the [martini-contrib](https://github.com/martini-contrib) organization. If you do have a contribution for the core of Martini feel free to put up a Pull Request.
+## Rozwijanie
+Martini w założeniu ma pozostać czysty i zwięzły. Większość kontrybucji powinna trafić jako repozytorium organizacji [martini-contrib](https://github.com/martini-contrib). Jeśli masz kontrybucję do core'a projektu Martini, zgłoś Pull Requesta.
 
-## About
+## O projekcie
 
-Inspired by [express](https://github.com/visionmedia/express) and [sinatra](https://github.com/sinatra/sinatra)
+Inspirowany [expressem](https://github.com/visionmedia/express) i [sinatrą](https://github.com/sinatra/sinatra)
 
-Martini is obsessively designed by none other than the [Code Gangsta](http://codegangsta.io/)
+Martini jest obsesyjnie projektowany przez nikogo innego jak przez [Code Gangsta](http://codegangsta.io/)
