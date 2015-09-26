@@ -255,14 +255,14 @@ m.NotFound(static, http.NotFound)
 ~~~
 
 ## Handlery middleware'ów
-Middleware Handlers sit between the incoming http request and the router. In essence they are no different than any other Handler in Martini. You can add a middleware handler to the stack like so:
+Handlery middleware'ów są uruchamiane po otrzymaniu nadchodzącego żądanie HTTP a przed przekazaniem go do routera. W zasadzie nie ma różnicy między nimi a handlerami Martini. Handler middleware'u można dodać do stosu wywołań w następujący sposób:
 ~~~ go
 m.Use(func() {
-  // do some middleware stuff
+  // wykonaj operacje zdefiniowane przez middleware
 })
 ~~~
 
-You can have full control over the middleware stack with the `Handlers` function. This will replace any handlers that have been previously set:
+Pełną kontrolę na stosem middleware'owym zapewnia funkcja `Handlers`. Poniższy przykład prezentuje, jak można zamienić poprzednio skonfigurowane handlery:
 ~~~ go
 m.Handlers(
   Middleware1,
@@ -271,7 +271,7 @@ m.Handlers(
 )
 ~~~
 
-Middleware Handlers work really well for things like logging, authorization, authentication, sessions, gzipping, error pages and any other operations that must happen before or after an http request:
+Handlery middleware'ów sprawdzają się doskonale dla mechanizmów takich jak logowanie, autoryzacja, uwierzytelnianie, obsługa sesji, kompresja odpowiedzi, strony błędów i innych, których operacje muszą zostać wykonane przed i po obsłudze żądania HTTP:
 ~~~ go
 // validate an api key
 m.Use(func(res http.ResponseWriter, req *http.Request) {
