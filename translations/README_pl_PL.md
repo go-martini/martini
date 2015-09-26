@@ -91,7 +91,7 @@ m.Get("/", func() {
 ~~~
 
 #### Wartości zwracane
-Jeśli handler zwróci wartośc, Martini przekaże ją do bieżącego [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) jako łańcuch znaków:
+Jeśli handler zwróci wartość, Martini przekaże ją do bieżącego [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) jako łańcuch znaków:
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
@@ -106,16 +106,16 @@ m.Get("/", func() (int, string) {
 ~~~
 
 #### Wstrzykiwanie usług
-Handlers are invoked via reflection. Martini makes use of *Dependency Injection* to resolve dependencies in a Handlers argument list. **This makes Martini completely  compatible with golang's `http.HandlerFunc` interface.**
+Handlery są wywoływane przez refleksję. Martini korzysta z *wstrzykiwania zależności* w celu rozwiązania tych, które występują na liście argumentów handlera. **To sprawia, że Martini jest w pełni zgodny z interfejsem `http.HandlerFunc`.**
 
-If you add an argument to your Handler, Martini will search its list of services and attempt to resolve the dependency via type assertion:
+Jeśli dodasz argument do handlera, Martini przeszuka swoja listę usług i spróbuje dopasować zależność na podstawie asercji typów:
 ~~~ go
-m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res and req are injected by Martini
+m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res i req są wstrzykiwane przez Martini
   res.WriteHeader(200) // HTTP 200
 })
 ~~~
 
-The following services are included with [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
+Następujące usługi są dostarczane razem z [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic):
   * [*log.Logger](http://godoc.org/log#Logger) - Global logger for Martini.
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request context.
   * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` of named params found by route matching.
