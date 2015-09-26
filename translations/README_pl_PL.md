@@ -58,14 +58,14 @@ GoDoc [dokumentacja](http://godoc.org/github.com/go-martini/martini)
 W celu uzyskania więcej informacji o middleware'ach i ich możliwościach, przejrzyj repozytoria należące do organizacji [martini-contrib](https://github.com/martini-contrib).
 
 ## Spis treści
-* [Domyślna konfiguracja (Martini Classic)](#domyslna-konfiguracja-(Martini-Classic))
-  * [Handlery](#handlers)
+* [Domyślna konfiguracja (Martini Classic)](#domyślna-konfiguracja-martini-classic))
+  * [Handlery](#handlery)
   * [Routing](#routing)
-  * [Usługi](#services)
-  * [Serwowanie plików statycznych](#serving-static-files)
-* [Handlery middleware'ów](#middleware-handlers)
+  * [Usługi](#usługi)
+  * [Serwowanie plików statycznych](#serwowanie-plików-statycznych)
+* [Handlery middleware'ów](#handlery-middlewareów)
   * [Next()](#next)
-* [Zmienne środowiskowe Martini](#martini-env)
+* [Zmienne środowiskowe Martini](#zmienne-środowiskowe-martini)
 * [FAQ](#faq)
 
 ## Domyślna konfiguracja (Martini Classic)
