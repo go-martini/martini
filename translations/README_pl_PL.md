@@ -313,7 +313,7 @@ Proponujemy zacząć poszukiwania od projektów należących do [martini-contrib
 * [encoder](https://github.com/martini-contrib/encoder) - Usługa enkodująca treść odpowiedzi w różnych formatach, wspiera negocjacje formatu.
 * [gzip](https://github.com/martini-contrib/gzip) - Handler dla kompresji GZIP żądań.
 * [gorelic](https://github.com/martini-contrib/gorelic) - NewRelic middleware.
-* [logstasher](https://github.com/martini-contrib/logstasher) - Middleware zwracający odpowiedź formacie kompatybilnym z logstash JSON.
+* [logstasher](https://github.com/martini-contrib/logstasher) - Middleware zwracający odpowiedź formacie kompatybilnym z logstash JSONem.
 * [method](https://github.com/martini-contrib/method) - Nadpisywanie metod HTTP poprzez nagłówek.
 * [oauth2](https://github.com/martini-contrib/oauth2) - Handler dostarczający logowanie OAuth 2.0 dla aplikacji Martini. Logowanie Google Sign-in, Facebook Connect i Github wspierane.
 * [permissions2](https://github.com/xyproto/permissions2) - Handler śledzący użytkowników, ich logowania i uprawnienia.
@@ -325,7 +325,7 @@ Proponujemy zacząć poszukiwania od projektów należących do [martini-contrib
 * [strip](https://github.com/martini-contrib/strip) - Pomijanie prefiksu URL.
 * [staticbin](https://github.com/martini-contrib/staticbin) - Handler umożliwia serwowanie statycznych plików z zasobów binarnych.
 * [throttle](https://github.com/martini-contrib/throttle) - Middleware kontrolujący przepustowość handlerów.
-* [vauth](https://github.com/rafecolton/vauth) - Handlery wspierające vendorowe uwierzytelnianie (obecnie GitHub i TravisCI)
+* [vauth](https://github.com/rafecolton/vauth) - Handlery wspierające vendorowe uwierzytelnianie (obecnie GitHub i TravisCI).
 * [web](https://github.com/martini-contrib/web) - Kontekst znany z web.go.
 
 ### Jak mogę zintegrować Martini z istniejącymi serwerami?
