@@ -300,9 +300,9 @@ Niektóre handlery Martini wykorzystują globalną zmienną `martini.Env` by dos
 
 ## FAQ
 
-### Where do I find middleware X?
+### Gdzie mam szukać middleware'u X?
 
-Start by looking in the [martini-contrib](https://github.com/martini-contrib) projects. If it is not there feel free to contact a martini-contrib team member about adding a new repo to the organization.
+Proponujemy zacząć poszukiwania od projektów należących do [martini-contrib](https://github.com/martini-contrib). Jeśli dany middleware się tam nie znajduje, skontaktuj się z członkiem zespołu martini-contrib i poproś go o dodanie nowego repozytorium do organizacji.
 
 * [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler for parsing the `Accept-Language` HTTP header.
 * [accessflags](https://github.com/martini-contrib/accessflags) - Handler to enable Access Control.
