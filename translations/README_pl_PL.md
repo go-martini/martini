@@ -69,21 +69,21 @@ W celu uzyskania więcej informacji o middleware'ach i ich możliwościach, prze
 * [FAQ](#faq)
 
 ## Domyślna konfiguracja (Martini Classic)
-Martini pozwala bardzo szybko uruchomić webserver korzystając przy tym z [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic), który to dostarcza kilku standardowych, domyślnych ustawień, który będą pasowały do większości aplikacji internetowych:
+Martini pozwala bardzo szybko uruchomić webserver korzystając przy tym z [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic). Standardowo Classic dostarcza domyślne ustawienia, które z powodzeniem pozwolą nam uruchomić wiele aplikacji internetowych:
 ~~~ go
   m := martini.Classic()
   // ... miejsce na middleware'y i routing
   m.Run()
 ~~~
 
-Poniżej wymieniono kilka funkcji [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic), które to dostarcza automatycznie:
+Poniżej wymieniono kilka funkcji [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) dostarczanych automatycznie:
   * Logowanie żądań/odpowiedzi - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
   * Panic Recovery - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
   * Serwowanie plików statycznych - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
   * Routing - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
 
 ### Handlery
-Można powiedzieć, że handlery to serce i dusza Martini. Handlerem można nazwać każdą funkcję postaci:
+Handlery to serce i dusza Martini. Handlerem można nazwać każdą funkcję postaci:
 ~~~ go
 m.Get("/", func() {
   println("hello world")
