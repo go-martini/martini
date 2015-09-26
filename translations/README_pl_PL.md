@@ -230,8 +230,8 @@ func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
 }
 ~~~
 
-#### Mapowanie wartości do interfejsów
-Jedną z mocnych stron usług jest możliwość zmapowania konkretnej usługi do interfejsu. Dla przykładu, jeśli chcesz nadpisać [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) obiektem, który go opakowuje i wykonuje dodatkowe operacje, to możesz napisać następujący handler:
+#### Mapowanie wartości na interfejsy
+Jedną z mocnych stron usług jest możliwość zmapowania konkretnej usługi na interfejs. Dla przykładu, jeśli chcesz nadpisać [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) obiektem, który go opakowuje i wykonuje dodatkowe operacje, to możesz napisać następujący handler:
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
@@ -240,21 +240,15 @@ func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
 ~~~
 
 ### Serwowanie plików statycznych
-A [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) instance automatically serves static files from the "public" directory in the root of your server.
-You can serve from more directories by adding more [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) handlers.
+Instancja [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) automatycznie serwuje statyczne pliki z katalogu "public", znajdującym się bezpośrednio w korzeniu (_root_) serwera. Możliwe jest serwowanie dodatkowych katalogów poprzez dodanie handlerów [martini.Static](http://godoc.org/github.com/go-martini/martini#Static).
 ~~~ go
-m.Use(martini.Static("assets")) // serve from the "assets" directory as well
+m.Use(martini.Static("assets")) // serwuj zasoby z katalogu "assets"
 ~~~
 
-#### Serving a Default Document
-You can specify the URL of a local file to serve when the requested URL is not
-found. You can also specify an exclusion prefix so that certain URLs are ignored.
-This is useful for servers that serve both static files and have additional
-handlers defined (e.g., REST API). When doing so, it's useful to define the
-static handler as a part of the NotFound chain.
+#### Serwowanie domyślnej strony
+Możesz zdefiniować adres URL lokalnego pliku, który będzie serwowany gdy żądany adres URL nie zostanie odnaleziony. Dodatkowo możesz zdefiniować prefiks wykluczający, który spowoduje, że niektórze adresy URL zostaną zignorowane. Jest to przydatna opcja dla serwerów, które jednocześnie serwują statyczne pliki i mają zdefiniowane handlery (np. REST API). Warto także rozważyć zdefiniowanie statycznych handlerów jako części łańcucha NotFound.
 
-The following example serves the `/index.html` file whenever any URL is
-requested that does not match any local file and does not start with `/api/v`:
+W poniższym przykładzie aplikacja serwuje plik `/index.html`, gdy tylko jakikolwiek adres URL nie zostanie dopasowany do istniejącego lokalnego pliku i nie zaczyna się prefiksem `/api/v`:
 ~~~ go
 static := martini.Static("assets", martini.StaticOptions{Fallback: "/index.html", Exclude: "/api/v"})
 m.NotFound(static, http.NotFound)
