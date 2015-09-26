@@ -69,28 +69,28 @@ W celu uzyskania więcej informacji o middleware'ach i ich możliwościach, prze
 * [FAQ](#faq)
 
 ## Domyślna konfiguracja (Martini Classic)
-To get up and running quickly, [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) provides some reasonable defaults that work well for most web applications:
+Martini pozwala bardzo szybko uruchomić webserver korzystając przy tym z [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic), który to dostarcza kilku standardowych, domyślnych ustawień, który będą pasowały do większości aplikacji internetowych:
 ~~~ go
   m := martini.Classic()
-  // ... middleware and routing goes here
+  // ... miejsce na middleware'y i routing
   m.Run()
 ~~~
 
-Below is some of the functionality [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) pulls in automatically:
-  * Request/Response Logging - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
+Poniżej wymieniono kilka funkcji [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic), które to dostarcza automatycznie:
+  * Logowanie żądań/odpowiedzi - [martini.Logger](http://godoc.org/github.com/go-martini/martini#Logger)
   * Panic Recovery - [martini.Recovery](http://godoc.org/github.com/go-martini/martini#Recovery)
-  * Static File serving - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
+  * Serwowanie plików statycznych - [martini.Static](http://godoc.org/github.com/go-martini/martini#Static)
   * Routing - [martini.Router](http://godoc.org/github.com/go-martini/martini#Router)
 
-### Handlers
-Handlers are the heart and soul of Martini. A handler is basically any kind of callable function:
+### Handlery
+Można powiedzieć, że handlery to serce i dusza Martini. Handlerem można nazwać każdą funkcję postaci:
 ~~~ go
 m.Get("/", func() {
   println("hello world")
 })
 ~~~
 
-#### Return Values
+#### Wartości zwracane
 If a handler returns something, Martini will write the result to the current [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) as a string:
 ~~~ go
 m.Get("/", func() string {
