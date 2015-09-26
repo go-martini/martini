@@ -157,7 +157,7 @@ m.NotFound(func() {
 })
 ~~~
 
-_Route'y_ są dopasowywane w kolejności ich zdefiniowania. Pierwszy dopasowany _route_ zostanie wywołany. 
+_Route'y_ są dopasowywane w kolejności ich definiowania. Pierwszy dopasowany _route_ zostanie wywołany. 
 
 Wzorce ścieżek _route'ów_ mogą zawierać nazwane paremetry, dostępne poprzez usługę  [martini.Params](http://godoc.org/github.com/go-martini/martini#Params):
 ~~~ go
@@ -181,10 +181,10 @@ m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
 ~~~
 Więcej informacji o budowie wyrażeń regularnych znajdziesz w [dokumentacji Go](http://golang.org/pkg/regexp/syntax/).
 
-Handlery można organizować w stosy wywołań, co przydaje się np. przy mechanizmach takich jak uwierzytelnianie i autoryzacja:
+Handlery można organizować w stosy wywołań, co przydaje się przy mechanizmach takich jak uwierzytelnianie i autoryzacja:
 ~~~ go
 m.Get("/secret", authorize, func() {
-  // funkcja będzie wykonywana dopóty, dopóki authorize nie zwróci odpowiedzi
+  // funkcja będzie wywoływana dopóty, dopóki authorize nie zwróci odpowiedzi
 })
 ~~~
 
@@ -209,37 +209,37 @@ m.Group("/books", func(r martini.Router) {
 ~~~
 
 ### Usługi
-Services are objects that are available to be injected into a Handler's argument list. You can map a service on a *Global* or *Request* level.
+Usługi są obiektami możliwymi do wstrzyknięcia poprzez listę argumentów danego handlera i mogą być mapowane na poziomie *globalnym* lub *żądania*.
 
-#### Global Mapping
-A Martini instance implements the inject.Injector interface, so mapping a service is easy:
+#### Mapowanie globalne
+Instancja Martini implementuje interfejs inject.Injector interface, więc mapowanie jest bardzo proste:
 ~~~ go
 db := &MyDatabase{}
 m := martini.Classic()
-m.Map(db) // the service will be available to all handlers as *MyDatabase
+m.Map(db) // usługa będzie dostępna dla wszystkich handlerów jako *MyDatabase
 // ...
 m.Run()
 ~~~
 
-#### Request-Level Mapping
-Mapping on the request level can be done in a handler via [martini.Context](http://godoc.org/github.com/go-martini/martini#Context):
+#### Mapowanie na poziomie żądania
+Mapowanie na poziomie żądania może być wykonane w handlerze poprzez [martini.Context](http://godoc.org/github.com/go-martini/martini#Context):
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
   logger := &MyCustomLogger{req}
-  c.Map(logger) // mapped as *MyCustomLogger
+  c.Map(logger) // zmapowany jako *MyCustomLogger
 }
 ~~~
 
-#### Mapping values to Interfaces
-One of the most powerful parts about services is the ability to map a service to an interface. For instance, if you wanted to override the [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) with an object that wrapped it and performed extra operations, you can write the following handler:
+#### Mapowanie wartości do interfejsów
+Jedną z mocnych stron usług jest możliwość zmapowania konkretnej usługi do interfejsu. Dla przykładu, jeśli chcesz nadpisać [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) obiektem, który go opakowuje i wykonuje dodatkowe operacje, to możesz napisać następujący handler:
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
-  c.MapTo(rw, (*http.ResponseWriter)(nil)) // override ResponseWriter with our wrapper ResponseWriter
+  c.MapTo(rw, (*http.ResponseWriter)(nil)) // nadpisz oryginalny ResponseWriter naszym ResponseWriterem
 }
 ~~~
 
-### Serving Static Files
+### Serwowanie plików statycznych
 A [martini.Classic()](http://godoc.org/github.com/go-martini/martini#Classic) instance automatically serves static files from the "public" directory in the root of your server.
 You can serve from more directories by adding more [martini.Static](http://godoc.org/github.com/go-martini/martini#Static) handlers.
 ~~~ go
