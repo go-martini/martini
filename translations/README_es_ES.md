@@ -41,7 +41,7 @@ Observe el [Video demostrativo](http://martini.codegangsta.io/#demo)
 
 Use la etiqueta [martini](http://stackoverflow.com/questions/tagged/martini) para preguntas en Stackoverflow
 
-GoDoc [documentation](http://godoc.org/github.com/go-martini/martini)
+Documentación [GoDoc](http://godoc.org/github.com/go-martini/martini)
 
 
 ## Caracteríticas
@@ -53,6 +53,7 @@ GoDoc [documentation](http://godoc.org/github.com/go-martini/martini)
 * Muy buen uso de handlers/middlewares.
 * Grandes características innovadoras.
 * **Compatibilidad total con la interface [http.HandlerFunc](http://godoc.org/net/http#HandlerFunc).**
+* Sirviendo documentos por defecto (e.g. para servir aplicaciones AngularJS en modo HTML5).
 
 ## Más Middlewares
 Para más middlewares y funcionalidades, revisar los repositorios en [martini-contrib](https://github.com/martini-contrib).
@@ -110,7 +111,7 @@ Handlers son invocados vía reflexión. Martini utiliza *Inyección de Dependenc
 
 Si agrega un argumento a su Handler, Martini buscará en su lista de servicios e intentará resolver su dependencia vía su tipo de aserción:
 ~~~ go
-m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res e req son inyectados por Martini
+m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res y req son inyectados por Martini
   res.WriteHeader(200) // HTTP 200
 })
 ~~~
@@ -171,7 +172,7 @@ m.Get("/hello/**", func(params martini.Params) string {
 })
 ~~~
 
-Las expresiones regulares puede ser usadas también:
+Las expresiones regulares pueden ser usadas también:
 ~~~go
 m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
   return fmt.Sprintf ("Hello %s", params["name"])
@@ -180,7 +181,7 @@ m.Get("/hello/(?P<name>[a-zA-Z]+)", func(params martini.Params) string {
 Observe la [documentación](http://golang.org/pkg/regexp/syntax/) para mayor información sobre la sintaxis de expresiones regulares.
 
 
-Handlers de ruta pueden ser empilados en la cima de otros, la cual es útil para cosas como autenticación y autorización:
+Handlers de ruta pueden ser apilados encima de otros, lo cual es útil para cosas como autenticación y autorización:
 ~~~ go
 m.Get("/secret", authorize, func() {
   // será ejecutado cuando autorice escribir una respuesta
@@ -197,7 +198,7 @@ m.Group("/books", func(r martini.Router) {
 })
 ~~~
 
-Igualmente como puede pasar middlewares para un handler, usted puede pasar middlewares para grupos.
+Al igual que usted puede pasar middlewares a un handler, puede pasar middlewares a grupos.
 ~~~ go
 m.Group("/books", func(r martini.Router) {
     r.Get("/:id", GetBooks)
@@ -208,10 +209,10 @@ m.Group("/books", func(r martini.Router) {
 ~~~
 
 ### Servicios
-Servicios son objetos que están disponibles para ser inyectados en una lista de argumentos Handler. Usted puede mapear un servicios a nivel *Global* o *Request*.
+Lo servicios son objetos que están disponibles para ser inyectados en una lista de argumentos Handler. Usted puede mapear un servicio a nivel *Global* o *Request*.
 
-#### Mapeamento Global
-Una instancia de Martini implementa la interface inject.Injector, entonces un mapeamiento de un servicio es fácil:
+#### Mapeo Global
+Una instancia de Martini implementa la interface `inject.Injector`, asi que el mapeo de un servicio es sencillo:
 ~~~ go
 db := &MyDatabase{}
 m := martini.Classic()
@@ -220,8 +221,8 @@ m.Map(db) // el servicio estará disponible para todos los handlers como *MyData
 m.Run()
 ~~~
 
-#### Mapeamiento por Request
-Mapeamiento a nivel de request se puede realizar un handler vía [martini.Context](http://godoc.org/github.com/go-martini/martini#Context):
+#### Mapeo por Request
+El mapeo a nivel de request puede ser hecho en un handler via  [martini.Context](http://godoc.org/github.com/go-martini/martini#Context):
 ~~~ go
 func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
   logger := &MyCustomLogger{req}
@@ -229,8 +230,8 @@ func MyCustomLoggerHandler(c martini.Context, req *http.Request) {
 }
 ~~~
 
-#### Valores de Mapeamiento para Interfaces
-Una de las partes mas poderosas sobre servicios es la capadidad de mapear un servicio para una interface. Por ejemplo, si desea sobreescribir [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) con un objeto que envuelva y realice operaciones extra, puede escribir el siguiente handler:
+#### Valores de Mapeo para Interfaces
+Una de las partes más poderosas sobre servicios es la capacidad de mapear un servicio para una interface. Por ejemplo, si desea sobreescribir [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter) con un objeto que envuelva y realice operaciones extra, puede escribir el siguiente handler:
 ~~~ go
 func WrapResponseWriter(res http.ResponseWriter, c martini.Context) {
   rw := NewSpecialResponseWriter(res)
@@ -246,14 +247,14 @@ m.Use(martini.Static("assets")) // sirviendo los archivos del directorio "assets
 ~~~
 
 ## Middleware Handlers
-Middleware Handlers se sitúan entre una solicitud HTTP y un router. En esencia, ellos no son diferentes de cualquier otro Handler en Martini. Usted puede añadir un handler de middleware para la pila de la siguiente forma:
+Los Middleware Handlers se sitúan entre una solicitud HTTP y un router. En esencia, ellos no son diferentes de cualquier otro Handler en Martini. Usted puede añadir un handler de middleware para la pila de la siguiente forma:
 ~~~ go
 m.Use(func() {
   // Hacer algo con middleware
 })
 ~~~
 
-Puede tener el control total sobre la pila de middleware con la función `Handlers`. Esto reemplazará a cualquier handler que se ha establecido previamente:
+Puede tener el control total sobre la pila del Middleware con la función `Handlers`. Esto reemplazará a cualquier handler que haya sido establecido previamente:
 ~~~ go
 m.Handlers(
   Middleware1,
@@ -262,7 +263,7 @@ m.Handlers(
 )
 ~~~
 
-Middleware Handlers trabaja realmente bien como logging, autorización, autenticación, sessión, gzipping, páginas de errores y una serie de otras operaciones que deben suceder antes de una solicitud http:
+Middleware Handlers trabaja realmente bien como logging, autorización, autenticación, sesión, gzipping, páginas de errores y una serie de otras operaciones que deben suceder antes o después de una solicitud http:
 ~~~ go
 // Valida una llave de api
 m.Use(func(res http.ResponseWriter, req *http.Request) {
@@ -273,7 +274,7 @@ m.Use(func(res http.ResponseWriter, req *http.Request) {
 ~~~
 
 ### Next()
-[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) es una función opcional que Middleware Handlers puede llamar para aguardar una ejecución de otros Handlers. Esto trabaja muy bien para calquier operación que debe suceder antes de una solicitud http:
+[Context.Next()](http://godoc.org/github.com/go-martini/martini#Context) es una función opcional que Middleware Handlers puede llamar para entregar hasta después de que una solicitud http haya sido ejecutada. Esto trabaja muy bien para calquier operación que debe suceder luego de una solicitud http:
 ~~~ go
 // log antes y después de una solicitud
 m.Use(func(c martini.Context, log *log.Logger){
@@ -295,18 +296,29 @@ Martini handlers hace uso de `martini.Env`, una variable global para proveer fun
 
 Inicie su búsqueda en los proyectos [martini-contrib](https://github.com/martini-contrib). Si no esta allí, no dude en contactar a algún miembro del equipo martini-contrib para adicionar un nuevo repositorio para la organización.
 
+* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler para analizar el `Accept-Language` HTTP header.
+* [accessflags](https://github.com/martini-contrib/accessflags) - Handler para habilitar Access Control.
 * [auth](https://github.com/martini-contrib/auth) - Handlers para autenticación.
-* [binding](https://github.com/martini-contrib/binding) - Handler para mapeamiento/validación de un request en una estrutura.
-* [gzip](https://github.com/martini-contrib/gzip) - Handler para agregar gzip comprimidos para requests
-* [render](https://github.com/martini-contrib/render) - Handler que provee un servicio de fácil renderizado JSON y plantillas HTML.
-* [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler para analizar  `Accept-Language` header HTTP.
-* [sessions](https://github.com/martini-contrib/sessions) - Handler que provee un servicio de sesión.
-* [strip](https://github.com/martini-contrib/strip) - URL Prefix stripping.
-* [method](https://github.com/martini-contrib/method) - HTTP método de sobreescritura vía header o campos de formulario.
-* [secure](https://github.com/martini-contrib/secure) - Implementa rápidamente items de seguridad.
-* [encoder](https://github.com/martini-contrib/encoder) - Servicio de encoder para renderización de datos en varios formatos y negocios de contenidos.
-* [cors](https://github.com/martini-contrib/cors) - Handler que habilita suporte a CORS.
-* [oauth2](https://github.com/martini-contrib/oauth2) - Handler que provee sistema de login OAuth 2.0 para aplicaciones Martini. Google Sign-in, Facebook Connect y Github login son soportados.
+* [binding](https://github.com/martini-contrib/binding) - Handler para mapeo/validación de un request en una estructura.
+* [cors](https://github.com/martini-contrib/cors) - Handler habilita soporte para CORS.
+* [csrf](https://github.com/martini-contrib/csrf) - CSRF protección para aplicaciones.
+* [encoder](https://github.com/martini-contrib/encoder) - Servicio de codificador para renderizado de datos en varios formatos y gestión de contenidos.
+* [gzip](https://github.com/martini-contrib/gzip) - Handler para agregar compresión gzip para los requests.
+* [gorelic](https://github.com/martini-contrib/gorelic) - NewRelic middleware
+* [logstasher](https://github.com/martini-contrib/logstasher) - Middleware que imprime logstash-compatiable JSON.
+* [method](https://github.com/martini-contrib/method) - HTTP method overriding via cabecera o campos de formulario.
+* [oauth2](https://github.com/martini-contrib/oauth2) - Handler que provee OAuth 2.0 login para Martini apps. Google Sign-in, Facebook Connect y Github login son soportados.
+* [permissions2](https://github.com/xyproto/permissions2) - Handler para hacer seguimiento de usuarios, estados de login y permisos.
+* [render](https://github.com/martini-contrib/render) - Handler que provee un servicio para fácil renderizado de plantillas HTML y JSON.
+* [secure](https://github.com/martini-contrib/secure) - Implementa un par de rápidos triunfos de seguridad.
+* [sessions](https://github.com/martini-contrib/sessions) - Handler que provee un servicio de sesiones.
+* [sessionauth](https://github.com/martini-contrib/sessionauth) - Handler que provee una simple forma de hacer routes, requerir un login y manejar login de usuarios en la sesión.
+* [strict](https://github.com/martini-contrib/strict) - Modo estricto (Strict Mode)
+* [strip](https://github.com/martini-contrib/strip) - Prefijo de extracción de URL.
+* [staticbin](https://github.com/martini-contrib/staticbin) - Handler para servir archivos estáticos desde datos binarios.
+* [throttle](https://github.com/martini-contrib/throttle) - Request rate throttling middleware.
+* [vauth](https://github.com/rafecolton/vauth) - Handlers para expender autenticación con webhooks (actualmente GitHub y TravisCI)
+* [web](https://github.com/martini-contrib/web) - Contexto hoisie web.go's
 
 ### ¿Cómo se integra con los servidores existentes?
 
@@ -331,7 +343,7 @@ func init() {
 
 ### ¿Cómo cambiar el puerto/host?
 
-La función `Run` de Martini observa las variables PORT e HOST para utilizarlas. Caso contrário, Martini asume por defecto localhost:3000. Para tener maayor flexibilidad sobre el puerto y host, use la función `martini.RunOnAddr`.
+La función `Run` de Martini observa las variables de entorno `PORT` y `HOST` para utilizarlas. De lo contrário, Martini asume por defecto `localhost:3000`. Para tener mayor flexibilidad sobre el puerto y host, use la función `martini.RunOnAddr`.
 
 ~~~ go
   m := martini.Classic()
@@ -341,13 +353,14 @@ La función `Run` de Martini observa las variables PORT e HOST para utilizarlas.
 
 ### ¿Servidor con autoreload?
 
-[gin](https://github.com/codegangsta/gin) y [fresh](https://github.com/pilu/fresh) son aplicaciones para autorecarga de Martini.
+[gin](https://github.com/codegangsta/gin) y [fresh](https://github.com/pilu/fresh) son ambas aplicaciones para autorecarga de Martini.
 
 ## Contribuyendo
 Martini se desea mantener pequeño y limpio. La mayoría de contribuciones deben realizarse en el repositorio [martini-contrib](https://github.com/martini-contrib). Si desea hacer una contribución al core de Martini es libre de realizar un Pull Request.
 
 ## Sobre
 
-Inspirado por [express](https://github.com/visionmedia/express) y [sinatra](https://github.com/sinatra/sinatra)
+Inspirado por [Express](https://github.com/visionmedia/express) y [Sinatra](https://github.com/sinatra/sinatra)
 
-Martini está diseñoado obsesivamente por nada menos que [Code Gangsta](http://codegangsta.io/)
+Martini está diseñado obsesivamente por nada menos que [Code Gangsta](http://codegangsta.io/)
+
