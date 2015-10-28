@@ -180,6 +180,26 @@ m.Get("/secret", authorize, func() {
 })
 ~~~
 
+也可以通过 Group 方法, 将 route 编成一組.
+~~~ go
+m.Group("/books", func(r martini.Router) {
+    r.Get("/:id", GetBooks)
+    r.Post("/new", NewBook)
+    r.Put("/update/:id", UpdateBook)
+    r.Delete("/delete/:id", DeleteBook)
+})
+~~~
+
+就像为 handler 增加 middleware 方法一样, 你也可以为一组 routes 增加 middleware.
+~~~ go
+m.Group("/books", func(r martini.Router) {
+    r.Get("/:id", GetBooks)
+    r.Post("/new", NewBook)
+    r.Put("/update/:id", UpdateBook)
+    r.Delete("/delete/:id", DeleteBook)
+}, MyMiddleware1, MyMiddleware2)
+~~~
+
 ### 服务
 服务即是被注入到处理器中的参数. 你可以映射一个服务到 *全局* 或者 *请求* 的级别.
 
