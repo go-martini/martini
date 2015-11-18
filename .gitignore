@@ -28,3 +28,6 @@ _testmain.go
 # Godeps
 Godeps/_workspace
 Godeps/Readme
+
+# IntelliJ IDEA
+.idea
