@@ -380,7 +380,7 @@ To have more flexibility over port and host, use the `martini.RunOnAddr` functio
 ~~~ go
   m := martini.Classic()
   // ...
-  log.Fatal(m.RunOnAddr(":8080"))
+  m.RunOnAddr(":8080")
 ~~~
 
 ### Live code reload?
