@@ -57,6 +57,12 @@ func (m *Martini) Action(handler Handler) {
 	m.action = handler
 }
 
+// Logger sets the logger
+func (m *Martini) Logger(logger *log.Logger) {
+	m.logger = logger
+	m.Map(m.logger)
+}
+
 // Use adds a middleware Handler to the stack. Will panic if the handler is not a callable func. Middleware Handlers are invoked in the order that they are added.
 func (m *Martini) Use(handler Handler) {
 	validateHandler(handler)
