@@ -36,8 +36,6 @@ go run server.go
 
 Присоединяйтесь к [рассылке](https://groups.google.com/forum/#!forum/martini-go)
 
-Смотрите [демо видео](http://martini.codegangsta.io/#demo)
-
 Задавайте вопросы на Stackoverflow используя [тэг martini](http://stackoverflow.com/questions/tagged/martini)
 
 GoDoc [документация](http://godoc.org/github.com/go-martini/martini)
