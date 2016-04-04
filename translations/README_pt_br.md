@@ -1,5 +1,7 @@
 # Martini  [![wercker status](https://app.wercker.com/status/9b7dbc6e2654b604cd694d191c3d5487/s/master "wercker status")](https://app.wercker.com/project/bykey/9b7dbc6e2654b604cd694d191c3d5487)[![GoDoc](https://godoc.org/github.com/go-martini/martini?status.png)](http://godoc.org/github.com/go-martini/martini)
 
+**NOTA:** O martini framework não é mais mantido.
+
 Martini é um poderoso pacote para escrever aplicações/serviços modulares em Golang..
 
 
