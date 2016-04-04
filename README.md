@@ -390,6 +390,9 @@ To have more flexibility over port and host, use the `martini.RunOnAddr` functio
 ## Contributing
 Martini is meant to be kept tiny and clean. Most contributions should end up in a repository in the [martini-contrib](https://github.com/martini-contrib) organization. If you do have a contribution for the core of Martini feel free to put up a Pull Request.
 
+## License
+Martini is distributed by The MIT License, see LICENSE
+
 ## About
 
 Inspired by [express](https://github.com/visionmedia/express) and [sinatra](https://github.com/sinatra/sinatra)
