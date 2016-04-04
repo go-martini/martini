@@ -335,7 +335,7 @@ Start by looking in the [martini-contrib](https://github.com/martini-contrib) pr
 * [encoder](https://github.com/martini-contrib/encoder) - Encoder service for rendering data in several formats and content negotiation.
 * [gzip](https://github.com/martini-contrib/gzip) - Handler for adding gzip compress to requests
 * [gorelic](https://github.com/martini-contrib/gorelic) - NewRelic middleware
-* [logstasher](https://github.com/martini-contrib/logstasher) - Middleware that prints logstash-compatiable JSON 
+* [logstasher](https://github.com/martini-contrib/logstasher) - Middleware that prints logstash-compatible JSON 
 * [method](https://github.com/martini-contrib/method) - HTTP method overriding via Header or form fields.
 * [oauth2](https://github.com/martini-contrib/oauth2) - Handler that provides OAuth 2.0 login for Martini apps. Google Sign-in, Facebook Connect and Github login is supported.
 * [permissions2](https://github.com/xyproto/permissions2) - Handler for keeping track of users, login states and permissions.
