@@ -107,7 +107,7 @@ m.Get("/", func() (int, string) {
 ~~~
 
 #### Service Injection
-Handler werden per Reflection aufgerufen. Martini macht Gebrauch von *Dependency Injection*, um Abhängigkeiten in der Argumentliste von Handlern aufzulösen. **Dies macht Martini komplett inkompatibel mit Golangs `http.HandlerFunc` Interface.**
+Handler werden per Reflection aufgerufen. Martini macht Gebrauch von *Dependency Injection*, um Abhängigkeiten in der Argumentliste von Handlern aufzulösen. **Dies macht Martini komplett kompatibel mit Golangs `http.HandlerFunc` Interface.**
 
 Fügst Du einem Handler ein Argument hinzu, sucht Martini in seiner Liste von Services und versucht, die Abhängigkeiten via Type Assertion aufzulösen. 
 ~~~ go
