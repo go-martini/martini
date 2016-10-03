@@ -1,7 +1,6 @@
 package martini
 
 import (
-	"github.com/codegangsta/inject"
 	"net/http"
 	"reflect"
 )
@@ -14,23 +13,23 @@ type ReturnHandler func(Context, []reflect.Value)
 
 func defaultReturnHandler() ReturnHandler {
 	return func(ctx Context, vals []reflect.Value) {
-		rv := ctx.Get(inject.InterfaceOf((*http.ResponseWriter)(nil)))
-		res := rv.Interface().(http.ResponseWriter)
-		var responseVal reflect.Value
-		if len(vals) > 1 && vals[0].Kind() == reflect.Int {
-			res.WriteHeader(int(vals[0].Int()))
-			responseVal = vals[1]
-		} else if len(vals) > 0 {
-			responseVal = vals[0]
-		}
-		if canDeref(responseVal) {
-			responseVal = responseVal.Elem()
-		}
-		if isByteSlice(responseVal) {
-			res.Write(responseVal.Bytes())
-		} else {
-			res.Write([]byte(responseVal.String()))
-		}
+		ctx.Invoke(func(res http.ResponseWriter) {
+			var responseVal reflect.Value
+			if len(vals) > 1 && vals[0].Kind() == reflect.Int {
+				res.WriteHeader(int(vals[0].Int()))
+				responseVal = vals[1]
+			} else if len(vals) > 0 {
+				responseVal = vals[0]
+			}
+			if canDeref(responseVal) {
+				responseVal = responseVal.Elem()
+			}
+			if isByteSlice(responseVal) {
+				res.Write(responseVal.Bytes())
+			} else {
+				res.Write([]byte(responseVal.String()))
+			}
+		})
 	}
 }
 
