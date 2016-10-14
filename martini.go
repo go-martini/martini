@@ -90,7 +90,7 @@ func (m *Martini) RunOnAddr(addr string) {
 	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
 	logger.Printf("listening on %s (%s)\n", addr, Env)
 	//logger.Fatalln(http.ListenAndServe(addr, m))
-	logger.Fatalln(m.listenAndServe(addr, m))
+	logger.Println(m.listenAndServe(addr, m))
 }
 
 // Run the http server on a given host and port.
@@ -102,7 +102,7 @@ func (m *Martini) RunOnAddrTLS(addr, certFile, keyFile string) {
 	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
 	logger.Printf("listening on %s (%s)\n", addr, Env)
 	//logger.Fatalln(http.ListenAndServe(addr, m))
-	logger.Fatalln(m.listenAndServeTLS(addr, certFile, keyFile, m))
+	logger.Println(m.listenAndServeTLS(addr, certFile, keyFile, m))
 }
 
 // tcpKeepAliveListener sets TCP keep-alive timeouts on accepted
