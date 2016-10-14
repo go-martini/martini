@@ -51,7 +51,7 @@ func (p *program) Start() error {
 	})
 
 	p.waitGroup.Wrap(func() {
-		go p.m.RunOnAddrTLS(":443", "server.crt", "server.key")
+		p.m.RunOnAddrTLS(":443", "server.crt", "server.key")
 	})
 
 	return nil
