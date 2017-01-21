@@ -19,7 +19,7 @@ func Logger() Handler {
 			}
 		}
 
-		log.Printf("Started %s %s for %s", req.Method, req.URL.Path, addr)
+		log.Printf("Started %s %s for %s", req.Method, req.URL.RequestURI(), addr)
 
 		rw := res.(ResponseWriter)
 		c.Next()
