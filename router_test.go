@@ -239,6 +239,7 @@ var routeTests = []struct {
 	match  RouteMatch
 	params map[string]string
 }{
+	{"GET", "/foo/123?/bat/321", ExactMatch, map[string]string{"bar": "123?", "baz": "321"}},
 	{"GET", "/foo/123/bat/321", ExactMatch, map[string]string{"bar": "123", "baz": "321"}},
 	{"POST", "/foo/123/bat/321", NoMatch, map[string]string{}},
 	{"GET", "/foo/hello/bat/world", ExactMatch, map[string]string{"bar": "hello", "baz": "world"}},
