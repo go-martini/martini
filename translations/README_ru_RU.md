@@ -89,7 +89,7 @@ m.Get("/", func() {
 ~~~
 
 #### Возвращаемые значения
-Если обработчик возвращает что либо, Martini запишет это как результат в текущий [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter), в виде строки:
+Если обработчик возвращает что-либо, Martini запишет это как результат в текущий [http.ResponseWriter](http://godoc.org/net/http#ResponseWriter), в виде строки:
 ~~~ go
 m.Get("/", func() string {
   return "hello world" // HTTP 200 : "hello world"
@@ -117,7 +117,7 @@ m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res и req бу
 
   * [*log.Logger](http://godoc.org/log#Logger) - Глобальный логгер для Martini.
   * [martini.Context](http://godoc.org/github.com/go-martini/martini#Context) - http request контекст.
-  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` именованых аргументов из роутера.
+  * [martini.Params](http://godoc.org/github.com/go-martini/martini#Params) - `map[string]string` именованных аргументов из роутера.
   * [martini.Routes](http://godoc.org/github.com/go-martini/martini#Routes) - Хэлпер роутеров.
   * [http.ResponseWriter](http://godoc.org/net/http/#ResponseWriter) - http Response writer интерфейс.
   * [*http.Request](http://godoc.org/net/http/#Request) - http Request.
@@ -341,7 +341,7 @@ func init() {
 
 [gin](https://github.com/codegangsta/gin) и [fresh](https://github.com/pilu/fresh) могут работать вместе с Martini.
 
-## Вклад в обшее дело
+## Вклад в общее дело
 
 Подразумевается что Martini чистый и маленький. Большинство улучшений должны быть в организации [martini-contrib](https://github.com/martini-contrib). Но если вы хотите улучшить ядро Martini, отправляйте пулл реквесты.
 
