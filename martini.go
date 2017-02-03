@@ -18,20 +18,26 @@
 package martini
 
 import (
+	"crypto/tls"
+	"github.com/codegangsta/inject"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"reflect"
-
-	"github.com/codegangsta/inject"
+	"sync"
+	"time"
 )
 
 // Martini represents the top level web application. inject.Injector methods can be invoked to map services on a global level.
 type Martini struct {
 	inject.Injector
-	handlers []Handler
-	action   Handler
-	logger   *log.Logger
+	handlers      []Handler
+	action        Handler
+	httpListener  net.Listener
+	httpsListener net.Listener
+	mutex         sync.RWMutex
+	logger        *log.Logger
 }
 
 // New creates a bare bones Martini instance. Use this method if you want to have full control over the middleware that is used.
@@ -83,7 +89,87 @@ func (m *Martini) RunOnAddr(addr string) {
 
 	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
 	logger.Printf("listening on %s (%s)\n", addr, Env)
-	logger.Fatalln(http.ListenAndServe(addr, m))
+	//logger.Fatalln(http.ListenAndServe(addr, m))
+	logger.Fatalln(m.listenAndServe(addr, m))
+}
+
+// Run the http server on a given host and port.
+func (m *Martini) RunOnAddrTLS(addr, certFile, keyFile string) {
+	// TODO: Should probably be implemented using a new instance of http.Server in place of
+	// calling http.ListenAndServer directly, so that it could be stored in the martini struct for later use.
+	// This would also allow to improve testing when a custom host and port are passed.
+
+	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
+	logger.Printf("listening on %s (%s)\n", addr, Env)
+	//logger.Fatalln(http.ListenAndServe(addr, m))
+	logger.Fatalln(m.listenAndServeTLS(addr, certFile, keyFile, m))
+}
+
+// tcpKeepAliveListener sets TCP keep-alive timeouts on accepted
+// connections. It's used by ListenAndServe and ListenAndServeTLS so
+// dead TCP connections (e.g. closing laptop mid-download) eventually
+// go away.
+type tcpKeepAliveListener struct {
+	*net.TCPListener
+}
+
+func (ln tcpKeepAliveListener) Accept() (c net.Conn, err error) {
+	tc, err := ln.AcceptTCP()
+	if err != nil {
+		return
+	}
+	tc.SetKeepAlive(true)
+	tc.SetKeepAlivePeriod(3 * time.Minute)
+	return tc, nil
+}
+
+func (m *Martini) listenAndServe(addr string, handler http.Handler) error {
+	server := &http.Server{Addr: addr, Handler: handler}
+
+	if addr == "" {
+		addr = ":http"
+	}
+	ln, err := net.Listen("tcp", addr)
+	if err != nil {
+		return err
+	}
+	m.mutex.Lock()
+	m.httpListener = ln
+	m.mutex.Unlock()
+	return server.Serve(tcpKeepAliveListener{ln.(*net.TCPListener)})
+}
+
+// listenAndServeTLS always returns a non-nil error.
+func (m *Martini) listenAndServeTLS(addr, certFile, keyFile string, handler http.Handler) error {
+	server := &http.Server{Addr: addr, Handler: handler}
+
+	tlscfg := &tls.Config{}
+
+	if tlscfg.NextProtos == nil {
+		tlscfg.NextProtos = []string{"http/1.1"}
+	}
+
+	tlscfg.Certificates = make([]tls.Certificate, 1)
+	var err error
+	tlscfg.Certificates[0], err = tls.LoadX509KeyPair(certFile, keyFile)
+	if err != nil {
+		return err
+	}
+
+	ln, err := net.Listen("tcp", addr)
+	if err != nil {
+		return err
+	}
+
+	m.mutex.Lock()
+	m.httpsListener = ln
+	m.mutex.Unlock()
+
+	tlsListener := tls.NewListener(tcpKeepAliveListener{ln.(*net.TCPListener)}, tlscfg)
+
+	return server.Serve(tlsListener)
+
+	//return server.ListenAndServeTLS(certFile, keyFile)
 }
 
 // Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
@@ -96,6 +182,30 @@ func (m *Martini) Run() {
 	host := os.Getenv("HOST")
 
 	m.RunOnAddr(host + ":" + port)
+}
+
+// Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
+func (m *Martini) RunTLS(certFile, keyFile string) {
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "4000"
+	}
+
+	host := os.Getenv("HOST")
+
+	m.RunOnAddrTLS(host+":"+port, certFile, keyFile)
+}
+
+func (m *Martini) Stop() {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+
+	if m.httpListener != nil {
+		m.httpListener.Close()
+	}
+	if m.httpsListener != nil {
+		m.httpsListener.Close()
+	}
 }
 
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
