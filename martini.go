@@ -34,6 +34,13 @@ type Martini struct {
 	logger   *log.Logger
 }
 
+type SSLOptions struct {
+	UseSSL         bool
+	Port           string
+	PrivateKeyPath string
+	PublicKeyPath  string
+}
+
 // New creates a bare bones Martini instance. Use this method if you want to have full control over the middleware that is used.
 func New() *Martini {
 	m := &Martini{Injector: inject.New(), action: func() {}, logger: log.New(os.Stdout, "[martini] ", 0)}
@@ -76,14 +83,19 @@ func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 }
 
 // Run the http server on a given host and port.
-func (m *Martini) RunOnAddr(addr string) {
+func (m *Martini) RunOnAddr(addr string, sslOptions SSLOptions) {
 	// TODO: Should probably be implemented using a new instance of http.Server in place of
 	// calling http.ListenAndServer directly, so that it could be stored in the martini struct for later use.
 	// This would also allow to improve testing when a custom host and port are passed.
 
 	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
 	logger.Printf("listening on %s (%s)\n", addr, Env)
-	logger.Fatalln(http.ListenAndServe(addr, m))
+
+	if sslOptions.UseSSL == true {
+		logger.Fatalln(http.ListenAndServeTLS(sslOptions.Port, sslOptions.PublicKeyPath, sslOptions.PrivateKeyPath, m))
+	} else {
+		logger.Fatalln(http.ListenAndServe(addr, m))
+	}
 }
 
 // Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
@@ -95,7 +107,9 @@ func (m *Martini) Run() {
 
 	host := os.Getenv("HOST")
 
-	m.RunOnAddr(host + ":" + port)
+	sslOptions := new(SSLOptions)
+
+	m.RunOnAddr(host+":"+port, *sslOptions)
 }
 
 func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *context {
