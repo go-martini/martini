@@ -28,7 +28,7 @@ import (
 
 // Martini represents the top level web application. inject.Injector methods can be invoked to map services on a global level.
 type Martini struct {
-	inject.Injector
+	Injector inject.Injector
 	handlers []Handler
 	action   Handler
 	logger   *log.Logger
