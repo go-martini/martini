@@ -103,6 +103,7 @@ func (m *Martini) createContext(res http.ResponseWriter, req *http.Request) *con
 	c.SetParent(m)
 	c.MapTo(c, (*Context)(nil))
 	c.MapTo(c.rw, (*http.ResponseWriter)(nil))
+	c.MapTo(c.rw, (*ResponseWriter)(nil))
 	c.Map(req)
 	return c
 }
