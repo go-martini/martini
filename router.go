@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strconv"
 	"sync"
+	"strings"
 )
 
 // Params is a map of name/value pairs for named routes. An instance of martini.Params is available to be injected into any route handler.
@@ -56,6 +57,16 @@ type group struct {
 	handlers []Handler
 }
 
+func NotFound(res http.ResponseWriter, req *http.Request,routes Routes) {
+	availMethods := routes.MethodsFor(req.URL.Path)
+	if len(availMethods)>0 {
+		res.Header().Set("Allow", strings.Join(availMethods,","))
+		http.Error(res, "405 method not allowed", http.StatusMethodNotAllowed)
+	}else{
+		http.Error(res, "404 page not found", http.StatusNotFound)
+	}
+}
+
 // NewRouter creates a new Router instance.
 // If you aren't using ClassicMartini, then you can add Routes as a
 // service with:
@@ -66,7 +77,11 @@ type group struct {
 //
 // If you are using ClassicMartini, then this is done for you.
 func NewRouter() Router {
-	return &router{notFounds: []Handler{http.NotFound}, groups: make([]group, 0)}
+	router := &router{groups: make([]group, 0)}
+	router.notFounds = []Handler{
+		func(res http.ResponseWriter,req *http.Request) { NotFound(res,req,router) },
+	}
+	return router
 }
 
 func (r *router) Group(pattern string, fn func(Router), h ...Handler) {
