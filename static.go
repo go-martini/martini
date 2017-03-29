@@ -7,6 +7,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"regexp"
 )
 
 // StaticOptions is a struct for specifying configuration options for the martini.Static middleware.
@@ -49,6 +50,21 @@ func prepareStaticOptions(options []StaticOptions) StaticOptions {
 	return opt
 }
 
+func compileExclude(exclude string) func (string) bool {
+	if regexp.QuoteMeta(exclude) == exclude {
+		// There are no regular expression special characters, just default to the original behaviour
+		return func (str string) bool {
+			return strings.HasPrefix(str, exclude)
+		}
+	} else {
+		// This is regular expression, let's compile it and use it
+		reg, _ := regexp.Compile(exclude)
+		return func (str string) bool {
+			return reg.MatchString(str)
+		}
+	}
+}
+
 // Static returns a middleware handler that serves static files in the given directory.
 func Static(directory string, staticOpt ...StaticOptions) Handler {
 	if !filepath.IsAbs(directory) {
@@ -57,11 +73,13 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 	dir := http.Dir(directory)
 	opt := prepareStaticOptions(staticOpt)
 
+	exclude := compileExclude(opt.Exclude)
+
 	return func(res http.ResponseWriter, req *http.Request, log *log.Logger) {
 		if req.Method != "GET" && req.Method != "HEAD" {
 			return
 		}
-		if opt.Exclude != "" && strings.HasPrefix(req.URL.Path, opt.Exclude) {
+		if opt.Exclude != "" && exclude(req.URL.Path) {
 			return
 		}
 		file := req.URL.Path
