@@ -215,6 +215,62 @@ func Test_Static_Options_Expires(t *testing.T) {
 	expect(t, response.Header().Get("Expires"), "46")
 }
 
+func Test_Static_Options_Exclude(t *testing.T) {
+	response := httptest.NewRecorder()
+
+	m := Classic()
+
+	r := NewRouter()
+
+	// Serve current directory under /public
+	m.Use(Static(currentRoot, StaticOptions{Exclude: "/translations",}))
+	m.Action(r.Handle)
+
+	// Check file content behaviour
+	req, err := http.NewRequest("GET", "http://localhost:3000/README.md", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusOK)
+
+	response = httptest.NewRecorder()
+
+	req, err = http.NewRequest("GET", "http://localhost:3000/translations/README_de_DE.md", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusNotFound)
+
+	m = Classic()
+	m.Use(Static(currentRoot, StaticOptions{Exclude: "(.*\\.md)"}))
+	m.Action(r.Handle)
+
+	response = httptest.NewRecorder()
+
+	req, err = http.NewRequest("GET", "http://localhost:3000/translations/README_de_DE.md", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusNotFound)
+
+	response = httptest.NewRecorder()
+
+	req, err = http.NewRequest("GET", "http://localhost:3000/Godeps/Godeps.json", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	m.ServeHTTP(response, req)
+	expect(t, response.Code, http.StatusOK)
+
+}
+
 func Test_Static_Options_Fallback(t *testing.T) {
 	response := httptest.NewRecorder()
 
