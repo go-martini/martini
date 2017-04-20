@@ -18,13 +18,69 @@
 package martini
 
 import (
+	"errors"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"reflect"
+	"time"
 
 	"github.com/codegangsta/inject"
 )
+
+// wraps a Listener and adds a channel to allow user to indicate the desire to shut down
+type stoppableListener struct {
+	*net.TCPListener
+	// This channel only exists to indicate the need to shut down (by closing it).
+	// No messages are actually passed over it.
+	stop chan int
+}
+
+var stoppedError = errors.New("Listener stopped.")
+
+// wrap Listener in a StoppableListener
+func newStoppableListener(l net.Listener) (*stoppableListener, error) {
+	tcpL, ok := l.(*net.TCPListener)
+	if !ok {
+		return nil, errors.New("Cannot wrap listener")
+	}
+	retval := &stoppableListener{}
+	retval.TCPListener = tcpL
+	retval.stop = make(chan int)
+
+	return retval, nil
+}
+
+// Hide the listener's Accept() method to incorporate stop checks
+func (sl *stoppableListener) Accept() (net.Conn, error) {
+	for {
+		// set a time out for our acccept operation
+		sl.SetDeadline(time.Now().Add(time.Second))
+
+		// accept
+		newConn, err := sl.TCPListener.Accept()
+
+		// check to see if we've been told to stop
+		select {
+		case <-sl.stop:
+			return nil, stoppedError
+		default:
+			// channel still open, continue as normal
+		}
+		if err != nil {
+			netErr, ok := err.(net.Error)
+			if ok && netErr.Timeout() && netErr.Temporary() {
+				continue
+			}
+		}
+		return newConn, err
+	}
+}
+
+func (sl *stoppableListener) Stop() {
+	close(sl.stop)
+}
 
 // Martini represents the top level web application. inject.Injector methods can be invoked to map services on a global level.
 type Martini struct {
@@ -32,6 +88,7 @@ type Martini struct {
 	handlers []Handler
 	action   Handler
 	logger   *log.Logger
+	sl       *stoppableListener
 }
 
 // New creates a bare bones Martini instance. Use this method if you want to have full control over the middleware that is used.
@@ -40,6 +97,10 @@ func New() *Martini {
 	m.Map(m.logger)
 	m.Map(defaultReturnHandler())
 	return m
+}
+
+func (m *Martini) Stop() {
+	m.sl.Stop()
 }
 
 // Handlers sets the entire middleware stack with the given Handlers. This will clear any current middleware handlers.
@@ -78,12 +139,32 @@ func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 // Run the http server on a given host and port.
 func (m *Martini) RunOnAddr(addr string) {
 	// TODO: Should probably be implemented using a new instance of http.Server in place of
-	// calling http.ListenAndServer directly, so that it could be stored in the martini struct for later use.
+	// calling http.Serve directly, so that it could be stored in the martini struct for later use.
 	// This would also allow to improve testing when a custom host and port are passed.
 
 	logger := m.Injector.Get(reflect.TypeOf(m.logger)).Interface().(*log.Logger)
 	logger.Printf("listening on %s (%s)\n", addr, Env)
-	logger.Fatalln(http.ListenAndServe(addr, m))
+
+	ln, err := net.Listen("tcp", addr)
+	if err != nil {
+		logger.Fatalln(err)
+	}
+
+	newSl, err := newStoppableListener(ln)
+	if err != nil {
+		logger.Fatalln(err)
+	}
+
+	m.sl = newSl
+
+	serveError := http.Serve(m.sl, m)
+
+	if serveError == stoppedError {
+		logger.Println("Server stopped.")
+		// do nothing, we were stopping
+		return
+	}
+	logger.Fatalln(serveError)
 }
 
 // Run the http server. Listening on os.GetEnv("PORT") or 3000 by default.
