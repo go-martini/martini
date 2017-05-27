@@ -23,8 +23,10 @@ type StaticOptions struct {
 	// Fallback defines a default URL to serve when the requested resource was
 	// not found.
 	Fallback string
-	// Exclude defines a pattern for URLs this handler should never process.
-	Exclude string
+	// Exclude defines a url prefix this handler should never process.
+	ExcludePrefix []string
+	// Exclude defines a url suffix this handler should never process.
+	ExcludeSuffix []string
 }
 
 func prepareStaticOptions(options []StaticOptions) StaticOptions {
@@ -61,8 +63,15 @@ func Static(directory string, staticOpt ...StaticOptions) Handler {
 		if req.Method != "GET" && req.Method != "HEAD" {
 			return
 		}
-		if opt.Exclude != "" && strings.HasPrefix(req.URL.Path, opt.Exclude) {
-			return
+		for _, excl := range opt.ExcludePrefix {
+			if strings.HasPrefix(req.URL.Path, excl) {
+				return
+			}
+		}
+		for _, excl := range opt.ExcludeSuffix {
+			if strings.HasSuffix(req.URL.Path, excl) {
+				return
+			}
 		}
 		file := req.URL.Path
 		// if we have a prefix, filter requests by stripping the prefix
