@@ -234,7 +234,7 @@ const (
 	ExactMatch
 )
 
-//Higher number = better match
+// BetterThan: Higher number = better match
 func (r RouteMatch) BetterThan(o RouteMatch) bool {
 	return r > o
 }
