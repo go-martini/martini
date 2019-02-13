@@ -75,7 +75,7 @@ func (m *Martini) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	m.createContext(res, req).run()
 }
 
-// Run the http server on a given host and port.
+// RunOnAddr: Run the http server on a given host and port.
 func (m *Martini) RunOnAddr(addr string) {
 	// TODO: Should probably be implemented using a new instance of http.Server in place of
 	// calling http.ListenAndServer directly, so that it could be stored in the martini struct for later use.
