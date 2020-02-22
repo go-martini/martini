@@ -58,7 +58,7 @@ Use a tag [martini](http://stackoverflow.com/questions/tagged/martini) para perg
 ## Mais Middleware
 Para mais middleware e funcionalidades, veja os repositórios em [martini-contrib](https://github.com/martini-contrib).
 
-## Tabela de Conteudos
+## Tabela de Conteúdos
 * [Classic Martini](#classic-martini)
   * [Handlers](#handlers)
   * [Routing](#routing)
@@ -107,9 +107,9 @@ m.Get("/", func() (int, string) {
 ~~~
 
 #### Injeção de Serviços
-Handlers são chamados via reflexão. Martini utiliza *Injeção de Dependencia* para resolver as dependencias nas listas de argumentos dos Handlers . **Isso faz Martini ser completamente compatível com a interface `http.HandlerFunc` do golang.**
+Handlers são chamados via reflexão. Martini utiliza *Injeção de Dependência* para resolver as dependências nas listas de argumentos dos Handlers . **Isso faz Martini ser completamente compatível com a interface `http.HandlerFunc` do golang.**
 
-Se você adicionar um argumento ao seu Handler, Martini ira procurar na sua lista de serviços e tentar resolver sua dependencia pelo seu tipo:
+Se você adicionar um argumento ao seu Handler, Martini irá procurar na sua lista de serviços e tentar resolver sua dependência pelo seu tipo:
 ~~~ go
 m.Get("/", func(res http.ResponseWriter, req *http.Request) { // res e req são injetados pelo Martini
   res.WriteHeader(200) // HTTP 200
@@ -300,9 +300,9 @@ Inicie sua busca nos projetos [martini-contrib](https://github.com/martini-contr
 * [auth](https://github.com/martini-contrib/auth) - Handlers para autenticação.
 * [binding](https://github.com/martini-contrib/binding) - Handler para mapeamento/validação de um request a estrutura.
 * [gzip](https://github.com/martini-contrib/gzip) - Handler para adicionar compreção gzip para o requests
-* [render](https://github.com/martini-contrib/render) - Handler que providencia uma rederização simples para JSON e templates HTML.
+* [render](https://github.com/martini-contrib/render) - Handler que providencia uma renderização simples para JSON e templates HTML.
 * [acceptlang](https://github.com/martini-contrib/acceptlang) - Handler para parsing do `Accept-Language` no header HTTP.
-* [sessions](https://github.com/martini-contrib/sessions) - Handler que prove o serviço de sessão.
+* [sessions](https://github.com/martini-contrib/sessions) - Handler que provê o serviço de sessão.
 * [strip](https://github.com/martini-contrib/strip) - URL Prefix stripping.
 * [method](https://github.com/martini-contrib/method) - HTTP método de substituição via cabeçalho ou campos do formulário.
 * [secure](https://github.com/martini-contrib/secure) - Implementa rapidamente itens de segurança.
