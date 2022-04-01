@@ -31,7 +31,7 @@ type Martini struct {
 	inject.Injector
 	handlers []Handler
 	action   Handler
-	logger   *log.Logger
+	logger   logger
 }
 
 // New creates a bare bones Martini instance. Use this method if you want to have full control over the middleware that is used.
@@ -58,7 +58,7 @@ func (m *Martini) Action(handler Handler) {
 }
 
 // Logger sets the logger
-func (m *Martini) Logger(logger *log.Logger) {
+func (m *Martini) Logger(logger logger) {
 	m.logger = logger
 	m.Map(m.logger)
 }
@@ -118,7 +118,6 @@ type ClassicMartini struct {
 func Classic() *ClassicMartini {
 	r := NewRouter()
 	m := New()
-	m.Use(Logger())
 	m.Use(Recovery())
 	m.Use(Static("public"))
 	m.MapTo(r, (*Routes)(nil))
